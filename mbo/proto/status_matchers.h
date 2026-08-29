@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: Copyright (c) The helly25/mbo authors (helly25.com), The CPP Proto Builder Authors
+// SPDX-FileCopyrightText: Copyright (c) M. Boerger, the MBO Works authors, The CPP Proto Builder Authors
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 // Do not use this elsewhere. Instead:
 //   - just upgrade your Abseil dependency.
 //     #include "absl/status/status_matchers"
-//   - use @helly25_mbo//mbo/testing:status_cc
+//   - use @mboworks_mbo//mbo/testing:status_cc
 //     #include "mbo/testing/status.h"
 //
 // These are layman's implementations to simplify testwriting without incuring

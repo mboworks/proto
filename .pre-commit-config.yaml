@@ -70,7 +70,7 @@ repos:
     description: |
       * Use descriptive, referenceable TODOs. Examples:
         * `// TODO(nero.windstriker@helly25.com)`
-        * `# FIXME(https://github.com/helly25/bzl/issues/42)`
+        * `# FIXME(https://github.com/mboworks/bzl/issues/42)`
       * From the google style guide:
         Use FIXME/TODO comments for code that is temporary, a short-term solution.
         FIXME/TODOs should include the string `FIXME` or `TODO` in all caps, followed by a person's
@@ -111,7 +111,7 @@ repos:
   - id: beautysh
     # setuptools is a runtime dep on Python 3.12+ where pkg_resources
     # is no longer bundled; pre-commit's isolated env doesn't get it
-    # otherwise. Pattern copied from helly25/bzl.
+    # otherwise. Pattern copied from mboworks/bzl.
     additional_dependencies: [setuptools]
 
 - repo: https://github.com/shellcheck-py/shellcheck-py

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: Copyright (c) The helly25/mbo authors (helly25.com)
+// SPDX-FileCopyrightText: Copyright (c) M. Boerger, the MBO Works authors
 // SPDX-License-Identifier: Apache-2.0
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
