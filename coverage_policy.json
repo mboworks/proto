@@ -1,9 +1,6 @@
 {
   "include": ["mbo/proto/**"],
-  "exclude": [
-    "mbo/proto/**/*_test.cc",
-    "mbo/proto/tests/**"
-  ],
+  "exclude": ["mbo/proto/**/*_test.cc", "mbo/proto/tests/**"],
   "minimum": { "lines": 80, "functions": 80, "branches": 65 },
   "target": { "lines": 90, "functions": 90, "branches": 80 },
   "enforce": { "lines": "medium", "functions": "medium", "branches": "medium" },

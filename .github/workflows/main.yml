@@ -236,7 +236,17 @@ jobs:
       proto_version: ${{ matrix.proto_version }}
 
   done:
-    needs: [trunk, pre-commit, clang-tidy, coverage, test-gcc, test-clang, test-bcr, test-proto]
+    needs:
+      [
+        trunk,
+        pre-commit,
+        clang-tidy,
+        coverage,
+        test-gcc,
+        test-clang,
+        test-bcr,
+        test-proto,
+      ]
     if: always()
     runs-on: ubuntu-latest
     steps:
