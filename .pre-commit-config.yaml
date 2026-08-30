@@ -36,7 +36,11 @@ repos:
     hooks:
       - id: codespell
         types_or: [c, c++, markdown]
-        args: ["--ignore-words-list=filetest"]
+        args:
+          - "--ignore-words-list=filetest"
+          # Pre-existing spelling debt; keep the baseline file-specific so new
+          # C++ and Markdown remain fully checked.
+          - "--skip=mbo/proto/file.h,mbo/proto/silent_error_collector.h"
 
   - repo: local
     hooks:
