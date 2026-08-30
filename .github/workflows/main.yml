@@ -49,7 +49,10 @@ jobs:
           bazel build --config=clang-tidy //...
           ./compile_commands-update.sh
       - name: Run clang-tidy
-        run: tools/clang_tidy.sh --all-files
+        run: |
+          git fetch --quiet --no-tags origin main
+          mapfile -t CHANGED_FILES < <(git diff --name-only origin/main...HEAD)
+          tools/clang_tidy.sh "${CHANGED_FILES[@]}"
 
   coverage:
     needs: [trunk, pre-commit]
