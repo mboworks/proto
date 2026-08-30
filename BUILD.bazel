@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load("@hedron_compile_commands//:refresh_compile_commands.bzl", "refresh_compile_commands")
-
 package(default_visibility = ["//visibility:private"])
 
 licenses(["notice"])
@@ -25,15 +23,4 @@ licenses(["notice"])
 config_setting(
     name = "is_clang",
     define_values = {"is_clang": "true"},
-)
-
-COM_GOOGLE_PROTOBUF = "bazel-out/../../../external/com_google_protobuf/src"
-
-refresh_compile_commands(
-    name = "refresh_all",
-    targets = {
-        "//...": " ".join([
-            "--cxxopt=-I" + COM_GOOGLE_PROTOBUF,
-        ]),
-    },
 )

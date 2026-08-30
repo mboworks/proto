@@ -7,9 +7,7 @@
       "github": "helly25"
     }
   ],
-  "repository": [
-    "github:mboworks/proto"
-  ],
+  "repository": ["github:mboworks/proto"],
   "versions": [],
   "yanked_versions": {}
 }
