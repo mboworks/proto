@@ -216,7 +216,7 @@ jobs:
           key: ${{env.CACHE_KEY_PREFIX}}-${{github.ref}}-${{github.sha}}
 
       - name: Cleanup old caches
-        if: ${{!startsWith(github.ref, 'refs/tags/') && steps.cache_restore.outputs.cache-hit}}
+        if: ${{!startsWith(github.ref, 'refs/tags/') && github.actor != 'dependabot[bot]' && steps.cache_restore.outputs.cache-hit}}
         run: |
           set -euo pipefail
           PREFIX="${{env.CACHE_KEY_PREFIX}}-${{github.ref}}"

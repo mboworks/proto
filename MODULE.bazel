@@ -36,15 +36,14 @@ bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "rules_cc", version = "0.2.19")
 bazel_dep(name = "rules_shell", version = "0.8.0")
-bazel_dep(name = "abseil-cpp", version = "20250814.2", repo_name = "com_google_absl")
+bazel_dep(name = "abseil-cpp", version = "20260817.0", repo_name = "com_google_absl")
 bazel_dep(name = "re2", version = "2025-11-05.bcr.1", repo_name = "com_googlesource_code_re2")
 bazel_dep(name = "googletest", version = "1.18.0.bcr.1", repo_name = "com_google_googletest")
 
-# Default to protobuf 34.1: a conservative pin one release behind the newest
-# (35.x). The full supported range [32, 33, 34, 35] is exercised by the
-# `proto_version` CI matrix, so the newest is covered without making the
-# bleeding-edge release the default that downstreams inherit.
-bazel_dep(name = "protobuf", version = "34.1", repo_name = "com_google_protobuf")
+# Default to protobuf 35.0, the version selected by the combined GoogleTest and
+# Abseil graph. The `proto_version` CI matrix continues to exercise its declared
+# roots under Bazel's normal minimum-version selection.
+bazel_dep(name = "protobuf", version = "35.0", repo_name = "com_google_protobuf")
 
 # Transitive-compat shim (not used by any first-party code): protobuf pulls
 # rules_android -> rules_go 0.51.0-rc2, which `register_toolchains`es
