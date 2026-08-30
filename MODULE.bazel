@@ -84,4 +84,4 @@ bazel_dep(name = "rules_go", version = "0.63.0")
 # Bazel 9. Force a current rules_android via MVS. (`.bazelrc` blanks ANDROID_HOME
 # for our own builds; this shim is what fixes downstream consumers, which never
 # see our `.bazelrc` -- e.g. the BCR presubmit.)
-bazel_dep(name = "rules_android", version = "0.7.2")
+bazel_dep(name = "rules_android", version = "0.7.3")
