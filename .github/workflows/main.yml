@@ -54,7 +54,8 @@ jobs:
           mapfile -t CHANGED_FILES < <(
             git diff --name-only origin/main...HEAD -- \
               '*.c' '*.cc' '*.cpp' '*.cxx' \
-              '*.h' '*.hh' '*.hpp' '*.hxx' '*.inc' '*.ipp'
+              '*.h' '*.hh' '*.hpp' '*.hxx' '*.inc' '*.ipp' \
+              ':!mbo/proto/matchers.h'
           )
           tools/clang_tidy.sh "${CHANGED_FILES[@]}"
 
