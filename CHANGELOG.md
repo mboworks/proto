@@ -1,3 +1,7 @@
+# 1.2.2
+
+* Force a Bazel-9-compatible `rules_android` (0.7.2) via MVS, so downstream consumers (and the BCR presubmit) don't hit protobuf's transitive `rules_android` 0.6.4 failing to load on Bazel 9.
+
 # 1.2.1
 
 * Require Bazel 8 or newer and bzlmod; dropped WORKSPACE support.
