@@ -1,5 +1,9 @@
 Some rules for the code layout and its development.
 
+Language-specific conventions are documented in [`STYLE_CPP.md`](STYLE_CPP.md) and
+[`STYLE_SH.md`](STYLE_SH.md). The checked-in formatter, linter, and compiler configurations enforce
+the mechanical parts of those guides.
+
 * Everything is under Apache 2 license, see file `LICENSE`.
 * All sources must be unix-text files: https://en.wikipedia.org/wiki/Text_file
   * Lines end in {LF}.

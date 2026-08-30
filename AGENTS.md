@@ -1,7 +1,9 @@
 # Agent and contributor rules - proto
 
 These rules apply to human and automated contributors. Keep changes reviewable, preserve existing
-project-specific behavior, and use automation for mechanical policy.
+project-specific behavior, and use automation for mechanical policy. [`STYLE_CPP.md`](STYLE_CPP.md)
+and [`STYLE_SH.md`](STYLE_SH.md) are canonical for their languages; [`RULES.md`](RULES.md) contains
+the repository's broader code-layout rules.
 
 ## Development workflow
 
