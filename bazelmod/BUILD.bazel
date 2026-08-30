@@ -13,9 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@hedron_compile_commands//:refresh_compile_commands.bzl", "refresh_compile_commands")
+
 package(default_visibility = [])
 
 exports_files([
     "dev.MODULE.bazel",
     "llvm.MODULE.bazel",
 ])
+
+# Generates compile_commands.json for clangd and the enforcing clang-tidy hook.
+refresh_compile_commands(
+    name = "refresh_compile_commands",
+    tags = ["manual"],
+    targets = {
+        "@//...": "--config=clang-tidy",
+    },
+)

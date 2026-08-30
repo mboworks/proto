@@ -1,13 +1,28 @@
 name: Test
-# Branches only — release tags are handled by release.yml. Running this on tag
-# pushes fires the full matrix needlessly.
+# Validate pull requests and main. Release tags are handled by release.yml.
 on:
   push:
-    branches: ["**"]
+    branches: [main]
+  pull_request: {}
 
-permissions: read-all
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
+  trunk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v1
+        with:
+          save-annotations: true
+
   pre-commit:
     runs-on: ubuntu-latest
     steps:
@@ -16,11 +31,93 @@ jobs:
         with:
           python-version: "3.13"
       - uses: pre-commit/action@v3.0.1
+        env:
+          SKIP: trunk-fmt,clang-tidy
       - uses: pre-commit-ci/lite-action@v1.0.2
         if: always()
 
+  clang-tidy:
+    needs: [trunk, pre-commit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: bazelbuild/setup-bazelisk@v3
+      - name: Build and generate the compilation database
+        run: |
+          bazel build --config=clang-tidy //...
+          ./compile_commands-update.sh
+      - name: Run clang-tidy
+        run: tools/clang_tidy.sh --all-files
+
+  coverage:
+    needs: [trunk, pre-commit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: bazelbuild/setup-bazelisk@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install coverage tooling
+        run: |
+          sudo apt-get install -y gcc-14 g++-14 lcov
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 \
+            --slave /usr/bin/g++ g++ /usr/bin/g++-14 \
+            --slave /usr/bin/gcov gcov /usr/bin/gcov-14
+          sudo update-alternatives --set gcc /usr/bin/gcc-14
+          tools/install_lcov.sh "${RUNNER_TEMP}/lcov"
+          echo "${RUNNER_TEMP}/lcov/bin" >>"${GITHUB_PATH}"
+      - name: Collect and enforce coverage
+        env:
+          COVERAGE_PAGE: ${{ github.event_name == 'pull_request' && format('pr/{0}', github.event.pull_request.number) || 'main' }}
+        run: |
+          set -euo pipefail
+          bazel coverage //... \
+            --combined_report=lcov \
+            --instrumentation_filter='^//mbo/proto[/:].*'
+          cp "$(bazel info output_path)/_coverage/_coverage_report.dat" coverage.lcov
+          printf '%s\n' "${COVERAGE_PAGE}" >coverage-target.txt
+          python3 tools/coverage_sources.py coverage.lcov coverage-html.lcov \
+            --policy coverage_policy.json --source-root coverage-source-tree
+          python3 tools/coverage_lcovrc.py coverage_policy.json coverage.lcovrc
+          genhtml coverage-html.lcov \
+            --branch-coverage --config-file coverage.lcovrc --demangle-cpp \
+            --function-coverage --hierarchical \
+            --ignore-errors corrupt,inconsistent,inconsistent,negative,unsupported,unsupported \
+            --output-directory coverage-html/lcov \
+            --prefix "${PWD}/coverage-source-tree" --show-details \
+            --title "proto production coverage"
+          python3 tools/coverage_html.py coverage-html/lcov coverage_policy.json "${COVERAGE_PAGE}"
+          BASE_ARGS=()
+          if [ "${GITHUB_REF}" != "refs/heads/main" ]; then
+            git fetch --quiet --no-tags origin main
+            BASE_ARGS=(--base-ref origin/main)
+          fi
+          python3 tools/coverage.py --lcov coverage.lcov \
+            --json-summary coverage-html/coverage-summary.json \
+            --policy coverage_policy.json --summary coverage-summary.md \
+            "${BASE_ARGS[@]}"
+          python3 tools/coverage_index.py report \
+            coverage-html/coverage-summary.json "${COVERAGE_PAGE}" coverage-html/index.html
+          cat coverage-summary.md >>"${GITHUB_STEP_SUMMARY}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-report
+          path: |
+            coverage-html/
+            coverage.lcov
+            coverage-summary.md
+            coverage-target.txt
+          retention-days: 14
+          if-no-files-found: error
+
   test-gcc:
-    needs: pre-commit
+    needs: [pre-commit, trunk]
     secrets: inherit
     strategy:
       matrix:
@@ -44,7 +141,7 @@ jobs:
       bazel_config: ${{ matrix.bazel_config }}
 
   test-bcr:
-    needs: [pre-commit, test-gcc]
+    needs: [pre-commit, trunk, test-gcc]
     secrets: inherit
     strategy:
       matrix:
@@ -75,7 +172,7 @@ jobs:
       bazel_version: ${{ matrix.bazel_version }}
 
   test-clang:
-    needs: [pre-commit, test-gcc, test-bcr]
+    needs: [pre-commit, trunk, test-gcc, test-bcr]
     secrets: inherit
     strategy:
       matrix:
@@ -114,7 +211,7 @@ jobs:
       bazel_config: ${{ matrix.bazel_config }}
 
   test-proto:
-    needs: [pre-commit, test-gcc]
+    needs: [pre-commit, trunk, test-gcc]
     secrets: inherit
     strategy:
       matrix:
@@ -139,7 +236,7 @@ jobs:
       proto_version: ${{ matrix.proto_version }}
 
   done:
-    needs: [pre-commit, test-gcc, test-clang, test-bcr, test-proto]
+    needs: [trunk, pre-commit, clang-tidy, coverage, test-gcc, test-clang, test-bcr, test-proto]
     if: always()
     runs-on: ubuntu-latest
     steps:

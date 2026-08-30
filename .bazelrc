@@ -34,7 +34,17 @@ common --repo_env=ANDROID_HOME=
 # Define absl=1 to tell googletest to use absl for backtrace.
 common --define absl=1
 
-common --cxxopt=-std=c++20 --host_cxxopt=-std=c++20 --cxxopt=-Werror
+common --cxxopt=-std=c++20 --host_cxxopt=-std=c++20 --cxxopt=-Werror --host_cxxopt=-Werror
+
+# Own the warning set so first-party diagnostics do not depend on toolchain defaults.
+common --cxxopt=-Wall --host_cxxopt=-Wall
+common --cxxopt=-Wextra --host_cxxopt=-Wextra
+common --cxxopt=-Wpedantic --host_cxxopt=-Wpedantic
+common --cxxopt=-Wno-missing-field-initializers --host_cxxopt=-Wno-missing-field-initializers
+# Abseil intentionally uses these Clang extensions in macros expanded by first-party TUs.
+common --cxxopt=-Wno-c2y-extensions --host_cxxopt=-Wno-c2y-extensions
+common --cxxopt=-Wno-nullability-extension --host_cxxopt=-Wno-nullability-extension
+common --cxxopt=-Wno-gcc-compat --host_cxxopt=-Wno-gcc-compat
 
 # Don't let our global -Werror be tripped by third-party (external) code; newer
 # compilers keep adding warnings inside dependencies we don't control (e.g.
@@ -44,8 +54,9 @@ common --cxxopt=-std=c++20 --host_cxxopt=-std=c++20 --cxxopt=-Werror
 #    warnings are ignored even when our first-party TUs include them.
 #  - per_file_copt on external/* sources: downgrades -Werror when *compiling* an
 #    external repo's own .cc / internal (src/) headers.
-common --features=external_include_paths
-common --per_file_copt=external/.*@-Wno-error
+common --features=external_include_paths --host_features=external_include_paths
+common --per_file_copt=external/.*@-w
+common --host_per_file_copt=external/.*@-w
 
 test --test_output=errors
 
@@ -66,17 +77,20 @@ common:clang --define is_clang=true
 # https://github.com/llvm/llvm-project/issues/100909
 common:clang --cxxopt=-Wno-unused-command-line-argument
 
+# Compilation database generation and clang-tidy use the hermetic Clang config.
+common:clang-tidy --config=clang
+
 common:symbolizer --strip=never
 common:symbolizer --run_under=//tools:run_under_symbolizer
 
 # Custom --config=asan mode:
 common:asan --config=symbolizer
 common:asan --copt -g
-common:asan --copt -fsanitize=address
+common:asan --copt -fsanitize=address,undefined
 common:asan --copt -fno-sanitize=vptr
 common:asan --copt -fno-omit-frame-pointer
 common:asan --copt -DADDRESS_SANITIZER
-common:asan --linkopt -fsanitize=address
+common:asan --linkopt -fsanitize=address,undefined
 common:asan --linkopt -fno-sanitize=vptr
 #common:asan --linkopt -fsanitize-link-c++-runtime
 common:asan --linkopt -ldl
@@ -85,6 +99,8 @@ common:asan --define signal_trace=disabled
 common:asan --build_tag_filters=-no_san  # skip san targets
 common:asan --test_tag_filters=-no_san  # skip san targets
 common:asan --define san=true  # skip san targets
+common:asan-gcc --copt -fno-sanitize=undefined
+common:asan-gcc --linkopt -fno-sanitize=undefined
 common:asan --features=asan  # https://github.com/bazelbuild/bazel/issues/6932
 common:asan --action_env=ASAN_OPTIONS=halt_on_error=1:print_stacktrace=1:symbolize=1:strip_path_prefix=/proc/self/cwd/:color=always
 common:asan --action_env=UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1:symbolize=1:strip_path_prefix=/proc/self/cwd/:color=always

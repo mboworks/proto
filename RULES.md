@@ -1,6 +1,6 @@
 Some rules for the code layout and its development.
 
-* Everything is under Apache 2 license, see fle `LICENSE`.
+* Everything is under Apache 2 license, see file `LICENSE`.
 * All sources must be unix-text files: https://en.wikipedia.org/wiki/Text_file
   * Lines end in {LF}.
   * The files are either empty or end in {LF}.
@@ -37,10 +37,10 @@ Some rules for the code layout and its development.
     is useful for visibility and name resolution.
 * All public / exported code must:
   * be tested,
-  * have a documentaion.
+  * have documentation.
 * All headers must have macro-guards: "{path}_{file}_" with '/' becoming '_'.
-  * A '__' betwenn {path} and {file} would be better, but C++ does not allow it.
-  * Filnames may not start with the basename of any directory in their same
+  * A '__' between {path} and {file} would be better, but C++ does not allow it.
+  * Filenames may not start with the basename of any directory in their same
     directory followed by an '_' as that would lead to conflicting macro guards.
     E.g.: "foo/bar.h" and "foo_bar.h" would have macro guard "FOO_BAR_H_".
 * Macros are to be avoided at all costs, or prefixed by 'MBO_'.

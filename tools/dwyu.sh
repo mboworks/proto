@@ -17,11 +17,14 @@
 
 set -euo pipefail
 
-function die() { echo "ERROR: ${*}" 1>&2 ; exit 1; }
+function die() {
+  echo "ERROR: ${*}" 1>&2
+  exit 1
+}
 
 if [[ ! -r "MODULE.bazel" ]] || [[ "${0}" != "tools/dwyu.sh" ]] || [[ ! -r "tools/dwyu.bzl" ]]; then
-    die "Must be run from workspace directory."
+  die "Must be run from workspace directory."
 fi
 
-bazel build --aspects=//tools:dwyu.bzl%dwyu_aspect --output_groups=dwyu //... || \
-    bazel run @depend_on_what_you_use//:apply_fixes -- --fix-all
+bazel build --aspects=//tools:dwyu.bzl%dwyu_aspect --output_groups=dwyu //... \
+  || bazel run @depend_on_what_you_use//:apply_fixes -- --fix-all

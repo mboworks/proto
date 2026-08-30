@@ -1,3 +1,6 @@
+ci:
+  skip: [trunk-fmt]
+
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v5.0.0
@@ -27,6 +30,13 @@ repos:
     files: ^\.github/workflows/
     entry: actionlint
     args: ["-shellcheck", ""]
+
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.4.3
+  hooks:
+  - id: codespell
+    types_or: [c, c++, markdown]
+    args: ["--ignore-words-list=filetest"]
 
 - repo: local
   hooks:
@@ -65,6 +75,13 @@ repos:
     entry: DO([ _]?NOT|N'T)[ _]?(SUBMIT|MERGE)
     exclude: ^.pre-commit-config.yaml$
     types: [text]
+  - id: no-em-dashes
+    name: No em dashes
+    description: Use a spaced hyphen in prose, documentation, and comments.
+    language: pygrep
+    entry: "—"
+    exclude: ^\.pre-commit-config\.yaml$
+    types: [text]
   - id: no-todos-without-context
     name: No TODOs without context
     description: |
@@ -92,6 +109,59 @@ repos:
     #      1         1  1          1   1  234           4  4    4 4   5    5 4 3 3              322      2 1
     types: [text]
 
+  - id: header-guards
+    name: Enforce path-based header guards
+    language: python
+    entry: .pre-commit/check_header_guards.py
+    files: \.h$
+  - id: done-gate-covers-all-jobs
+    name: done gate covers all jobs
+    language: python
+    additional_dependencies: [pyyaml]
+    entry: python .pre-commit/check_done_gate.py
+    files: ^\.github/workflows/main\.yml$
+    pass_filenames: false
+  - id: cache-cleanup-tests
+    name: Test cache cleanup selection
+    language: system
+    entry: python3 -m unittest tools/cache_cleanup_test.py
+    files: ^(\.github/workflows/cache_cleanup\.yml|tools/cache_cleanup(_test)?\.py)$
+    pass_filenames: false
+  - id: coverage-policy-tests
+    name: Test coverage tooling and policy
+    language: system
+    entry: python3 -m unittest tools/coverage_test.py tools/coverage_sources_test.py tools/coverage_html_test.py tools/coverage_index_test.py tools/coverage_lcovrc_test.py tools/coverage_policy_test.py
+    files: ^(coverage_policy\.json|tools/coverage(_html|_index|_lcovrc|_policy|_sources)?(_test)?\.py)$
+    pass_filenames: false
+  - id: align-markdown-tables
+    name: Align Markdown tables
+    language: script
+    entry: tools/align_markdown_tables.py
+    types: [markdown]
+  - id: align-markdown-tables-test
+    name: Test Markdown table aligner
+    language: system
+    entry: python3 -m unittest tools/align_markdown_tables_test.py
+    files: ^tools/align_markdown_tables(_test)?\.py$
+    pass_filenames: false
+  - id: clang-tidy
+    name: clang-tidy
+    language: script
+    entry: tools/clang_tidy.sh
+    files: (\.(cc|cpp|cxx|h|hh|hpp|hxx|inc|ipp|bzl)$|\.h\.in$)
+    types: [file]
+  - id: clang-tidy-scope-test
+    name: Test clang-tidy scope selection
+    language: system
+    entry: python3 -m unittest tools/clang_tidy_scope_test.py
+    files: ^tools/clang_tidy_scope(_test)?\.py$
+    pass_filenames: false
+  - id: trunk-fmt
+    name: trunk fmt
+    language: system
+    entry: trunk fmt
+    require_serial: true
+
 
 - repo: https://github.com/keith/pre-commit-buildifier
   rev: 8.0.1
@@ -104,15 +174,13 @@ repos:
   rev: v19.1.6
   hooks:
   - id: clang-format
+    types_or: [c, c++, cuda]
 
-- repo: https://github.com/lovesegfault/beautysh
-  rev: v6.4.3
+- repo: https://github.com/scop/pre-commit-shfmt
+  rev: v3.11.0-1
   hooks:
-  - id: beautysh
-    # setuptools is a runtime dep on Python 3.12+ where pkg_resources
-    # is no longer bundled; pre-commit's isolated env doesn't get it
-    # otherwise. Pattern copied from mboworks/bzl.
-    additional_dependencies: [setuptools]
+  - id: shfmt
+    args: ["-bn", "-ci", "-i=2", "-w"]
 
 - repo: https://github.com/shellcheck-py/shellcheck-py
   rev: v0.10.0.1

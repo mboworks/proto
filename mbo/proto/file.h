@@ -76,8 +76,8 @@ concept IsProtoType =
 // The second call returns either the read protocol buffer or an error status.
 // In this version the return value forces the caller to handle any errors.
 //
-// The third call returns either the read protocol buffer ot std::nullopt.
-// In this verion the caller is responsible for error handling.
+// The third call returns either the read protocol buffer or std::nullopt.
+// In this version the caller is responsible for error handling.
 //
 // The class also supports static direct typed access by functions whose
 // addresses can be taken.
@@ -185,8 +185,8 @@ absl::Status WriteBinaryProtoFile(
 // The second call returns either the read protocol buffer or an error status.
 // In this version the return value forces the caller to handle any errors.
 //
-// The third call returns either the read protocol buffer ot std::nullopt.
-// In this verion the caller is responsible for error handling.
+// The third call returns either the read protocol buffer or std::nullopt.
+// In this version the caller is responsible for error handling.
 //
 // The class also supports static direct typed access by functions whose
 // addresses can be taken.

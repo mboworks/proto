@@ -84,19 +84,19 @@ TEST_F(ParseTextProtoTest, ParseText) {
 
 TEST_F(ParseTextProtoTest, Macro) {
 #if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #elif defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif  // defined(__clang__)
   // NOLINTNEXTLINE(clang-diagnostic-deprecated-declarations)
   const SimpleMessage proto = PARSE_TEXT_PROTO("one: 42");
   EXPECT_THAT(proto, EqualsProto("one: 42"));
 #if defined(__clang__)
-#pragma clang diagnostic pop
+# pragma clang diagnostic pop
 #elif defined(__GNUC__)
-#pragma GCC diagnostic pop
+# pragma GCC diagnostic pop
 #endif  // defined(__clang__)
 }
 

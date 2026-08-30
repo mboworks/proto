@@ -1,4 +1,4 @@
-This package contains a collection of utilities around Google's [Protocolbuffer](https://github.com/protocolbuffers/protobuf). The functions offered in this packages are widely used across Google's C++ code base and have saved tens of thousands of engineering hours. Some of these functons were originally implemented by the author and later re-implemented or cloned (see below).
+This package contains a collection of utilities around Google's [Protocolbuffer](https://github.com/protocolbuffers/protobuf). The functions offered in this packages are widely used across Google's C++ code base and have saved tens of thousands of engineering hours. Some of these functions were originally implemented by the author and later re-implemented or cloned (see below).
 
 The project works with Google's proto library version 27, 28, 29 and 30. Packages are available at [Bazel Central Registry](https://registry.bazel.build/modules/helly25_proto) and [GitHub](https://github.com/mboworks/proto/releases).
 
@@ -157,7 +157,7 @@ TEST(Foo, EqualsProto) {
 
 In the above example `EqualsProto` takes the text-proto as a C++ raw-string.
 
-The matchers can of course be combined with the parse functions. The below shows how a `FunctionUnderTest` can be tested. It receives the proto input directly from the parse function and the matcher compares it directly to the expected golden result text-proto. Note how there is no field-by-field processing anywhere. No dstraction from what is being tested and what the expectations are. Or in other words the test avoids misleading and error prone in-test logic. And becasue the function-under-test is called inside the EXPECT_THAT macro the gtest failure messages will show what actually failed (and not something like "Input: temp_var").
+The matchers can of course be combined with the parse functions. The below shows how a `FunctionUnderTest` can be tested. It receives the proto input directly from the parse function and the matcher compares it directly to the expected golden result text-proto. Note how there is no field-by-field processing anywhere. No distraction from what is being tested and what the expectations are. Or in other words the test avoids misleading and error prone in-test logic. And because the function-under-test is called inside the EXPECT_THAT macro the gtest failure messages will show what actually failed (and not something like "Input: temp_var").
 
 ```c++
 #include "gmock/gmock.h"
@@ -220,10 +220,10 @@ TEST(Foo, Wrapper) {
   * `message` the protocol buffer to write.
   * Returns `absl::OkStatus()` or an error status.
 
-* function `HasBinaryProtoExtension`(`filesname`)
+* function `HasBinaryProtoExtension`(`filename`)
   * Returns whether the filename ends with a well-known extension for binary proto files.
 
-* function `HasTextProtoExtension`(`filesname`)
+* function `HasTextProtoExtension`(`filename`)
   * Returns whether the filename ends with a well-known extension for text proto files.
 
 ## Usage
