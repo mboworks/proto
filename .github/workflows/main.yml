@@ -51,7 +51,11 @@ jobs:
       - name: Run clang-tidy
         run: |
           git fetch --quiet --no-tags origin main
-          mapfile -t CHANGED_FILES < <(git diff --name-only origin/main...HEAD)
+          mapfile -t CHANGED_FILES < <(
+            git diff --name-only origin/main...HEAD -- \
+              '*.c' '*.cc' '*.cpp' '*.cxx' \
+              '*.h' '*.hh' '*.hpp' '*.hxx' '*.inc' '*.ipp'
+          )
           tools/clang_tidy.sh "${CHANGED_FILES[@]}"
 
   coverage:
