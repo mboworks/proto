@@ -30,7 +30,7 @@ namespace mbo::proto {
 //
 // This class does not implement `::google::protobuf::io::ErrorCollector` but
 // can be used as such due to its conversion operator. The reason this is done,
-// is to disable direct access to the underlying functions which change across
+// is to disable direct access to the underlying functions which change accross
 // protobuf library versions.
 class SilentErrorCollector {
  public:

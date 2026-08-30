@@ -136,7 +136,7 @@ inline absl::StatusOr<T> ParseText(
 // ```
 //
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
-# define PARSE_TEXT_PROTO(text) proto_internal::DeprecatedParseTextProtoOrDie(text)
+#define PARSE_TEXT_PROTO(text) proto_internal::DeprecatedParseTextProtoOrDie(text)
 #endif  // !PARSE_TEXT_PROTO
 
 #endif  // MBO_PROTO_PARSE_TEXT_PROTO_H_

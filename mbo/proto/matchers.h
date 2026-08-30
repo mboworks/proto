@@ -312,7 +312,7 @@ class ProtoMatcher : public ProtoMatcherBase {
     return expected_.get();
   }
 
-  void DeleteExpectedProto(const ::google::protobuf::Message*) const override {}
+  void DeleteExpectedProto(const ::google::protobuf::Message* expected) const override {}
 
   // NOLINTNEXTLINE(readability-identifier-naming)
   const std::shared_ptr<const ::google::protobuf::Message>& expected() const { return expected_; }
