@@ -20,6 +20,8 @@ package(default_visibility = [])
 exports_files([
     "dev.MODULE.bazel",
     "llvm.MODULE.bazel",
+    "protobuf-35.0-abseil.patch",
+    "re2-2025-11-05-abseil.patch",
 ])
 
 # Generates compile_commands.json for clangd and the enforcing clang-tidy hook.
