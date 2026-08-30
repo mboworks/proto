@@ -54,10 +54,11 @@ jobs:
         llvm_version: [20.1.8]
         bazel_config: [opt]
         # Bazel-version compatibility rungs, crossed with the os/compiler combos
-        # below. The floor is 8.x: the checked-in default protobuf (34.1) no longer
-        # analyzes on Bazel 7.x, so 8.7.0 is the lowest we support. Plus the latest
-        # 9.0.x (9.0.2) and the checked-in default 9.1.1.
-        bazel_version: [8.7.0, 9.0.2, 9.1.1]
+        # below. The floor is 8.x: protobuf 35 no longer analyzes on Bazel 7.x,
+        # so 8.7.0 is the lowest we support. Bazel 9.0's embedded bazel_tools
+        # selects compatibility-level-1 Abseil and cannot resolve Abseil's new
+        # compatibility level; 9.1.1 is the supported Bazel 9 rung.
+        bazel_version: [8.7.0, 9.1.1]
         exclude:
           - os: ubuntu-latest
             compiler: native
