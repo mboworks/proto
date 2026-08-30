@@ -34,7 +34,7 @@ include("//bazelmod:llvm.MODULE.bazel")
 # `@com_google_googletest`, `@com_google_protobuf`).
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "platforms", version = "1.1.0")
-bazel_dep(name = "rules_cc", version = "0.2.19")
+bazel_dep(name = "rules_cc", version = "0.2.22")
 bazel_dep(name = "rules_shell", version = "0.8.0")
 
 # RE2's release metadata still selects compatibility-level-1 Abseil. Patch the
