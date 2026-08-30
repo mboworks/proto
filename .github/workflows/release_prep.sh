@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# SPDX-FileCopyrightText: Copyright (c) The helly25/mbo authors (helly25.com)
+# SPDX-FileCopyrightText: Copyright (c) M. Boerger, the MBO Works authors
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,7 +93,7 @@ git archive --format=tar.gz --prefix="${PREFIX}/" -o "${ARCHIVE}" --add-virtual-
 
 # Print header
 echo "# Version ${TAG}"
-echo "## [Changelog](https://github.com/helly25/${PACKAGE_NAME}/blob/${TAG}/CHANGELOG.md)"
+echo "## [Changelog](https://github.com/mboworks/${PACKAGE_NAME}/blob/${TAG}/CHANGELOG.md)"
 
 # Print Changelog
 awk '/^#/{f+=1;if(f>1)exit} !/^#/{print}' < CHANGELOG.md
@@ -107,7 +107,7 @@ bazel_dep(name = "${BAZELMOD_NAME}", version = "${TAG}")
 
 ### Using the provided LLVM
 
-Copy [llvm.MODULE.bazel](https://github.com/helly25/${PACKAGE_NAME}/blob/main/bazelmod/llvm.MODULE.bazel) to your repository's root directory and add the following line to your MODULES.bazel file or paste the whole contents into it.
+Copy [llvm.MODULE.bazel](https://github.com/mboworks/${PACKAGE_NAME}/blob/main/bazelmod/llvm.MODULE.bazel) to your repository's root directory and add the following line to your MODULES.bazel file or paste the whole contents into it.
 
 \`\`\`
 include("//:llvm.MODULE.bazel")
@@ -115,7 +115,7 @@ include("//:llvm.MODULE.bazel")
 
 ### Using the provided development modules
 
-Copy [dev.MODULE.bazel](https://github.com/helly25/${PACKAGE_NAME}/blob/main/bazelmod/dev.MODULE.bazel) to your repository's root directory and add the following line to your MODULES.bazel file or paste the whole contents into it. It provides the dev-only Hedron compile-commands extractor (generates compile_commands.json for clangd) and depend_on_what_you_use.
+Copy [dev.MODULE.bazel](https://github.com/mboworks/${PACKAGE_NAME}/blob/main/bazelmod/dev.MODULE.bazel) to your repository's root directory and add the following line to your MODULES.bazel file or paste the whole contents into it. It provides the dev-only Hedron compile-commands extractor (generates compile_commands.json for clangd) and depend_on_what_you_use.
 
 \`\`\`
 include("//:dev.MODULE.bazel")
