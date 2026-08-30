@@ -177,6 +177,9 @@ repos:
     rev: v19.1.6
     hooks:
       - id: clang-format
+        # These files contain intentional column-zero preprocessor directives
+        # that the adopted formatter rewrites. Keep that legacy baseline local.
+        exclude: ^mbo/proto/(parse_text_proto\.h|parse_text_proto_test\.cc)$
         types_or: [c, c++, cuda]
 
   - repo: https://github.com/scop/pre-commit-shfmt
