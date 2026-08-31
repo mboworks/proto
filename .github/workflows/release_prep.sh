@@ -22,7 +22,7 @@ set -euo pipefail
 
 # Custom args to update as needed.
 PACKAGE_NAME="proto"
-BAZELMOD_NAME="helly25_proto"
+BAZELMOD_NAME="mboworks_proto"
 PATCHES=(
   ".github/workflows/bazelmod.patch"
 )

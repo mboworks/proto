@@ -1,12 +1,12 @@
 This package contains a collection of utilities around Google's [Protocolbuffer](https://github.com/protocolbuffers/protobuf). The functions offered in this packages are widely used across Google's C++ code base and have saved tens of thousands of engineering hours. Some of these functions were originally implemented by the author and later re-implemented or cloned (see below).
 
-The project works with Google's proto library version 27, 28, 29 and 30. Packages are available at [Bazel Central Registry](https://registry.bazel.build/modules/helly25_proto) and [GitHub](https://github.com/mboworks/proto/releases).
+The project works with Google's proto library version 27, 28, 29 and 30. Packages are available at [Bazel Central Registry](https://registry.bazel.build/modules/mboworks_proto) and [GitHub](https://github.com/mboworks/proto/releases).
 
 [![Test](https://github.com/mboworks/proto/actions/workflows/main.yml/badge.svg)](https://github.com/mboworks/proto/actions/workflows/main.yml)
 
 # Parse Proto
 
-- rule: `@com_helly25_proto//mbo/proto:parse_text_proto_cc`
+- rule: `@mboworks_proto//mbo/proto:parse_text_proto_cc`
 - namespace: `mbo::proto`
 
 - `ParseTextProtoOrDie`(`text_proto` [, `std::source_location`])
@@ -34,7 +34,7 @@ BUILD.bazel:
 cc_test(
     name = "test",
     srcs = ["test.cc"],
-    deps = ["@com_helly25_proto//mbo/proto:parse_text_proto",]
+    deps = ["@mboworks_proto//mbo/proto:parse_text_proto_cc"],
 )
 ```
 
@@ -65,7 +65,7 @@ The `ParseTextProtoOrDie` function dies if the input text-proto is not valid. Th
 
 # Proto Matchers
 
-- rule: `@com_helly25_proto//mbo/proto:matchers_cc`
+- rule: `@mboworks_proto//mbo/proto:matchers_cc`
 - namespace: `mbo::proto`
 
 - `EqualsProto`(`msg`)
@@ -133,7 +133,7 @@ BUILD.bazel:
 cc_test(
     name = "test",
     srcs = ["test.cc"],
-    deps = ["@com_helly25_proto//mbo/proto:matchers"],
+    deps = ["@mboworks_proto//mbo/proto:matchers_cc"],
 )
 ```
 
@@ -192,7 +192,7 @@ TEST(Foo, Wrapper) {
 
 # Proto Files
 
-- rule: `@com_helly25_proto//mbo/proto:file_cc`
+- rule: `@mboworks_proto//mbo/proto:file_cc`
 - namespace: `mbo::proto`
 
 - class `ReadBinaryProtoFile`(`filename`)
@@ -299,12 +299,12 @@ The project is formatted with specific clang-format settings which require clang
 
 ## MODULES.bazel
 
-The project is consumed via Bazel modules (bzlmod); WORKSPACE mode is no longer supported. The [BCR](https://registry.bazel.build/modules/helly25_proto) version declares the dependency versions this module is pinned to; those can be bumped locally. The protobuf version can be overridden in your own `MODULE.bazel` (e.g. via `single_version_override`) to any release the project supports.
+The project is consumed via Bazel modules (bzlmod); WORKSPACE mode is no longer supported. The [BCR](https://registry.bazel.build/modules/mboworks_proto) version declares the dependency versions this module is pinned to; those can be bumped locally. The protobuf version can be overridden in your own `MODULE.bazel` (e.g. via `single_version_override`) to any release the project supports.
 
-Check [Releases](https://registry.bazel.build/modules/helly25_proto) for details. All that is needed is a `bazel_dep` instruction with the correct version.
+Check [Releases](https://registry.bazel.build/modules/mboworks_proto) for details. All that is needed is a `bazel_dep` instruction with the correct version.
 
 ```bzl
-bazel_dep(name = "helly25_proto", version = "0.0.0", repo_name = "com_helly25_proto")
+bazel_dep(name = "mboworks_proto", version = "1.2.2")
 ```
 
 # Clone
