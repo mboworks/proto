@@ -17,7 +17,7 @@
 
 module(
     name = "mboworks_proto",
-    version = "1.2.2",
+    version = "1.2.3",
 )
 
 # For local development we include LLVM, Hedron-Compile-Commands, etc.
@@ -60,8 +60,8 @@ bazel_dep(name = "re2", version = "2025-11-05.bcr.1", repo_name = "com_googlesou
 bazel_dep(name = "googletest", version = "1.18.0.bcr.1", repo_name = "com_google_googletest")
 
 # Default to protobuf 35.0, the version selected by the combined GoogleTest and
-# Abseil graph. The `proto_version` CI matrix continues to exercise its declared
-# roots under Bazel's normal minimum-version selection.
+# Abseil graph. The scheduled compatibility workflow continues to exercise its
+# declared protobuf roots under Bazel's normal minimum-version selection.
 bazel_dep(name = "protobuf", version = "35.0", repo_name = "com_google_protobuf")
 
 # Transitive-compat shim (not used by any first-party code): protobuf pulls
