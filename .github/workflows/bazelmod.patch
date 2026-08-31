@@ -13,3 +13,19 @@ diff --git a/MODULE.bazel b/MODULE.bazel
  
  # `repo_name`s preserve the WORKSPACE-era aliases that this repo's BUILD files
  # still reference (`@com_google_absl`, `@com_googlesource_code_re2`,
+diff --git a/bazelmod/BUILD.bazel b/bazelmod/BUILD.bazel
+--- a/bazelmod/BUILD.bazel
++++ b/bazelmod/BUILD.bazel
+@@ -16,2 +16,0 @@
+-load("@hedron_compile_commands//:refresh_compile_commands.bzl", "refresh_compile_commands")
+-
+@@ -26,9 +24,0 @@ exports_files([
+-
+-# Generates compile_commands.json for clangd and the enforcing clang-tidy hook.
+-refresh_compile_commands(
+-    name = "refresh_compile_commands",
+-    tags = ["manual"],
+-    targets = {
+-        "@//...": "--config=clang-tidy",
+-    },
+-)

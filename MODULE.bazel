@@ -15,12 +15,9 @@
 
 """Module mboworks/proto."""
 
-# repo_name keeps the old WORKSPACE-era name as a downstream alias; no internal
-# code depends on it anymore. Slated for removal in a future breaking release.
 module(
-    name = "helly25_proto",
+    name = "mboworks_proto",
     version = "1.2.2",
-    repo_name = "com_helly25_proto",
 )
 
 # For local development we include LLVM, Hedron-Compile-Commands, etc.
@@ -32,7 +29,7 @@ include("//bazelmod:llvm.MODULE.bazel")
 # `repo_name`s preserve the WORKSPACE-era aliases that this repo's BUILD files
 # still reference (`@com_google_absl`, `@com_googlesource_code_re2`,
 # `@com_google_googletest`, `@com_google_protobuf`).
-bazel_dep(name = "bazel_skylib", version = "1.9.0")
+bazel_dep(name = "bazel_skylib", version = "1.9.2")
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "rules_cc", version = "0.2.22")
 bazel_dep(name = "rules_shell", version = "0.8.0")

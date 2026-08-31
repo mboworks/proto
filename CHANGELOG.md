@@ -1,5 +1,8 @@
 # 1.2.2
 
+- Renamed the Bazel module from `helly25_proto` to `mboworks_proto` for publication under MBO Works.
+- Updated bazel-skylib to 1.9.2 and the compile-commands extractor pin to its latest verified fork commit.
+- Made the release archive independent of development-only compile-command tooling.
 - Force a Bazel-9-compatible `rules_android` (0.7.2) via MVS, so downstream consumers (and the BCR presubmit) don't hit protobuf's transitive `rules_android` 0.6.4 failing to load on Bazel 9.
 
 # 1.2.1
