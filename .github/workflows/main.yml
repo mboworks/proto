@@ -112,7 +112,7 @@ jobs:
           python3 tools/coverage_index.py report \
             coverage-html/coverage-summary.json "${COVERAGE_PAGE}" coverage-html/index.html
           cat coverage-summary.md >>"${GITHUB_STEP_SUMMARY}"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: coverage-report
