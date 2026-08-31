@@ -1,0 +1,30 @@
+name: Compatibility
+
+on:
+  schedule:
+    - cron: "23 4 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: compatibility-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  protobuf:
+    strategy:
+      fail-fast: false
+      matrix:
+        proto_version: ["32.1", "33.6", "34.1", "35.0"]
+    uses: ./.github/workflows/test.yml
+    with:
+      continue-on-error: false
+      os: ubuntu-latest
+      compiler: clang
+      llvm_version: 22.1.8
+      bazel_config: opt
+      bazel_version: 9.2.0
+      proto_version: ${{ matrix.proto_version }}

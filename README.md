@@ -289,7 +289,7 @@ int main() {
 
 # Installation and requirements
 
-This repository requires a C++20 compiler (in case of MacOS XCode 15 is needed) and Bazel 8 or newer. The project's CI tests a combination of Clang and GCC compilers on Linux/Ubuntu and MacOS. The project can be used with Google's proto libraries in versions [32, 33, 34, 35].
+This repository requires a C++20 compiler (in case of MacOS XCode 15 is needed) and Bazel 8 or newer. Required CI uses GCC 14 and LLVM/Clang 22.1.8 on Linux/Ubuntu and macOS, with Bazel 8 and 9 compatibility rungs. A scheduled compatibility workflow tests Google's proto libraries in versions [32, 33, 34, 35].
 
 The reliance on a C++20 compiler is because it uses `std::source_location` since Google's Abseil `absl::SourceLocation` has not been open sourced.
 
