@@ -1,0 +1,561 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - proto production coverage - proto/mbo/proto/matchers.cc</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+  <style>
+    .mboNavigation { padding: .35rem 0; text-align: center; }
+    .mboHeaderSummary { margin: 0 auto; width: 80%; }
+    .mboPolicy { border-collapse: collapse; margin: .75rem auto 1rem; width: auto; }
+    .mboPolicy th { padding: .2rem .75rem; text-align: left; }
+    .mboPolicy td { font-size: 100%; padding: .2rem .75rem; text-align: center; }
+  </style>
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="mboNavigation"><a href="../../../../index.html">Report overview</a> &middot; <a href="../../../../../../index.html">All coverage reports</a></td></tr>
+
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table class="mboHeaderSummary" cellpadding=1 border=0>
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../../index.html" title="Click to go to top-level">top level</a> - <a href="../../index.html" title="Click to go to directory proto">proto</a>/<a href="../index.html" title="Click to go to directory mbo">mbo</a>/<a href="index.html" title="Click to go to directory proto">proto</a> - matchers.cc<span style="font-size: 80%;"> (source / <a href="matchers.cc.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">proto production coverage</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">71.3&nbsp;%</td>
+            <td class="headerCovTableEntry">157</td>
+            <td class="headerCovTableEntry">112</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-08-31 21:56:19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">73.7&nbsp;%</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntry">14</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntryLo">24.6&nbsp;%</td>
+            <td class="headerCovTableEntry">410</td>
+            <td class="headerCovTableEntry">101</td>
+          </tr>
+                  <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">             Branch data     Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>                 :             : // SPDX-FileCopyrightText: Copyright (c) M. Boerger, the MBO Works authors, The CPP Proto Builder Authors</span>
+<span id="L2"><span class="lineNum">       2</span>                 :             : // SPDX-License-Identifier: Apache-2.0</span>
+<span id="L3"><span class="lineNum">       3</span>                 :             : //</span>
+<span id="L4"><span class="lineNum">       4</span>                 :             : // Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span id="L5"><span class="lineNum">       5</span>                 :             : // you may not use this file except in compliance with the License.</span>
+<span id="L6"><span class="lineNum">       6</span>                 :             : // You may obtain a copy of the License at</span>
+<span id="L7"><span class="lineNum">       7</span>                 :             : //</span>
+<span id="L8"><span class="lineNum">       8</span>                 :             : //      http://www.apache.org/licenses/LICENSE-2.0</span>
+<span id="L9"><span class="lineNum">       9</span>                 :             : //</span>
+<span id="L10"><span class="lineNum">      10</span>                 :             : // Unless required by applicable law or agreed to in writing, software</span>
+<span id="L11"><span class="lineNum">      11</span>                 :             : // distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span id="L12"><span class="lineNum">      12</span>                 :             : // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span id="L13"><span class="lineNum">      13</span>                 :             : // See the License for the specific language governing permissions and</span>
+<span id="L14"><span class="lineNum">      14</span>                 :             : // limitations under the License.</span>
+<span id="L15"><span class="lineNum">      15</span>                 :             : </span>
+<span id="L16"><span class="lineNum">      16</span>                 :             : #include &quot;mbo/proto/matchers.h&quot;</span>
+<span id="L17"><span class="lineNum">      17</span>                 :             : </span>
+<span id="L18"><span class="lineNum">      18</span>                 :             : #include &lt;cstddef&gt;</span>
+<span id="L19"><span class="lineNum">      19</span>                 :             : #include &lt;memory&gt;</span>
+<span id="L20"><span class="lineNum">      20</span>                 :             : #include &lt;sstream&gt;</span>
+<span id="L21"><span class="lineNum">      21</span>                 :             : #include &lt;string&gt;</span>
+<span id="L22"><span class="lineNum">      22</span>                 :             : #include &lt;string_view&gt;</span>
+<span id="L23"><span class="lineNum">      23</span>                 :             : #include &lt;vector&gt;</span>
+<span id="L24"><span class="lineNum">      24</span>                 :             : </span>
+<span id="L25"><span class="lineNum">      25</span>                 :             : #include &quot;absl/log/absl_check.h&quot;</span>
+<span id="L26"><span class="lineNum">      26</span>                 :             : #include &quot;absl/log/absl_log.h&quot;</span>
+<span id="L27"><span class="lineNum">      27</span>                 :             : #include &quot;absl/strings/str_cat.h&quot;</span>
+<span id="L28"><span class="lineNum">      28</span>                 :             : #include &quot;absl/strings/strip.h&quot;</span>
+<span id="L29"><span class="lineNum">      29</span>                 :             : #include &quot;absl/strings/substitute.h&quot;</span>
+<span id="L30"><span class="lineNum">      30</span>                 :             : #include &quot;google/protobuf/descriptor.h&quot;</span>
+<span id="L31"><span class="lineNum">      31</span>                 :             : #include &quot;google/protobuf/io/tokenizer.h&quot;</span>
+<span id="L32"><span class="lineNum">      32</span>                 :             : #include &quot;google/protobuf/message.h&quot;</span>
+<span id="L33"><span class="lineNum">      33</span>                 :             : // #include &quot;google/protobuf/stubs/common.h&quot;  // Via tokenizer.h</span>
+<span id="L34"><span class="lineNum">      34</span>                 :             : #include &quot;google/protobuf/text_format.h&quot;</span>
+<span id="L35"><span class="lineNum">      35</span>                 :             : #include &quot;google/protobuf/util/field_comparator.h&quot;</span>
+<span id="L36"><span class="lineNum">      36</span>                 :             : #include &quot;gtest/gtest.h&quot;</span>
+<span id="L37"><span class="lineNum">      37</span>                 :             : #include &quot;re2/re2.h&quot;</span>
+<span id="L38"><span class="lineNum">      38</span>                 :             : </span>
+<span id="L39"><span class="lineNum">      39</span>                 :             : namespace mbo::proto::internal {</span>
+<span id="L40"><span class="lineNum">      40</span>                 :             : </span>
+<span id="L41"><span class="lineNum">      41</span>                 :             : // Utilities.</span>
+<span id="L42"><span class="lineNum">      42</span>                 :             : </span>
+<span id="L43"><span class="lineNum">      43</span>                 :             : class StringErrorCollector : public ::google::protobuf::io::ErrorCollector {</span>
+<span id="L44"><span class="lineNum">      44</span>                 :             :  public:</span>
+<span id="L45"><span class="lineNum">      45</span>                 :<span class="tlaGNC">          25 :   explicit StringErrorCollector(std::string* error_text) : error_text_(error_text) {}</span></span>
+<span id="L46"><span class="lineNum">      46</span>                 :             : </span>
+<span id="L47"><span class="lineNum">      47</span>                 :<span class="tlaGNC">          25 :   ~StringErrorCollector() override = default;</span></span>
+<span id="L48"><span class="lineNum">      48</span>                 :             :   StringErrorCollector(const StringErrorCollector&amp;) = delete;</span>
+<span id="L49"><span class="lineNum">      49</span>                 :             :   StringErrorCollector&amp; operator=(const StringErrorCollector&amp;) = delete;</span>
+<span id="L50"><span class="lineNum">      50</span>                 :             :   StringErrorCollector(StringErrorCollector&amp;&amp;) = delete;</span>
+<span id="L51"><span class="lineNum">      51</span>                 :             :   StringErrorCollector&amp; operator=(StringErrorCollector&amp;&amp;) = delete;</span>
+<span id="L52"><span class="lineNum">      52</span>                 :             : </span>
+<span id="L53"><span class="lineNum">      53</span>                 :             : #if GOOGLE_PROTOBUF_VERSION &gt;= 5'026'000</span>
+<span id="L54"><span class="lineNum">      54</span>                 :<span class="tlaUNC">           0 :   void RecordError(int line, int column, std::string_view message) override {</span></span>
+<span id="L55"><span class="lineNum">      55</span>                 :             : #else</span>
+<span id="L56"><span class="lineNum">      56</span>                 :             :   void AddError(int line, int column, const std::string&amp; message) override {</span>
+<span id="L57"><span class="lineNum">      57</span>                 :             : #endif</span>
+<span id="L58"><span class="lineNum">      58</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> :<span class="tlaUNC">           0 :     absl::SubstituteAndAppend(error_text_, &quot;$0($1): $2\n&quot;, line, column, message);</span></span>
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span>]
+<span id="L59"><span class="lineNum">      59</span>                 :<span class="tlaUNC">           0 :   }</span></span>
+<span id="L60"><span class="lineNum">      60</span>                 :             : </span>
+<span id="L61"><span class="lineNum">      61</span>                 :             : #if GOOGLE_PROTOBUF_VERSION &gt;= 5'026'000</span>
+<span id="L62"><span class="lineNum">      62</span>                 :<span class="tlaUNC">           0 :   void RecordWarning(int line, int column, std::string_view message) override {</span></span>
+<span id="L63"><span class="lineNum">      63</span>                 :             : #else</span>
+<span id="L64"><span class="lineNum">      64</span>                 :             :   void AddWarning(int line, int column, const std::string&amp; message) override {</span>
+<span id="L65"><span class="lineNum">      65</span>                 :             : #endif</span>
+<span id="L66"><span class="lineNum">      66</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> :<span class="tlaUNC">           0 :     absl::SubstituteAndAppend(error_text_, &quot;$0($1): $2\n&quot;, line, column, message);</span></span>
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span>]
+<span id="L67"><span class="lineNum">      67</span>                 :<span class="tlaUNC">           0 :   }</span></span>
+<span id="L68"><span class="lineNum">      68</span>                 :             : </span>
+<span id="L69"><span class="lineNum">      69</span>                 :             :  private:</span>
+<span id="L70"><span class="lineNum">      70</span>                 :             :   std::string* error_text_;</span>
+<span id="L71"><span class="lineNum">      71</span>                 :             : };</span>
+<span id="L72"><span class="lineNum">      72</span>                 :             : </span>
+<span id="L73"><span class="lineNum">      73</span>                 :<span class="tlaGNC">          25 : bool ParsePartialFromAscii(const std::string&amp; pb_ascii, ::google::protobuf::Message* proto, std::string* error_text) {</span></span>
+<span id="L74"><span class="lineNum">      74</span>         [<span class="tlaGBC" title="branch 0 was taken 25 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">          25 :   ::google::protobuf::TextFormat::Parser parser;</span></span>
+<span id="L75"><span class="lineNum">      75</span>                 :<span class="tlaGNC">          25 :   StringErrorCollector collector(error_text);</span></span>
+<span id="L76"><span class="lineNum">      76</span>                 :<span class="tlaGNC">          25 :   parser.RecordErrorsTo(&amp;collector);</span></span>
+<span id="L77"><span class="lineNum">      77</span>                 :<span class="tlaGNC">          25 :   parser.AllowPartialMessage(true);</span></span>
+<span id="L78"><span class="lineNum">      78</span>   [<span class="tlaGBC" title="branch 0 was taken 25 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 25 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span>]:<span class="tlaGNC">          50 :   return parser.ParseFromString(std::string(pb_ascii), proto);</span></span>
+<span id="L79"><span class="lineNum">      79</span>                 :<span class="tlaGNC">          25 : }</span></span>
+<span id="L80"><span class="lineNum">      80</span>                 :             : </span>
+<span id="L81"><span class="lineNum">      81</span>                 :             : // Returns true iff `lhs` and `rhs` can be compared (i.e. have the same descriptor).</span>
+<span id="L82"><span class="lineNum">      82</span>                 :<span class="tlaGNC">          84 : bool ProtoComparable(const ::google::protobuf::Message&amp; lhs, const ::google::protobuf::Message&amp; rhs) {</span></span>
+<span id="L83"><span class="lineNum">      83</span>                 :<span class="tlaGNC">          84 :   return lhs.GetDescriptor() == rhs.GetDescriptor();</span></span>
+<span id="L84"><span class="lineNum">      84</span>                 :             : }</span>
+<span id="L85"><span class="lineNum">      85</span>                 :             : </span>
+<span id="L86"><span class="lineNum">      86</span>                 :             : namespace {</span>
+<span id="L87"><span class="lineNum">      87</span>                 :             : </span>
+<span id="L88"><span class="lineNum">      88</span>                 :             : template&lt;typename Container&gt;</span>
+<span id="L89"><span class="lineNum">      89</span>                 :<span class="tlaUNC">           0 : std::string JoinStringPieces(const Container&amp; strings, std::string_view separator) {</span></span>
+<span id="L90"><span class="lineNum">      90</span>         [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :   std::stringstream stream;</span></span>
+<span id="L91"><span class="lineNum">      91</span>                 :<span class="tlaUNC">           0 :   std::string_view sep;</span></span>
+<span id="L92"><span class="lineNum">      92</span>         [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :   for (const std::string_view str : strings) {</span></span>
+<span id="L93"><span class="lineNum">      93</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span>]:<span class="tlaUNC">           0 :     stream &lt;&lt; sep &lt;&lt; str;</span></span>
+<span id="L94"><span class="lineNum">      94</span>                 :<span class="tlaUNC">           0 :     sep = separator;</span></span>
+<span id="L95"><span class="lineNum">      95</span>                 :             :   }</span>
+<span id="L96"><span class="lineNum">      96</span>         [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :   return stream.str();</span></span>
+<span id="L97"><span class="lineNum">      97</span>                 :<span class="tlaUNC">           0 : }</span></span>
+<span id="L98"><span class="lineNum">      98</span>                 :             : </span>
+<span id="L99"><span class="lineNum">      99</span>                 :             : // Find all the descriptors for the ignore_fields.</span>
+<span id="L100"><span class="lineNum">     100</span>                 :<span class="tlaGNC">           2 : std::vector&lt;const ::google::protobuf::FieldDescriptor*&gt; GetFieldDescriptors(</span></span>
+<span id="L101"><span class="lineNum">     101</span>                 :             :     const ::google::protobuf::Descriptor* proto_descriptor,</span>
+<span id="L102"><span class="lineNum">     102</span>                 :             :     const std::vector&lt;std::string&gt;&amp; ignore_fields) {</span>
+<span id="L103"><span class="lineNum">     103</span>                 :<span class="tlaGNC">           2 :   std::vector&lt;const ::google::protobuf::FieldDescriptor*&gt; ignore_descriptors;</span></span>
+<span id="L104"><span class="lineNum">     104</span>                 :<span class="tlaGNC">           2 :   std::vector&lt;std::string_view&gt; remaining_descriptors;</span></span>
+<span id="L105"><span class="lineNum">     105</span>                 :             : </span>
+<span id="L106"><span class="lineNum">     106</span>   [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 2 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span>]:<span class="tlaGNC">           2 :   const ::google::protobuf::DescriptorPool* pool = proto_descriptor-&gt;file()-&gt;pool();</span></span>
+<span id="L107"><span class="lineNum">     107</span>         [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaGBC" title="branch 1 was taken 2 times"> + </span>]:<span class="tlaGNC">           4 :   for (const std::string&amp; name : ignore_fields) {</span></span>
+<span id="L108"><span class="lineNum">     108</span>   [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 2 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> :<span class="tlaGNC">           2 :     if (const ::google::protobuf::FieldDescriptor* field = pool-&gt;FindFieldByName(std::string(name))) {</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="branch 4 was taken 2 times"> + </span><span class="tlaUNC" title="branch 5 was not taken"> - </span>]
+<span id="L109"><span class="lineNum">     109</span>         [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           2 :       ignore_descriptors.push_back(field);</span></span>
+<span id="L110"><span class="lineNum">     110</span>                 :             :     } else {</span>
+<span id="L111"><span class="lineNum">     111</span>         [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :       remaining_descriptors.push_back(name);</span></span>
+<span id="L112"><span class="lineNum">     112</span>                 :             :     }</span>
+<span id="L113"><span class="lineNum">     113</span>                 :             :   }</span>
+<span id="L114"><span class="lineNum">     114</span>                 :             : </span>
+<span id="L115"><span class="lineNum">     115</span>   [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 2 times"> + </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> :<span class="tlaGNC">           2 :   ABSL_QCHECK(remaining_descriptors.empty())</span></span>
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not taken"> - </span><span class="tlaUNC" title="branch 5 was not taken"> - </span><span class="tlaUNC" title="branch 6 was not taken"> - </span><span class="tlaUNC" title="branch 7 was not taken"> - </span><span class="tlaUNC" title="branch 8 was not taken"> - </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="branch 9 was not taken"> - </span>]
+<span id="L116"><span class="lineNum">     116</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> :<span class="tlaUNC">           0 :       &lt;&lt; &quot;Could not find fields for proto &quot; &lt;&lt; proto_descriptor-&gt;full_name()</span></span>
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span>]
+<span id="L117"><span class="lineNum">     117</span>   [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> :<span class="tlaGNC">           2 :       &lt;&lt; &quot; with fully qualified names: &quot; &lt;&lt; JoinStringPieces(remaining_descriptors, &quot;,&quot;);</span></span>
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not taken"> - </span><span class="tlaGBC" title="branch 5 was taken 2 times"> + </span><span class="tlaUNC" title="branch 6 was not taken"> - </span><span class="tlaGBC" title="branch 7 was taken 2 times"> + </span><span class="tlaUNC" title="branch 8 was not taken"> - </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="branch 9 was not taken"> - </span>]
+<span id="L118"><span class="lineNum">     118</span>                 :<span class="tlaGNC">           2 :   return ignore_descriptors;</span></span>
+<span id="L119"><span class="lineNum">     119</span>                 :<span class="tlaGNC">           2 : }</span></span>
+<span id="L120"><span class="lineNum">     120</span>                 :             : </span>
+<span id="L121"><span class="lineNum">     121</span>                 :             : // Sets the ignored fields corresponding to ignore_fields in differencer. Dies</span>
+<span id="L122"><span class="lineNum">     122</span>                 :             : // if any is invalid.</span>
+<span id="L123"><span class="lineNum">     123</span>                 :<span class="tlaGNC">          45 : void SetIgnoredFieldsOrDie(</span></span>
+<span id="L124"><span class="lineNum">     124</span>                 :             :     const ::google::protobuf::Descriptor&amp; root_descriptor,</span>
+<span id="L125"><span class="lineNum">     125</span>                 :             :     const std::vector&lt;std::string&gt;&amp; ignore_fields,</span>
+<span id="L126"><span class="lineNum">     126</span>                 :             :     ::google::protobuf::util::MessageDifferencer* differencer) {</span>
+<span id="L127"><span class="lineNum">     127</span>         [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaGBC" title="branch 1 was taken 43 times"> + </span>]:<span class="tlaGNC">          45 :   if (!ignore_fields.empty()) {</span></span>
+<span id="L128"><span class="lineNum">     128</span>                 :             :     const std::vector&lt;const ::google::protobuf::FieldDescriptor*&gt; ignore_descriptors =</span>
+<span id="L129"><span class="lineNum">     129</span>         [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           2 :         GetFieldDescriptors(&amp;root_descriptor, ignore_fields);</span></span>
+<span id="L130"><span class="lineNum">     130</span>         [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaGBC" title="branch 1 was taken 2 times"> + </span>]:<span class="tlaGNC">           4 :     for (const auto&amp; ignore_descriptor : ignore_descriptors) {</span></span>
+<span id="L131"><span class="lineNum">     131</span>         [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           2 :       differencer-&gt;IgnoreField(ignore_descriptor);</span></span>
+<span id="L132"><span class="lineNum">     132</span>                 :             :     }</span>
+<span id="L133"><span class="lineNum">     133</span>                 :<span class="tlaGNC">           2 :   }</span></span>
+<span id="L134"><span class="lineNum">     134</span>                 :<span class="tlaGNC">          45 : }</span></span>
+<span id="L135"><span class="lineNum">     135</span>                 :             : </span>
+<span id="L136"><span class="lineNum">     136</span>                 :             : // A criterion that ignores a field path.</span>
+<span id="L137"><span class="lineNum">     137</span>                 :             : class IgnoreFieldPathCriteria : public ::google::protobuf::util::MessageDifferencer::IgnoreCriteria {</span>
+<span id="L138"><span class="lineNum">     138</span>                 :             :  public:</span>
+<span id="L139"><span class="lineNum">     139</span>                 :<span class="tlaGNC">           6 :   explicit IgnoreFieldPathCriteria(</span></span>
+<span id="L140"><span class="lineNum">     140</span>                 :             :       const std::vector&lt;::google::protobuf::util::MessageDifferencer::SpecificField&gt;&amp; field_path)</span>
+<span id="L141"><span class="lineNum">     141</span>         [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           6 :       : ignored_field_path_(field_path) {}</span></span>
+<span id="L142"><span class="lineNum">     142</span>                 :             : </span>
+<span id="L143"><span class="lineNum">     143</span>                 :<span class="tlaGNC">          16 :   bool IsIgnored(</span></span>
+<span id="L144"><span class="lineNum">     144</span>                 :             :       const ::google::protobuf::Message&amp; /*message1*/,</span>
+<span id="L145"><span class="lineNum">     145</span>                 :             :       const ::google::protobuf::Message&amp; /*message2*/,</span>
+<span id="L146"><span class="lineNum">     146</span>                 :             :       const ::google::protobuf::FieldDescriptor* field,</span>
+<span id="L147"><span class="lineNum">     147</span>                 :             :       const std::vector&lt;::google::protobuf::util::MessageDifferencer::SpecificField&gt;&amp; parent_fields) override {</span>
+<span id="L148"><span class="lineNum">     148</span>                 :             :     // The off by one is for the current field.</span>
+<span id="L149"><span class="lineNum">     149</span>         [<span class="tlaGBC" title="branch 0 was taken 4 times"> + </span><span class="tlaGBC" title="branch 1 was taken 12 times"> + </span>]:<span class="tlaGNC">          16 :     if (parent_fields.size() + 1 != ignored_field_path_.size()) {</span></span>
+<span id="L150"><span class="lineNum">     150</span>                 :<span class="tlaGNC">           4 :       return false;</span></span>
+<span id="L151"><span class="lineNum">     151</span>                 :             :     }</span>
+<span id="L152"><span class="lineNum">     152</span>         [<span class="tlaGBC" title="branch 0 was taken 8 times"> + </span><span class="tlaGBC" title="branch 1 was taken 11 times"> + </span>]:<span class="tlaGNC">          19 :     for (std::size_t i = 0; i &lt; parent_fields.size(); ++i) {</span></span>
+<span id="L153"><span class="lineNum">     153</span>                 :<span class="tlaGNC">           8 :       const auto&amp; cur_field = parent_fields[i];</span></span>
+<span id="L154"><span class="lineNum">     154</span>                 :<span class="tlaGNC">           8 :       const auto&amp; ignored_field = ignored_field_path_[i];</span></span>
+<span id="L155"><span class="lineNum">     155</span>                 :             :       // We could compare pointers but it's not guaranteed that descriptors come</span>
+<span id="L156"><span class="lineNum">     156</span>                 :             :       // from the same pool.</span>
+<span id="L157"><span class="lineNum">     157</span>         [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 8 times"> + </span>]:<span class="tlaGNC">           8 :       if (cur_field.field-&gt;full_name() != ignored_field.field-&gt;full_name()) {</span></span>
+<span id="L158"><span class="lineNum">     158</span>                 :<span class="tlaUNC">           0 :         return false;</span></span>
+<span id="L159"><span class="lineNum">     159</span>                 :             :       }</span>
+<span id="L160"><span class="lineNum">     160</span>                 :             : </span>
+<span id="L161"><span class="lineNum">     161</span>                 :             :       // repeated_field[i] is ignored if repeated_field is ignored. To put it</span>
+<span id="L162"><span class="lineNum">     162</span>                 :             :       // differently: if ignored_field specifies an index, we ignore only a</span>
+<span id="L163"><span class="lineNum">     163</span>                 :             :       // field with the same index.</span>
+<span id="L164"><span class="lineNum">     164</span>   [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaGBC" title="branch 1 was taken 6 times"> + </span><span class="tlaGBC" title="branch 2 was taken 1 time"> + </span><span class="tlaGBC" title="branch 3 was taken 1 time"> + </span>]:<span class="tlaGNC">           8 :       if (ignored_field.index != -1 &amp;&amp; ignored_field.index != cur_field.index) {</span></span>
+<span id="L165"><span class="lineNum">     165</span>                 :<span class="tlaGNC">           1 :         return false;</span></span>
+<span id="L166"><span class="lineNum">     166</span>                 :             :       }</span>
+<span id="L167"><span class="lineNum">     167</span>                 :             :     }</span>
+<span id="L168"><span class="lineNum">     168</span>                 :<span class="tlaGNC">          11 :     return field-&gt;full_name() == ignored_field_path_.back().field-&gt;full_name();</span></span>
+<span id="L169"><span class="lineNum">     169</span>                 :             :   }</span>
+<span id="L170"><span class="lineNum">     170</span>                 :             : </span>
+<span id="L171"><span class="lineNum">     171</span>                 :             :  private:</span>
+<span id="L172"><span class="lineNum">     172</span>                 :             :   const std::vector&lt;::google::protobuf::util::MessageDifferencer::SpecificField&gt; ignored_field_path_;</span>
+<span id="L173"><span class="lineNum">     173</span>                 :             : };</span>
+<span id="L174"><span class="lineNum">     174</span>                 :             : </span>
+<span id="L175"><span class="lineNum">     175</span>                 :             : // Parses a field path and returns individual components.</span>
+<span id="L176"><span class="lineNum">     176</span>                 :             : // NOLINTNEXTLINE(readability-function-cognitive-complexity)</span>
+<span id="L177"><span class="lineNum">     177</span>                 :<span class="tlaGNC">           6 : std::vector&lt;::google::protobuf::util::MessageDifferencer::SpecificField&gt; ParseFieldPathOrDie(</span></span>
+<span id="L178"><span class="lineNum">     178</span>                 :             :     const std::string&amp; relative_field_path,</span>
+<span id="L179"><span class="lineNum">     179</span>                 :             :     const ::google::protobuf::Descriptor&amp; root_descriptor) {</span>
+<span id="L180"><span class="lineNum">     180</span>                 :<span class="tlaGNC">           6 :   std::vector&lt;::google::protobuf::util::MessageDifferencer::SpecificField&gt; field_path;</span></span>
+<span id="L181"><span class="lineNum">     181</span>                 :             :   // We're parsing a dot-separated list of elements that can be either:</span>
+<span id="L182"><span class="lineNum">     182</span>                 :             :   //   - field names</span>
+<span id="L183"><span class="lineNum">     183</span>                 :             :   //   - extension names</span>
+<span id="L184"><span class="lineNum">     184</span>                 :             :   //   - indexed field names</span>
+<span id="L185"><span class="lineNum">     185</span>                 :             :   // The parser is very permissive as to what is a field name, then we check</span>
+<span id="L186"><span class="lineNum">     186</span>                 :             :   // the field name against the descriptor.</span>
+<span id="L187"><span class="lineNum">     187</span>                 :             : </span>
+<span id="L188"><span class="lineNum">     188</span>                 :             :   // Regular parsers. Consume() does not handle optional captures so we split it</span>
+<span id="L189"><span class="lineNum">     189</span>                 :             :   // in two regexps.</span>
+<span id="L190"><span class="lineNum">     190</span>         [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           6 :   const RE2 field_regex(R&quot;(([^.()[\]]+))&quot;);</span></span>
+<span id="L191"><span class="lineNum">     191</span>         [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           6 :   const RE2 field_subscript_regex(R&quot;(([^.()[\]]+)\[(\d+)\])&quot;);</span></span>
+<span id="L192"><span class="lineNum">     192</span>         [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           6 :   const RE2 extension_regex(R&quot;(\(([^)]+)\))&quot;);</span></span>
+<span id="L193"><span class="lineNum">     193</span>                 :             : </span>
+<span id="L194"><span class="lineNum">     194</span>                 :<span class="tlaGNC">           6 :   std::string_view input(relative_field_path);</span></span>
+<span id="L195"><span class="lineNum">     195</span>         [<span class="tlaGBC" title="branch 0 was taken 10 times"> + </span><span class="tlaGBC" title="branch 1 was taken 6 times"> + </span>]:<span class="tlaGNC">          16 :   while (!input.empty()) {</span></span>
+<span id="L196"><span class="lineNum">     196</span>                 :             :     // Consume a dot, except on the first iteration.</span>
+<span id="L197"><span class="lineNum">     197</span>   [<span class="tlaGBC" title="branch 0 was taken 4 times"> + </span><span class="tlaGBC" title="branch 1 was taken 6 times"> + </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaGBC" title="branch 3 was taken 4 times"> + </span> :<span class="tlaGNC">          10 :     if (input.size() &lt; relative_field_path.size() &amp;&amp; !absl::ConsumePrefix(&amp;input, &quot;.&quot;)) {</span></span>
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 4 was not taken"> - </span><span class="tlaGBC" title="branch 5 was taken 10 times"> + </span>]
+<span id="L198"><span class="lineNum">     198</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> :<span class="tlaUNC">           0 :       ABSL_LOG(FATAL) &lt;&lt; &quot;Cannot parse field path '&quot; &lt;&lt; relative_field_path &lt;&lt; &quot;' at offset &quot;</span></span>
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span><span class="tlaUNC" title="branch 6 was not executed"> # </span><span class="tlaUNC" title="branch 7 was not executed"> # </span><span class="tlaUNC" title="branch 8 was not executed"> # </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="branch 9 was not executed"> # </span>]
+<span id="L199"><span class="lineNum">     199</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span>]:<span class="tlaUNC">           0 :                       &lt;&lt; relative_field_path.size() - input.size() &lt;&lt; &quot;: expected '.'&quot;;</span></span>
+<span id="L200"><span class="lineNum">     200</span>                 :             :     }</span>
+<span id="L201"><span class="lineNum">     201</span>                 :             :     // Try to consume a field name. If that fails, consume an extension name.</span>
+<span id="L202"><span class="lineNum">     202</span>                 :<span class="tlaGNC">          10 :     ::google::protobuf::util::MessageDifferencer::SpecificField field;</span></span>
+<span id="L203"><span class="lineNum">     203</span>                 :<span class="tlaGNC">          20 :     std::string name;</span></span>
+<span id="L204"><span class="lineNum">     204</span>   [<span class="tlaGBC" title="branch 0 was taken 10 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 9 times"> + </span><span class="tlaGBC" title="branch 3 was taken 1 time"> + </span> :<span class="tlaGNC">          10 :     if (RE2::Consume(&amp;input, field_subscript_regex, &amp;name, &amp;field.index) || RE2::Consume(&amp;input, field_regex, &amp;name)) {</span></span>
+<span class="lineNum">        </span> <span class="tlaGBC" title="branch 4 was taken 9 times"> + </span><span class="tlaUNC" title="branch 5 was not taken"> - </span><span class="tlaGBC" title="branch 6 was taken 9 times"> + </span><span class="tlaUNC" title="branch 7 was not taken"> - </span><span class="tlaGBC" title="branch 8 was taken 10 times"> + </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="branch 9 was not taken"> - </span>]
+<span id="L205"><span class="lineNum">     205</span>         [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaGBC" title="branch 1 was taken 4 times"> + </span>]:<span class="tlaGNC">          10 :       if (field_path.empty()) {</span></span>
+<span id="L206"><span class="lineNum">     206</span>   [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 6 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span>]:<span class="tlaGNC">           6 :         field.field = root_descriptor.FindFieldByName(std::string(name));</span></span>
+<span id="L207"><span class="lineNum">     207</span>                 :<span class="tlaGNC">           6 :         ABSL_CHECK(field.field) &lt;&lt; &quot;No such field '&quot; &lt;&lt; name &lt;&lt; &quot;' in message '&quot; &lt;&lt; root_descriptor.full_name() &lt;&lt; &quot;'&quot;;</span></span>
+<span class="lineNum">        </span>   [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 6 times"> + </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not taken"> - </span><span class="tlaUNC" title="branch 5 was not taken"> - </span><span class="tlaUNC" title="branch 6 was not taken"> - </span><span class="tlaUNC" title="branch 7 was not taken"> - </span><span class="tlaUNC" title="branch 8 was not taken"> - </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 9 was not taken"> - </span><span class="tlaUNC" title="branch 10 was not taken"> - </span><span class="tlaUNC" title="branch 11 was not taken"> - </span><span class="tlaUNC" title="branch 12 was not taken"> - </span><span class="tlaUNC" title="branch 13 was not taken"> - </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 14 was not taken"> - </span><span class="tlaUNC" title="branch 15 was not taken"> - </span><span class="tlaUNC" title="branch 16 was not taken"> - </span><span class="tlaUNC" title="branch 17 was not taken"> - </span><span class="tlaUNC" title="branch 18 was not taken"> - </span> 
+<span class="lineNum">        </span>       <span class="tlaGBC" title="branch 19 was taken 6 times"> + </span><span class="tlaUNC" title="branch 20 was not taken"> - </span><span class="tlaUNC" title="branch 21 was not taken"> - </span>]
+<span id="L208"><span class="lineNum">     208</span>                 :             :       } else {</span>
+<span id="L209"><span class="lineNum">     209</span>                 :<span class="tlaGNC">           4 :         const ::google::protobuf::util::MessageDifferencer::SpecificField&amp; parent = field_path.back();</span></span>
+<span id="L210"><span class="lineNum">     210</span>   [<span class="tlaGBC" title="branch 0 was taken 4 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 4 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> :<span class="tlaGNC">           4 :         field.field = parent.field-&gt;message_type()-&gt;FindFieldByName(std::string(name));</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="branch 4 was taken 4 times"> + </span><span class="tlaUNC" title="branch 5 was not taken"> - </span>]
+<span id="L211"><span class="lineNum">     211</span>                 :<span class="tlaGNC">           4 :         ABSL_CHECK(field.field) &lt;&lt; &quot;No such field '&quot; &lt;&lt; name &lt;&lt; &quot;' in '&quot; &lt;&lt; parent.field-&gt;full_name() &lt;&lt; &quot;'&quot;;</span></span>
+<span class="lineNum">        </span>   [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 4 times"> + </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not taken"> - </span><span class="tlaUNC" title="branch 5 was not taken"> - </span><span class="tlaUNC" title="branch 6 was not taken"> - </span><span class="tlaUNC" title="branch 7 was not taken"> - </span><span class="tlaUNC" title="branch 8 was not taken"> - </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 9 was not taken"> - </span><span class="tlaUNC" title="branch 10 was not taken"> - </span><span class="tlaUNC" title="branch 11 was not taken"> - </span><span class="tlaUNC" title="branch 12 was not taken"> - </span><span class="tlaUNC" title="branch 13 was not taken"> - </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 14 was not taken"> - </span><span class="tlaUNC" title="branch 15 was not taken"> - </span><span class="tlaUNC" title="branch 16 was not taken"> - </span><span class="tlaUNC" title="branch 17 was not taken"> - </span><span class="tlaUNC" title="branch 18 was not taken"> - </span> 
+<span class="lineNum">        </span>       <span class="tlaGBC" title="branch 19 was taken 4 times"> + </span><span class="tlaUNC" title="branch 20 was not taken"> - </span><span class="tlaUNC" title="branch 21 was not taken"> - </span>]
+<span id="L212"><span class="lineNum">     212</span>                 :             :       }</span>
+<span id="L213"><span class="lineNum">     213</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span>]:<span class="tlaUNC">           0 :     } else if (RE2::Consume(&amp;input, extension_regex, &amp;name)) {</span></span>
+<span id="L214"><span class="lineNum">     214</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span>]:<span class="tlaUNC">           0 :       field.field = ::google::protobuf::DescriptorPool::generated_pool()-&gt;FindExtensionByName(name);</span></span>
+<span id="L215"><span class="lineNum">     215</span>                 :<span class="tlaUNC">           0 :       ABSL_CHECK(field.field) &lt;&lt; &quot;No such extension '&quot; &lt;&lt; name &lt;&lt; &quot;'&quot;;</span></span>
+<span class="lineNum">        </span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span><span class="tlaUNC" title="branch 6 was not executed"> # </span><span class="tlaUNC" title="branch 7 was not executed"> # </span><span class="tlaUNC" title="branch 8 was not executed"> # </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 9 was not executed"> # </span><span class="tlaUNC" title="branch 10 was not executed"> # </span><span class="tlaUNC" title="branch 11 was not executed"> # </span><span class="tlaUNC" title="branch 12 was not executed"> # </span><span class="tlaUNC" title="branch 13 was not executed"> # </span> 
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 14 was not executed"> # </span><span class="tlaUNC" title="branch 15 was not executed"> # </span>]
+<span id="L216"><span class="lineNum">     216</span>         [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :       if (field_path.empty()) {</span></span>
+<span id="L217"><span class="lineNum">     217</span>                 :<span class="tlaUNC">           0 :         ABSL_CHECK(root_descriptor.IsExtensionNumber(field.field-&gt;number()))</span></span>
+<span class="lineNum">        </span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span><span class="tlaUNC" title="branch 6 was not executed"> # </span><span class="tlaUNC" title="branch 7 was not executed"> # </span><span class="tlaUNC" title="branch 8 was not executed"> # </span> 
+<span class="lineNum">        </span>    <span class="tlaUNC" title="branch 9 was not executed"> # </span><span class="tlaUNC" title="branch 10 was not executed"> # </span><span class="tlaUNC" title="branch 11 was not executed"> # </span><span class="tlaUNC" title="branch 12 was not executed"> # </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="branch 13 was not executed"> # </span>]
+<span id="L218"><span class="lineNum">     218</span>                 :<span class="tlaUNC">           0 :             &lt;&lt; &quot;Extension '&quot; &lt;&lt; name &lt;&lt; &quot;' does not extend message '&quot; &lt;&lt; root_descriptor.full_name() &lt;&lt; &quot;'&quot;;</span></span>
+<span class="lineNum">        </span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span><span class="tlaUNC" title="branch 6 was not executed"> # </span><span class="tlaUNC" title="branch 7 was not executed"> # </span><span class="tlaUNC" title="branch 8 was not executed"> # </span> 
+<span class="lineNum">        </span>       <span class="tlaUNC" title="branch 9 was not executed"> # </span><span class="tlaUNC" title="branch 10 was not executed"> # </span><span class="tlaUNC" title="branch 11 was not executed"> # </span>]
+<span id="L219"><span class="lineNum">     219</span>                 :             :       } else {</span>
+<span id="L220"><span class="lineNum">     220</span>                 :<span class="tlaUNC">           0 :         const ::google::protobuf::util::MessageDifferencer::SpecificField&amp; parent = field_path.back();</span></span>
+<span id="L221"><span class="lineNum">     221</span>                 :<span class="tlaUNC">           0 :         ABSL_CHECK(parent.field-&gt;message_type()-&gt;IsExtensionNumber(field.field-&gt;number()))</span></span>
+<span class="lineNum">        </span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span><span class="tlaUNC" title="branch 6 was not executed"> # </span><span class="tlaUNC" title="branch 7 was not executed"> # </span><span class="tlaUNC" title="branch 8 was not executed"> # </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 9 was not executed"> # </span><span class="tlaUNC" title="branch 10 was not executed"> # </span><span class="tlaUNC" title="branch 11 was not executed"> # </span><span class="tlaUNC" title="branch 12 was not executed"> # </span><span class="tlaUNC" title="branch 13 was not executed"> # </span> 
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 14 was not executed"> # </span><span class="tlaUNC" title="branch 15 was not executed"> # </span>]
+<span id="L222"><span class="lineNum">     222</span>                 :<span class="tlaUNC">           0 :             &lt;&lt; &quot;Extension '&quot; &lt;&lt; name &lt;&lt; &quot;' does not extend '&quot; &lt;&lt; parent.field-&gt;full_name() &lt;&lt; &quot;'&quot;;</span></span>
+<span class="lineNum">        </span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> 
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span><span class="tlaUNC" title="branch 6 was not executed"> # </span><span class="tlaUNC" title="branch 7 was not executed"> # </span><span class="tlaUNC" title="branch 8 was not executed"> # </span> 
+<span class="lineNum">        </span>       <span class="tlaUNC" title="branch 9 was not executed"> # </span><span class="tlaUNC" title="branch 10 was not executed"> # </span><span class="tlaUNC" title="branch 11 was not executed"> # </span>]
+<span id="L223"><span class="lineNum">     223</span>                 :             :       }</span>
+<span id="L224"><span class="lineNum">     224</span>                 :             :     } else {</span>
+<span id="L225"><span class="lineNum">     225</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> :<span class="tlaUNC">           0 :       ABSL_LOG(FATAL) &lt;&lt; &quot;Cannot parse field path '&quot; &lt;&lt; relative_field_path &lt;&lt; &quot;' at offset &quot;</span></span>
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span><span class="tlaUNC" title="branch 6 was not executed"> # </span><span class="tlaUNC" title="branch 7 was not executed"> # </span><span class="tlaUNC" title="branch 8 was not executed"> # </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="branch 9 was not executed"> # </span>]
+<span id="L226"><span class="lineNum">     226</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span>]:<span class="tlaUNC">           0 :                       &lt;&lt; relative_field_path.size() - input.size() &lt;&lt; &quot;: expected field or extension&quot;;</span></span>
+<span id="L227"><span class="lineNum">     227</span>                 :             :     }</span>
+<span id="L228"><span class="lineNum">     228</span>         [<span class="tlaGBC" title="branch 0 was taken 10 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">          10 :     field_path.push_back(field);</span></span>
+<span id="L229"><span class="lineNum">     229</span>                 :             :   }</span>
+<span id="L230"><span class="lineNum">     230</span>                 :             : </span>
+<span id="L231"><span class="lineNum">     231</span>   [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 6 times"> + </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> :<span class="tlaGNC">           6 :   ABSL_CHECK(!field_path.empty());</span></span>
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not taken"> - </span><span class="tlaUNC" title="branch 5 was not taken"> - </span><span class="tlaUNC" title="branch 6 was not taken"> - </span><span class="tlaGBC" title="branch 7 was taken 6 times"> + </span><span class="tlaUNC" title="branch 8 was not taken"> - </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="branch 9 was not taken"> - </span>]
+<span id="L232"><span class="lineNum">     232</span>   [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 6 times"> + </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> :<span class="tlaGNC">           6 :   ABSL_CHECK(field_path.back().index == -1)</span></span>
+<span class="lineNum">        </span> <span class="tlaUNC" title="branch 4 was not taken"> - </span><span class="tlaUNC" title="branch 5 was not taken"> - </span><span class="tlaUNC" title="branch 6 was not taken"> - </span><span class="tlaGBC" title="branch 7 was taken 6 times"> + </span><span class="tlaUNC" title="branch 8 was not taken"> - </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="branch 9 was not taken"> - </span>]
+<span id="L233"><span class="lineNum">     233</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> :<span class="tlaUNC">           0 :       &lt;&lt; &quot;Terminally ignoring fields by index is currently not supported ('&quot; &lt;&lt; relative_field_path &lt;&lt; &quot;')&quot;;</span></span>
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span>]
+<span id="L234"><span class="lineNum">     234</span>                 :<span class="tlaGNC">           6 :   return field_path;</span></span>
+<span id="L235"><span class="lineNum">     235</span>                 :<span class="tlaGNC">           6 : }</span></span>
+<span id="L236"><span class="lineNum">     236</span>                 :             : </span>
+<span id="L237"><span class="lineNum">     237</span>                 :             : // Sets the ignored field paths corresponding to field_paths in differencer.</span>
+<span id="L238"><span class="lineNum">     238</span>                 :             : // Dies if any path is invalid.</span>
+<span id="L239"><span class="lineNum">     239</span>                 :<span class="tlaGNC">          45 : void SetIgnoredFieldPathsOrDie(</span></span>
+<span id="L240"><span class="lineNum">     240</span>                 :             :     const ::google::protobuf::Descriptor&amp; root_descriptor,</span>
+<span id="L241"><span class="lineNum">     241</span>                 :             :     const std::vector&lt;std::string&gt;&amp; field_paths,</span>
+<span id="L242"><span class="lineNum">     242</span>                 :             :     ::google::protobuf::util::MessageDifferencer* differencer) {</span>
+<span id="L243"><span class="lineNum">     243</span>         [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaGBC" title="branch 1 was taken 45 times"> + </span>]:<span class="tlaGNC">          51 :   for (const std::string&amp; field_path : field_paths) {</span></span>
+<span id="L244"><span class="lineNum">     244</span>         [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           6 :     differencer-&gt;AddIgnoreCriteria(</span></span>
+<span id="L245"><span class="lineNum">     245</span>   [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 6 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span>]:<span class="tlaGNC">          12 :         std::make_unique&lt;IgnoreFieldPathCriteria&gt;(ParseFieldPathOrDie(field_path, root_descriptor)));</span></span>
+<span id="L246"><span class="lineNum">     246</span>                 :             :   }</span>
+<span id="L247"><span class="lineNum">     247</span>                 :<span class="tlaGNC">          45 : }</span></span>
+<span id="L248"><span class="lineNum">     248</span>                 :             : </span>
+<span id="L249"><span class="lineNum">     249</span>                 :             : // Configures a MessageDifferencer and DefaultFieldComparator to use the logic</span>
+<span id="L250"><span class="lineNum">     250</span>                 :             : // described in comp. The configured differencer is the output of this function,</span>
+<span id="L251"><span class="lineNum">     251</span>                 :             : // but a FieldComparator must be provided to keep ownership clear.</span>
+<span id="L252"><span class="lineNum">     252</span>                 :<span class="tlaGNC">          45 : void ConfigureDifferencer(</span></span>
+<span id="L253"><span class="lineNum">     253</span>                 :             :     const internal::ProtoComparison&amp; comp,</span>
+<span id="L254"><span class="lineNum">     254</span>                 :             :     ::google::protobuf::util::DefaultFieldComparator* comparator,</span>
+<span id="L255"><span class="lineNum">     255</span>                 :             :     ::google::protobuf::util::MessageDifferencer* differencer,</span>
+<span id="L256"><span class="lineNum">     256</span>                 :             :     const ::google::protobuf::Descriptor* descriptor) {</span>
+<span id="L257"><span class="lineNum">     257</span>                 :<span class="tlaGNC">          45 :   differencer-&gt;set_message_field_comparison(comp.field_comp);</span></span>
+<span id="L258"><span class="lineNum">     258</span>                 :<span class="tlaGNC">          45 :   differencer-&gt;set_scope(comp.scope);</span></span>
+<span id="L259"><span class="lineNum">     259</span>                 :<span class="tlaGNC">          45 :   comparator-&gt;set_float_comparison(comp.float_comp);</span></span>
+<span id="L260"><span class="lineNum">     260</span>                 :<span class="tlaGNC">          45 :   comparator-&gt;set_treat_nan_as_equal(comp.treating_nan_as_equal);</span></span>
+<span id="L261"><span class="lineNum">     261</span>                 :<span class="tlaGNC">          45 :   differencer-&gt;set_repeated_field_comparison(comp.repeated_field_comp);</span></span>
+<span id="L262"><span class="lineNum">     262</span>                 :<span class="tlaGNC">          45 :   SetIgnoredFieldsOrDie(*descriptor, comp.ignore_fields, differencer);</span></span>
+<span id="L263"><span class="lineNum">     263</span>                 :<span class="tlaGNC">          45 :   SetIgnoredFieldPathsOrDie(*descriptor, comp.ignore_field_paths, differencer);</span></span>
+<span id="L264"><span class="lineNum">     264</span>   [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaGBC" title="branch 1 was taken 42 times"> + </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaGBC" title="branch 3 was taken 3 times"> + </span> :<span class="tlaGNC">          45 :   if (comp.float_comp == internal::kProtoApproximate &amp;&amp; (comp.has_custom_margin || comp.has_custom_fraction)) {</span></span>
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 4 was not taken"> - </span><span class="tlaUNC" title="branch 5 was not taken"> - </span>]
+<span id="L265"><span class="lineNum">     265</span>                 :             :     // Two fields will be considered equal if they're within the fraction _or_</span>
+<span id="L266"><span class="lineNum">     266</span>                 :             :     // within the margin. So setting the fraction to 0.0 makes this effectively</span>
+<span id="L267"><span class="lineNum">     267</span>                 :             :     // a &quot;SetMargin&quot;. Similarly, setting the margin to 0.0 makes this</span>
+<span id="L268"><span class="lineNum">     268</span>                 :             :     // effectively a &quot;SetFraction&quot;.</span>
+<span id="L269"><span class="lineNum">     269</span>                 :<span class="tlaGNC">           3 :     comparator-&gt;SetDefaultFractionAndMargin(comp.float_fraction, comp.float_margin);</span></span>
+<span id="L270"><span class="lineNum">     270</span>                 :             :   }</span>
+<span id="L271"><span class="lineNum">     271</span>                 :<span class="tlaGNC">          45 :   differencer-&gt;set_field_comparator(comparator);</span></span>
+<span id="L272"><span class="lineNum">     272</span>                 :<span class="tlaGNC">          45 : }</span></span>
+<span id="L273"><span class="lineNum">     273</span>                 :             : </span>
+<span id="L274"><span class="lineNum">     274</span>                 :             : }  // namespace</span>
+<span id="L275"><span class="lineNum">     275</span>                 :             : </span>
+<span id="L276"><span class="lineNum">     276</span>                 :             : // Returns true iff actual and expected are comparable and match.  The</span>
+<span id="L277"><span class="lineNum">     277</span>                 :             : // comp argument specifies how two are compared.</span>
+<span id="L278"><span class="lineNum">     278</span>                 :<span class="tlaGNC">          42 : bool ProtoCompare(</span></span>
+<span id="L279"><span class="lineNum">     279</span>                 :             :     const internal::ProtoComparison&amp; comp,</span>
+<span id="L280"><span class="lineNum">     280</span>                 :             :     const ::google::protobuf::Message&amp; actual,</span>
+<span id="L281"><span class="lineNum">     281</span>                 :             :     const ::google::protobuf::Message&amp; expected) {</span>
+<span id="L282"><span class="lineNum">     282</span>   [<span class="tlaGBC" title="branch 0 was taken 42 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaGBC" title="branch 3 was taken 42 times"> + </span>]:<span class="tlaGNC">          42 :   if (!ProtoComparable(actual, expected)) {</span></span>
+<span id="L283"><span class="lineNum">     283</span>                 :<span class="tlaUNC">           0 :     return false;</span></span>
+<span id="L284"><span class="lineNum">     284</span>                 :             :   }</span>
+<span id="L285"><span class="lineNum">     285</span>                 :             : </span>
+<span id="L286"><span class="lineNum">     286</span>         [<span class="tlaGBC" title="branch 0 was taken 42 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">          42 :   ::google::protobuf::util::MessageDifferencer differencer;</span></span>
+<span id="L287"><span class="lineNum">     287</span>         [<span class="tlaGBC" title="branch 0 was taken 42 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">          42 :   ::google::protobuf::util::DefaultFieldComparator field_comparator;</span></span>
+<span id="L288"><span class="lineNum">     288</span>   [<span class="tlaGBC" title="branch 0 was taken 42 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 42 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span>]:<span class="tlaGNC">          42 :   ConfigureDifferencer(comp, &amp;field_comparator, &amp;differencer, actual.GetDescriptor());</span></span>
+<span id="L289"><span class="lineNum">     289</span>                 :             : </span>
+<span id="L290"><span class="lineNum">     290</span>                 :             :   // It's important for 'expected' to be the first argument here, as</span>
+<span id="L291"><span class="lineNum">     291</span>                 :             :   // Compare() is not symmetric.  When we do a partial comparison,</span>
+<span id="L292"><span class="lineNum">     292</span>                 :             :   // only fields present in the first argument of Compare() are</span>
+<span id="L293"><span class="lineNum">     293</span>                 :             :   // considered.</span>
+<span id="L294"><span class="lineNum">     294</span>         [<span class="tlaGBC" title="branch 0 was taken 42 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">          42 :   return differencer.Compare(expected, actual);</span></span>
+<span id="L295"><span class="lineNum">     295</span>                 :<span class="tlaGNC">          42 : }</span></span>
+<span id="L296"><span class="lineNum">     296</span>                 :             : </span>
+<span id="L297"><span class="lineNum">     297</span>                 :             : // Describes the types of the expected and the actual protocol buffer.</span>
+<span id="L298"><span class="lineNum">     298</span>                 :<span class="tlaUNC">           0 : std::string DescribeTypes(const ::google::protobuf::Message&amp; expected, const ::google::protobuf::Message&amp; actual) {</span></span>
+<span id="L299"><span class="lineNum">     299</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> :<span class="tlaUNC">           0 :   return absl::StrCat(</span></span>
+<span class="lineNum">        </span>    <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span><span class="tlaUNC" title="branch 6 was not executed"> # </span><span class="tlaUNC" title="branch 7 was not executed"> # </span>]
+<span id="L300"><span class="lineNum">     300</span>                 :             :       &quot;whose type should be &quot;, expected.GetDescriptor()-&gt;full_name(), &quot; but actually is &quot;,</span>
+<span id="L301"><span class="lineNum">     301</span>         [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :       actual.GetDescriptor()-&gt;full_name());</span></span>
+<span id="L302"><span class="lineNum">     302</span>                 :             : }</span>
+<span id="L303"><span class="lineNum">     303</span>                 :             : </span>
+<span id="L304"><span class="lineNum">     304</span>                 :             : // Prints the protocol buffer pointed to by proto.</span>
+<span id="L305"><span class="lineNum">     305</span>                 :<span class="tlaUNC">           0 : std::string PrintProtoPointee(const ::google::protobuf::Message* proto) {</span></span>
+<span id="L306"><span class="lineNum">     306</span>         [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :   if (proto == nullptr) {</span></span>
+<span id="L307"><span class="lineNum">     307</span>         [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :     return &quot;&quot;;</span></span>
+<span id="L308"><span class="lineNum">     308</span>                 :             :   }</span>
+<span id="L309"><span class="lineNum">     309</span>                 :             : </span>
+<span id="L310"><span class="lineNum">     310</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span>]:<span class="tlaUNC">           0 :   return absl::StrCat(&quot;which points to &quot;, ::testing::PrintToString(*proto));</span></span>
+<span id="L311"><span class="lineNum">     311</span>                 :             : }</span>
+<span id="L312"><span class="lineNum">     312</span>                 :             : </span>
+<span id="L313"><span class="lineNum">     313</span>                 :             : // Describes the differences between the two protocol buffers.</span>
+<span id="L314"><span class="lineNum">     314</span>                 :<span class="tlaGNC">           3 : std::string DescribeDiff(</span></span>
+<span id="L315"><span class="lineNum">     315</span>                 :             :     const internal::ProtoComparison&amp; comp,</span>
+<span id="L316"><span class="lineNum">     316</span>                 :             :     const ::google::protobuf::Message&amp; actual,</span>
+<span id="L317"><span class="lineNum">     317</span>                 :             :     const ::google::protobuf::Message&amp; expected) {</span>
+<span id="L318"><span class="lineNum">     318</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           3 :   ::google::protobuf::util::MessageDifferencer differencer;</span></span>
+<span id="L319"><span class="lineNum">     319</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           3 :   ::google::protobuf::util::DefaultFieldComparator field_comparator;</span></span>
+<span id="L320"><span class="lineNum">     320</span>   [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 3 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span>]:<span class="tlaGNC">           3 :   ConfigureDifferencer(comp, &amp;field_comparator, &amp;differencer, actual.GetDescriptor());</span></span>
+<span id="L321"><span class="lineNum">     321</span>                 :             : </span>
+<span id="L322"><span class="lineNum">     322</span>                 :<span class="tlaGNC">           3 :   std::string diff;</span></span>
+<span id="L323"><span class="lineNum">     323</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           3 :   differencer.ReportDifferencesToString(&amp;diff);</span></span>
+<span id="L324"><span class="lineNum">     324</span>                 :             : </span>
+<span id="L325"><span class="lineNum">     325</span>                 :             :   // We must put 'expected' as the first argument here, as Compare()</span>
+<span id="L326"><span class="lineNum">     326</span>                 :             :   // reports the diff in terms of how the protobuf changes from the</span>
+<span id="L327"><span class="lineNum">     327</span>                 :             :   // first argument to the second argument.</span>
+<span id="L328"><span class="lineNum">     328</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           3 :   differencer.Compare(expected, actual);</span></span>
+<span id="L329"><span class="lineNum">     329</span>                 :             : </span>
+<span id="L330"><span class="lineNum">     330</span>                 :             :   // Removes the trailing '\n' in the diff to make the output look nicer.</span>
+<span id="L331"><span class="lineNum">     331</span>   [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 3 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> :<span class="tlaGNC">           3 :   if (!diff.empty() &amp;&amp; *(diff.end() - 1) == '\n') {</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="branch 4 was taken 3 times"> + </span><span class="tlaUNC" title="branch 5 was not taken"> - </span>]
+<span id="L332"><span class="lineNum">     332</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           3 :     diff.erase(diff.end() - 1);</span></span>
+<span id="L333"><span class="lineNum">     333</span>                 :             :   }</span>
+<span id="L334"><span class="lineNum">     334</span>                 :             : </span>
+<span id="L335"><span class="lineNum">     335</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           6 :   return absl::StrCat(&quot;with the difference:\n&quot;, diff);</span></span>
+<span id="L336"><span class="lineNum">     336</span>                 :<span class="tlaGNC">           3 : }</span></span>
+<span id="L337"><span class="lineNum">     337</span>                 :             : </span>
+<span id="L338"><span class="lineNum">     338</span>                 :<span class="tlaGNC">          42 : bool ProtoMatcherBase::MatchAndExplain(</span></span>
+<span id="L339"><span class="lineNum">     339</span>                 :             :     const ::google::protobuf::Message&amp; arg,</span>
+<span id="L340"><span class="lineNum">     340</span>                 :             :     bool is_matcher_for_pointer,  // true iff this matcher is used to match</span>
+<span id="L341"><span class="lineNum">     341</span>                 :             :                                   // a protobuf pointer.</span>
+<span id="L342"><span class="lineNum">     342</span>                 :             :     ::testing::MatchResultListener* listener) const {</span>
+<span id="L343"><span class="lineNum">     343</span>   [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 42 times"> + </span><span class="tlaUNC" title="branch 2 was not taken"> - </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> :<span class="tlaGNC">          42 :   if (must_be_initialized_ &amp;&amp; !arg.IsInitialized()) {</span></span>
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 4 was not taken"> - </span><span class="tlaGBC" title="branch 5 was taken 42 times"> + </span>]
+<span id="L344"><span class="lineNum">     344</span>                 :<span class="tlaUNC">           0 :     *listener &lt;&lt; &quot;which isn't fully initialized&quot;;</span></span>
+<span id="L345"><span class="lineNum">     345</span>                 :<span class="tlaUNC">           0 :     return false;</span></span>
+<span id="L346"><span class="lineNum">     346</span>                 :             :   }</span>
+<span id="L347"><span class="lineNum">     347</span>                 :             : </span>
+<span id="L348"><span class="lineNum">     348</span>                 :<span class="tlaGNC">          42 :   const ::google::protobuf::Message* const expected = CreateExpectedProto(arg, listener);</span></span>
+<span id="L349"><span class="lineNum">     349</span>         [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 42 times"> + </span>]:<span class="tlaGNC">          42 :   if (expected == nullptr) {</span></span>
+<span id="L350"><span class="lineNum">     350</span>                 :<span class="tlaUNC">           0 :     return false;</span></span>
+<span id="L351"><span class="lineNum">     351</span>                 :             :   }</span>
+<span id="L352"><span class="lineNum">     352</span>                 :             : </span>
+<span id="L353"><span class="lineNum">     353</span>                 :             :   // Protobufs of different types cannot be compared.</span>
+<span id="L354"><span class="lineNum">     354</span>                 :<span class="tlaGNC">          42 :   const bool comparable = ProtoComparable(arg, *expected);</span></span>
+<span id="L355"><span class="lineNum">     355</span>   [<span class="tlaGBC" title="branch 0 was taken 42 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 36 times"> + </span><span class="tlaGBC" title="branch 3 was taken 6 times"> + </span>]:<span class="tlaGNC">          42 :   const bool match = comparable &amp;&amp; ProtoCompare(comp(), arg, *expected);</span></span>
+<span id="L356"><span class="lineNum">     356</span>                 :             : </span>
+<span id="L357"><span class="lineNum">     357</span>                 :             :   // Explaining the match result is expensive.  We don't want to waste</span>
+<span id="L358"><span class="lineNum">     358</span>                 :             :   // time calculating an explanation if the listener isn't interested.</span>
+<span id="L359"><span class="lineNum">     359</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaGBC" title="branch 1 was taken 39 times"> + </span>]:<span class="tlaGNC">          42 :   if (listener-&gt;IsInterested()) {</span></span>
+<span id="L360"><span class="lineNum">     360</span>                 :<span class="tlaGNC">           3 :     const char* sep = &quot;&quot;;</span></span>
+<span id="L361"><span class="lineNum">     361</span>         [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 3 times"> + </span>]:<span class="tlaGNC">           3 :     if (is_matcher_for_pointer) {</span></span>
+<span id="L362"><span class="lineNum">     362</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span>]:<span class="tlaUNC">           0 :       *listener &lt;&lt; PrintProtoPointee(&amp;arg);</span></span>
+<span id="L363"><span class="lineNum">     363</span>                 :<span class="tlaUNC">           0 :       sep = &quot;,\n&quot;;</span></span>
+<span id="L364"><span class="lineNum">     364</span>                 :             :     }</span>
+<span id="L365"><span class="lineNum">     365</span>                 :             : </span>
+<span id="L366"><span class="lineNum">     366</span>         [<span class="tlaUNC" title="branch 0 was not taken"> - </span><span class="tlaGBC" title="branch 1 was taken 3 times"> + </span>]:<span class="tlaGNC">           3 :     if (!comparable) {</span></span>
+<span id="L367"><span class="lineNum">     367</span>   [<span class="tlaUNC" title="branch 0 was not executed"> # </span><span class="tlaUNC" title="branch 1 was not executed"> # </span><span class="tlaUNC" title="branch 2 was not executed"> # </span><span class="tlaUNC" title="branch 3 was not executed"> # </span> :<span class="tlaUNC">           0 :       *listener &lt;&lt; sep &lt;&lt; DescribeTypes(*expected, arg);</span></span>
+<span class="lineNum">        </span>          <span class="tlaUNC" title="branch 4 was not executed"> # </span><span class="tlaUNC" title="branch 5 was not executed"> # </span>]
+<span id="L368"><span class="lineNum">     368</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span>]:<span class="tlaGNC">           3 :     } else if (!match) {</span></span>
+<span id="L369"><span class="lineNum">     369</span>   [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaUNC" title="branch 1 was not taken"> - </span><span class="tlaGBC" title="branch 2 was taken 3 times"> + </span><span class="tlaUNC" title="branch 3 was not taken"> - </span> :<span class="tlaGNC">           3 :       *listener &lt;&lt; sep &lt;&lt; DescribeDiff(comp(), arg, *expected);</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="branch 4 was taken 3 times"> + </span><span class="tlaUNC" title="branch 5 was not taken"> - </span>]
+<span id="L370"><span class="lineNum">     370</span>                 :             :     }</span>
+<span id="L371"><span class="lineNum">     371</span>                 :             :   }</span>
+<span id="L372"><span class="lineNum">     372</span>                 :             : </span>
+<span id="L373"><span class="lineNum">     373</span>                 :<span class="tlaGNC">          42 :   DeleteExpectedProto(expected);</span></span>
+<span id="L374"><span class="lineNum">     374</span>                 :<span class="tlaGNC">          42 :   return match;</span></span>
+<span id="L375"><span class="lineNum">     375</span>                 :             : }</span>
+<span id="L376"><span class="lineNum">     376</span>                 :             : </span>
+<span id="L377"><span class="lineNum">     377</span>                 :             : }  // namespace mbo::proto::internal</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table class="mboPolicy">
+            <thead>
+              <tr>
+                <th scope="col">Global coverage policy</th>
+                <th scope="col">Low</th>
+                <th scope="col">Medium</th>
+                <th scope="col">High</th>
+                <th scope="col">Enforced</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th scope="row">Lines</th>
+              <td class="headerValueLegL">&lt; 77%</td>
+              <td class="headerValueLegM">&ge; 77% and &lt; 90%</td>
+              <td class="headerValueLegH">&ge; 90%</td>
+              <td class="headerValueLegM">Medium</td>
+            </tr>
+            <tr>
+              <th scope="row">Branches</th>
+              <td class="headerValueLegL">&lt; 30%</td>
+              <td class="headerValueLegM">&ge; 30% and &lt; 80%</td>
+              <td class="headerValueLegH">&ge; 80%</td>
+              <td class="headerValueLegM">Medium</td>
+            </tr>
+            <tr>
+              <th scope="row">Functions</th>
+              <td class="headerValueLegL">&lt; 80%</td>
+              <td class="headerValueLegM">&ge; 80% and &lt; 90%</td>
+              <td class="headerValueLegH">&ge; 90%</td>
+              <td class="headerValueLegM">Medium</td>
+            </tr>
+            </tbody>
+          </table>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com/linux-test-project/lcov" target="_parent">LCOV version 2.5-0</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
