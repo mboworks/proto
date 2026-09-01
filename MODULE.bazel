@@ -62,7 +62,7 @@ bazel_dep(name = "googletest", version = "1.18.0.bcr.1", repo_name = "com_google
 # Default to protobuf 35.0, the version selected by the combined GoogleTest and
 # Abseil graph. The scheduled compatibility workflow continues to exercise its
 # declared protobuf roots under Bazel's normal minimum-version selection.
-bazel_dep(name = "protobuf", version = "35.0", repo_name = "com_google_protobuf")
+bazel_dep(name = "protobuf", version = "36.0.bcr.1", repo_name = "com_google_protobuf")
 
 # Transitive-compat shim (not used by any first-party code): protobuf pulls
 # rules_android -> rules_go 0.51.0-rc2, which `register_toolchains`es
