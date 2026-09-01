@@ -17,7 +17,7 @@ jobs:
   trunk:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Trunk Check
         uses: trunk-io/trunk-action@v1
         with:
@@ -26,21 +26,21 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
       - uses: pre-commit/action@v3.0.1
         env:
           SKIP: trunk-fmt,clang-tidy
-      - uses: pre-commit-ci/lite-action@v1.0.2
+      - uses: pre-commit-ci/lite-action@v1.1.0
         if: always()
 
   clang-tidy:
     needs: [trunk, pre-commit]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: bazelbuild/setup-bazelisk@v3
@@ -63,11 +63,11 @@ jobs:
     needs: [trunk, pre-commit]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - uses: bazelbuild/setup-bazelisk@v3
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
       - name: Install coverage tooling
@@ -112,7 +112,7 @@ jobs:
           python3 tools/coverage_index.py report \
             coverage-html/coverage-summary.json "${COVERAGE_PAGE}" coverage-html/index.html
           cat coverage-summary.md >>"${GITHUB_STEP_SUMMARY}"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: coverage-report
@@ -206,7 +206,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Ensure every job is wired into this gate
         env:
           NEEDS_JSON: ${{ toJSON(needs) }}
