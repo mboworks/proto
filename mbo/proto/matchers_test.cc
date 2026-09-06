@@ -26,15 +26,19 @@
 #include "mbo/proto/tests/test.pb.h"
 
 namespace mbo::proto {
-
-template<typename T, typename M>
-static std::string GetExplanation(const M& matcher, const T& value) {
-  std::stringstream sss;
-  ::testing::SafeMatcherCast<const T&>(matcher).ExplainMatchResultTo(value, &sss);
-  return sss.str();
-}
-
 namespace {
+
+struct ExplanationGetter {
+  template<typename T, typename M>
+  std::string operator()(const M& matcher, const T& value) const {
+    std::stringstream sss;
+    ::testing::SafeMatcherCast<const T&>(matcher).ExplainMatchResultTo(value, &sss);
+    return sss.str();
+  }
+};
+
+inline constexpr ExplanationGetter kGetExplanation;
+
 using ::mbo::proto::ParseTextProtoOrDie;
 using ::mbo::proto::tests::ExtensibleMessage;
 using ::mbo::proto::tests::ExtensionContainer;
@@ -50,7 +54,7 @@ TEST(Matchers, EqualsProto) {
   const TestMessage msg = ParseTextProtoOrDie(R"pb(num: 42 name: "name")pb");
   EXPECT_THAT(msg, EqualsProto(msg));
   EXPECT_THAT(msg, EqualsProto(R"pb(num: 42 name: "name")pb"));
-  EXPECT_THAT(GetExplanation(EqualsProto(R"pb(num: 43 name: "name")pb"), msg), EndsWith("modified: num: 43 -> 42"));
+  EXPECT_THAT(kGetExplanation(EqualsProto(R"pb(num: 43 name: "name")pb"), msg), EndsWith("modified: num: 43 -> 42"));
 }
 
 TEST(Matchers, EquivToProto) {
@@ -70,13 +74,13 @@ TEST(Matchers, Approximately) {
   const TestMessage msg = ParseTextProtoOrDie(R"pb(val: 1.0)pb");
   EXPECT_THAT(msg, Approximately(EqualsProto(R"pb(val: 0.992)pb"), 0.01));
   EXPECT_THAT(
-      GetExplanation(Approximately(EqualsProto(R"pb(val: 0.9)pb"), 0.01), msg), HasSubstr("modified: val: 0.9 -> 1"));
+      kGetExplanation(Approximately(EqualsProto(R"pb(val: 0.9)pb"), 0.01), msg), HasSubstr("modified: val: 0.9 -> 1"));
 }
 
 TEST(Matchers, TreatingNaNsAsEqual) {
   const TestMessage msg = ParseTextProtoOrDie(R"pb(val: nan)pb");
   EXPECT_THAT(msg, TreatingNaNsAsEqual(EqualsProto(R"pb(val: nan)pb")));
-  EXPECT_THAT(GetExplanation(EqualsProto(R"pb(val: nan)pb"), msg), HasSubstr("val: nan -> nan"));
+  EXPECT_THAT(kGetExplanation(EqualsProto(R"pb(val: nan)pb"), msg), HasSubstr("val: nan -> nan"));
 }
 
 TEST(Matchers, IgnoringFields) {
@@ -230,7 +234,7 @@ TEST(Matchers, RequiresInitializedMessagesWhenConfigured) {
       ::testing::MakePolymorphicMatcher(internal::ProtoMatcher(initialized, internal::kMustBeInitialized, comparison));
 
   EXPECT_THAT(initialized, matcher);
-  EXPECT_THAT(GetExplanation(matcher, uninitialized), HasSubstr("isn't fully initialized"));
+  EXPECT_THAT(kGetExplanation(matcher, uninitialized), HasSubstr("isn't fully initialized"));
   EXPECT_THAT(::testing::DescribeMatcher<RequiredMessage>(matcher), HasSubstr("fully initialized and"));
   EXPECT_THAT(::testing::DescribeMatcher<RequiredMessage>(matcher, true), HasSubstr("not fully initialized or not"));
   EXPECT_THAT(matcher.impl().must_be_initialized(), true);
@@ -242,8 +246,8 @@ TEST(Matchers, ReportsPointersAndNullPointers) {
   const TestMessage* actual_ptr = &actual;
   const TestMessage* null_ptr = nullptr;
 
-  EXPECT_THAT(GetExplanation(EqualsProto(expected), actual_ptr), HasSubstr("which points to"));
-  EXPECT_THAT(GetExplanation(EqualsProto(expected), actual_ptr), HasSubstr("modified: num: 42 -> 43"));
+  EXPECT_THAT(kGetExplanation(EqualsProto(expected), actual_ptr), HasSubstr("which points to"));
+  EXPECT_THAT(kGetExplanation(EqualsProto(expected), actual_ptr), HasSubstr("modified: num: 42 -> 43"));
   const TestMessage* expected_ptr = &expected;
   EXPECT_THAT(expected_ptr, EqualsProto(expected));
   EXPECT_THAT(null_ptr, Not(EqualsProto(expected)));
@@ -255,20 +259,20 @@ TEST(Matchers, ReportsIncompatibleMessageTypes) {
   const TestMessage2 actual = ParseTextProtoOrDie(R"pb(num: 42)pb");
 
   EXPECT_THAT(
-      GetExplanation(EqualsProto(expected), actual),
+      kGetExplanation(EqualsProto(expected), actual),
       HasSubstr("whose type should be mbo.proto.tests.TestMessage but actually is "
                 "mbo.proto.tests.TestMessage2"));
   const internal::ProtoComparison comparison;
   EXPECT_THAT(internal::ProtoCompare(comparison, expected, actual), false);
   const TestMessage2* actual_ptr = &actual;
-  EXPECT_THAT(GetExplanation(EqualsProto(expected), actual_ptr), HasSubstr("which points to"));
+  EXPECT_THAT(kGetExplanation(EqualsProto(expected), actual_ptr), HasSubstr("which points to"));
 }
 
 TEST(Matchers, ReportsMalformedExpectedText) {
   const TestMessage actual;
 
-  EXPECT_THAT(GetExplanation(EqualsProto("not_a_field: 1"), actual), HasSubstr("doesn't parse as a"));
-  EXPECT_THAT(GetExplanation(EqualsProto("not_a_field: 1"), actual), HasSubstr("no field named"));
+  EXPECT_THAT(kGetExplanation(EqualsProto("not_a_field: 1"), actual), HasSubstr("doesn't parse as a"));
+  EXPECT_THAT(kGetExplanation(EqualsProto("not_a_field: 1"), actual), HasSubstr("no field named"));
   EXPECT_THAT(Matches(EqualsProto("not_a_field: 1"))(actual), false);
 }
 
@@ -374,13 +378,13 @@ TEST(Matchers, MatchesSerializedMessages) {
   EXPECT_THAT(Matches(WhenDeserialized(EqualsProto(expected)))(malformed), false);
   EXPECT_THAT(Matches(WhenDeserialized(EqualsProto(different)))(serialized), false);
   EXPECT_THAT(
-      GetExplanation(WhenDeserialized(EqualsProto(expected)), malformed),
+      kGetExplanation(WhenDeserialized(EqualsProto(expected)), malformed),
       HasSubstr("cannot be deserialized as a mbo.proto.tests.TestMessage"));
   EXPECT_THAT(
-      GetExplanation(WhenDeserializedAs<TestMessage>(EqualsProto(expected)), serialized),
+      kGetExplanation(WhenDeserializedAs<TestMessage>(EqualsProto(expected)), serialized),
       HasSubstr("which deserializes to"));
   EXPECT_THAT(
-      GetExplanation(WhenDeserializedAs<TestMessage>(EqualsProto(R"pb(num: 43)pb")), serialized),
+      kGetExplanation(WhenDeserializedAs<TestMessage>(EqualsProto(R"pb(num: 43)pb")), serialized),
       HasSubstr("modified: num: 43 -> 42"));
   EXPECT_THAT(
       ::testing::DescribeMatcher<std::string>(WhenDeserialized(EqualsProto(expected))),
