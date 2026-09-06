@@ -3,7 +3,8 @@
 These rules apply to human and automated contributors. Keep changes reviewable, preserve existing
 project-specific behavior, and use automation for mechanical policy. [`STYLE_CPP.md`](STYLE_CPP.md)
 and [`STYLE_SH.md`](STYLE_SH.md) are canonical for their languages; [`RULES.md`](RULES.md) contains
-the repository's broader code-layout rules.
+the repository's broader code-layout rules. [`GIT_RULES.md`](GIT_RULES.md) is the source of truth
+for branch, pull-request, CI, and merge operations.
 
 ## Development workflow
 

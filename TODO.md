@@ -65,10 +65,10 @@ has no undocumented exceptions.
 
 ### POLICY-2: Align contributor and pull-request governance
 
-- [ ] Add a project-appropriate Git and pull-request rules document based on mbo's `GIT_RULES.md`.
-- [ ] Reference it from `AGENTS.md` and `CONTRIBUTING.md`.
-- [ ] Adopt the two-layer pull-request description with a human summary followed by `## AG;DR`.
-- [ ] Document state-changing Git/GitHub operations, review readiness, dependency ordering, CI
+- [x] Add a project-appropriate Git and pull-request rules document based on mbo's `GIT_RULES.md`.
+- [x] Reference it from `AGENTS.md` and `CONTRIBUTING.md`.
+- [x] Adopt the two-layer pull-request description with a human summary followed by `## AG;DR`.
+- [x] Document state-changing Git/GitHub operations, review readiness, dependency ordering, CI
       recovery, and merge completion checks.
 
 Acceptance: contributor documentation has one unambiguous source of truth for Git and pull-request

@@ -2,6 +2,9 @@
 
 All contributions are generally welcome as long as they fit in with the concepts and goals of this repository and as long as the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) is being respected.
 
+Branch, pull-request, CI, and merge operations must follow [GIT_RULES.md](GIT_RULES.md), including
+its two-layer pull-request description format and readiness requirements.
+
 # Code Rules
 
 All code must adhere to the [RULES.dm](RULES.md) and mostly follows the [Google style](https://google.github.io/styleguide/). Where it diverges, clang-tidy rules are in effect as much as possible.
