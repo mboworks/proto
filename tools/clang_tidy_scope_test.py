@@ -53,6 +53,34 @@ class ClangTidyScopeTest(unittest.TestCase):
             ["mbo/a/a.cc", "mbo/b/b_test.cc"],
         )
 
+    def test_build_change_selects_all_sources(self) -> None:
+        self.assertEqual(
+            clang_tidy_scope.select_sources(self.database, ["mbo/proto/BUILD.bazel"]),
+            ["mbo/a/a.cc", "mbo/b/b_test.cc"],
+        )
+
+    def test_module_fragment_change_selects_all_sources(self) -> None:
+        self.assertEqual(
+            clang_tidy_scope.select_sources(
+                self.database, ["bazelmod/dev.MODULE.bazel"]
+            ),
+            ["mbo/a/a.cc", "mbo/b/b_test.cc"],
+        )
+
+    def test_clang_tidy_config_change_selects_all_sources(self) -> None:
+        self.assertEqual(
+            clang_tidy_scope.select_sources(self.database, [".clang-tidy"]),
+            ["mbo/a/a.cc", "mbo/b/b_test.cc"],
+        )
+
+    def test_ci_orchestration_change_selects_all_sources(self) -> None:
+        self.assertEqual(
+            clang_tidy_scope.select_sources(
+                self.database, [".github/workflows/main.yml"]
+            ),
+            ["mbo/a/a.cc", "mbo/b/b_test.cc"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

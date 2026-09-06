@@ -15,8 +15,11 @@
 
 #include "mbo/proto/file.h"
 
+#include <filesystem>
 #include <fstream>
+#include <ios>
 #include <source_location>
+#include <string>
 
 #include "absl/status/status.h"
 #include "absl/strings/str_format.h"

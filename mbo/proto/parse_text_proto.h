@@ -107,7 +107,7 @@ inline absl::StatusOr<T> ParseText(
     std::string_view text_proto,
     std::source_location loc = std::source_location::current()) {
   T message;
-  absl::Status result = proto_internal::ParseTextInternal(text_proto, &message, "ParseText", loc);
+  const absl::Status result = proto_internal::ParseTextInternal(text_proto, &message, "ParseText", loc);
   if (!result.ok()) {
     // We are missing the Google internal update mechanisms, so we may loose details here.
     // But Google also did not bless the Abseil open-source versions with anything we could drop here...

@@ -44,20 +44,32 @@ jobs:
         with:
           fetch-depth: 0
       - uses: bazelbuild/setup-bazelisk@v3
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Select the scope to lint
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [ "${EVENT_NAME}" = "pull_request" ]; then
+            git fetch --quiet --no-tags origin main
+            git diff --name-only origin/main...HEAD >.clang-tidy-changes
+          else
+            : >.clang-tidy-changes
+          fi
+          python3 tools/clang_tidy_ci.py "${EVENT_NAME}" \
+            <.clang-tidy-changes >.clang-tidy-inputs
+          echo "clang-tidy inputs for ${EVENT_NAME}:"
+          sed 's/^/  /' .clang-tidy-inputs
       - name: Build and generate the compilation database
         run: |
           bazel build --config=clang-tidy //...
           ./compile_commands-update.sh
       - name: Run clang-tidy
         run: |
-          git fetch --quiet --no-tags origin main
-          mapfile -t CHANGED_FILES < <(
-            git diff --name-only origin/main...HEAD -- \
-              '*.c' '*.cc' '*.cpp' '*.cxx' \
-              '*.h' '*.hh' '*.hpp' '*.hxx' '*.inc' '*.ipp' \
-              ':!mbo/proto/matchers.h'
-          )
-          tools/clang_tidy.sh "${CHANGED_FILES[@]}"
+          mapfile -t CLANG_TIDY_INPUTS <.clang-tidy-inputs
+          tools/clang_tidy.sh "${CLANG_TIDY_INPUTS[@]}"
 
   coverage:
     needs: [trunk, pre-commit]

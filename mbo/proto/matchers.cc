@@ -30,7 +30,7 @@
 #include "google/protobuf/descriptor.h"
 #include "google/protobuf/io/tokenizer.h"
 #include "google/protobuf/message.h"
-// #include "google/protobuf/stubs/common.h"  // Via tokenizer.h
+#include "google/protobuf/stubs/common.h"
 #include "google/protobuf/text_format.h"
 #include "google/protobuf/util/field_comparator.h"
 #include "gtest/gtest.h"
@@ -39,6 +39,8 @@
 namespace mbo::proto::internal {
 
 // Utilities.
+
+namespace {
 
 class StringErrorCollector : public ::google::protobuf::io::ErrorCollector {
  public:
@@ -69,6 +71,8 @@ class StringErrorCollector : public ::google::protobuf::io::ErrorCollector {
  private:
   std::string* error_text_;
 };
+
+}  // namespace
 
 bool ParsePartialFromAscii(const std::string& pb_ascii, ::google::protobuf::Message* proto, std::string* error_text) {
   ::google::protobuf::TextFormat::Parser parser;
@@ -150,8 +154,8 @@ class IgnoreFieldPathCriteria : public ::google::protobuf::util::MessageDifferen
       return false;
     }
     for (std::size_t i = 0; i < parent_fields.size(); ++i) {
-      const auto& cur_field = parent_fields[i];
-      const auto& ignored_field = ignored_field_path_[i];
+      const auto& cur_field = parent_fields.at(i);
+      const auto& ignored_field = ignored_field_path_.at(i);
       // We could compare pointers but it's not guaranteed that descriptors come
       // from the same pool.
       if (cur_field.field->full_name() != ignored_field.field->full_name()) {

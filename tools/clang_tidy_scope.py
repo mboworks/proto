@@ -10,7 +10,29 @@ import pathlib
 import sys
 
 SOURCE_SUFFIXES = (".cc", ".cpp", ".cxx")
-WIDE_SUFFIXES = (".bzl", ".h", ".h.in", ".hh", ".hpp", ".hxx", ".inc", ".ipp")
+WIDE_SUFFIXES = (
+    ".bzl",
+    ".h",
+    ".h.in",
+    ".hh",
+    ".hpp",
+    ".hxx",
+    ".inc",
+    ".ipp",
+    ".MODULE.bazel",
+)
+WIDE_BASENAMES = ("BUILD", "BUILD.bazel", "MODULE.bazel", ".bazelrc")
+WIDE_PATHS = frozenset(
+    {
+        ".clang-tidy",
+        ".github/workflows/main.yml",
+        ".pre-commit-config.yaml",
+        "compile_commands-update.sh",
+        "tools/clang_tidy.sh",
+        "tools/clang_tidy_ci.py",
+        "tools/clang_tidy_scope.py",
+    }
+)
 
 
 def is_source(path: str) -> bool:
@@ -18,7 +40,11 @@ def is_source(path: str) -> bool:
 
 
 def requires_full_sweep(path: str) -> bool:
-    return path.endswith(WIDE_SUFFIXES)
+    return (
+        path.endswith(WIDE_SUFFIXES)
+        or pathlib.PurePath(path).name in WIDE_BASENAMES
+        or path in WIDE_PATHS
+    )
 
 
 def select_sources(database: list[dict[str, object]], changed: list[str]) -> list[str]:

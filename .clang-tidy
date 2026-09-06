@@ -1,4 +1,7 @@
 ---
+# Anonymous namespaces are the repository convention for internal linkage.
+# llvm-prefer-static-over-anonymous-namespace conflicts with that convention
+# and with misc-use-anonymous-namespace, which remains enabled.
 Checks: >
   *,
   abseil-*,
@@ -19,6 +22,7 @@ Checks: >
   -llvm-else-after-return,
   -llvm-header-guard,
   -llvm-include-order,
+  -llvm-prefer-static-over-anonymous-namespace,
   -llvmlibc-*,
   misc-*,
   modernize-*,
