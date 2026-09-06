@@ -46,7 +46,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-09-06 13:06:55</td>
+            <td class="headerValue">2026-09-06 15:35:33</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -117,14 +117,14 @@
 <span id="L46"><span class="lineNum">      46</span>              : </span>
 <span id="L47"><span class="lineNum">      47</span>              :   using value_type = ErrorInfo;</span>
 <span id="L48"><span class="lineNum">      48</span>              : </span>
-<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">          27 :   SilentErrorCollector() : impl_(std::make_unique&lt;Impl&gt;(*this)) {}</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">          48 :   SilentErrorCollector() : impl_(std::make_unique&lt;Impl&gt;(*this)) {}</span></span>
 <span id="L50"><span class="lineNum">      50</span>              : </span>
 <span id="L51"><span class="lineNum">      51</span>              :   SilentErrorCollector(const SilentErrorCollector&amp;) = delete;</span>
 <span id="L52"><span class="lineNum">      52</span>              :   SilentErrorCollector&amp; operator=(const SilentErrorCollector&amp;) = delete;</span>
 <span id="L53"><span class="lineNum">      53</span>              :   SilentErrorCollector(SilentErrorCollector&amp;&amp;) noexcept = default;</span>
 <span id="L54"><span class="lineNum">      54</span>              :   SilentErrorCollector&amp; operator=(SilentErrorCollector&amp;&amp;) noexcept = default;</span>
 <span id="L55"><span class="lineNum">      55</span>              : </span>
-<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">          27 :   virtual ~SilentErrorCollector() = default;</span></span>
+<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">          48 :   virtual ~SilentErrorCollector() = default;</span></span>
 <span id="L57"><span class="lineNum">      57</span>              : </span>
 <span id="L58"><span class="lineNum">      58</span>              :   // Records a single message. In client code that manually needs to add messages always use this</span>
 <span id="L59"><span class="lineNum">      59</span>              :   // variant and never RecordError/Warning or AddError/Warning.</span>
@@ -136,7 +136,7 @@
 <span id="L65"><span class="lineNum">      65</span> <span class="tlaGNC">           1 :   operator ::google::protobuf::io::ErrorCollector&amp;() &amp; { return *impl_; }</span></span>
 <span id="L66"><span class="lineNum">      66</span>              : </span>
 <span id="L67"><span class="lineNum">      67</span>              :   // NOLINTNEXTLINE(*-explicit-constructor,*-explicit-conversions)</span>
-<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">          27 :   operator ::google::protobuf::io::ErrorCollector*() &amp; { return &amp;*impl_; }</span></span>
+<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">          48 :   operator ::google::protobuf::io::ErrorCollector*() &amp; { return &amp;*impl_; }</span></span>
 <span id="L69"><span class="lineNum">      69</span>              : </span>
 <span id="L70"><span class="lineNum">      70</span>              :   virtual std::string FormatError(const ErrorInfo&amp; error) const;</span>
 <span id="L71"><span class="lineNum">      71</span>              : </span>
@@ -159,7 +159,7 @@
 <span id="L88"><span class="lineNum">      88</span>              :    public:</span>
 <span id="L89"><span class="lineNum">      89</span>              :     Impl() = delete;</span>
 <span id="L90"><span class="lineNum">      90</span>              : </span>
-<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">          27 :     explicit Impl(SilentErrorCollector&amp; collector) : collector_(collector) {}</span></span>
+<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">          48 :     explicit Impl(SilentErrorCollector&amp; collector) : collector_(collector) {}</span></span>
 <span id="L92"><span class="lineNum">      92</span>              : </span>
 <span id="L93"><span class="lineNum">      93</span>              :     // protobuf's `io::ErrorCollector` API: the pre-v26 `AddError`/`AddWarning`</span>
 <span id="L94"><span class="lineNum">      94</span>              :     // virtuals were deprecated in favour of `RecordError`/`RecordWarning` and</span>
@@ -203,24 +203,24 @@
             <tbody>
             <tr>
               <th scope="row">Lines</th>
-              <td class="headerValueLegL">&lt; 70%</td>
-              <td class="headerValueLegM">&ge; 70% and &lt; 90%</td>
-              <td class="headerValueLegH">&ge; 90%</td>
-              <td class="headerValueLegM">Medium</td>
+              <td class="headerValueLegL">&lt; 90%</td>
+              <td class="headerValueLegM">&ge; 90% and &lt; 95%</td>
+              <td class="headerValueLegH">&ge; 95%</td>
+              <td class="headerValueLegH">High</td>
             </tr>
             <tr>
               <th scope="row">Branches</th>
-              <td class="headerValueLegL">&lt; 30%</td>
-              <td class="headerValueLegM">&ge; 30% and &lt; 80%</td>
-              <td class="headerValueLegH">&ge; 80%</td>
-              <td class="headerValueLegM">Medium</td>
+              <td class="headerValueLegL">&lt; 85%</td>
+              <td class="headerValueLegM">&ge; 85% and &lt; 90%</td>
+              <td class="headerValueLegH">&ge; 90%</td>
+              <td class="headerValueLegH">High</td>
             </tr>
             <tr>
               <th scope="row">Functions</th>
-              <td class="headerValueLegL">&lt; 75%</td>
-              <td class="headerValueLegM">&ge; 75% and &lt; 90%</td>
-              <td class="headerValueLegH">&ge; 90%</td>
-              <td class="headerValueLegM">Medium</td>
+              <td class="headerValueLegL">&lt; 90%</td>
+              <td class="headerValueLegM">&ge; 90% and &lt; 95%</td>
+              <td class="headerValueLegH">&ge; 95%</td>
+              <td class="headerValueLegH">High</td>
             </tr>
             </tbody>
           </table>
