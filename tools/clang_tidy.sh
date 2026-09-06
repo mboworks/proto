@@ -128,9 +128,12 @@ done
 #   * abseil-unchecked-statusor-access: LLVM 22.1.8 crashes while analysing
 #     template instantiations of the file helpers from file_test.cc. Production
 #     translation units retain this check.
+#   * performance-no-automatic-move: test instantiations diagnose const status
+#     locals in public templates. Production translation units retain the check;
+#     changing the public header belongs with a complete header-scope lint pass.
 # `--checks` APPENDS to the `Checks` in .clang-tidy (it does not replace it), so
 # every other check still applies to tests.
-readonly TEST_DISABLED_CHECKS='-readability-function-cognitive-complexity,-clang-analyzer-cplusplus.NewDeleteLeaks,-abseil-unchecked-statusor-access'
+readonly TEST_DISABLED_CHECKS='-readability-function-cognitive-complexity,-clang-analyzer-cplusplus.NewDeleteLeaks,-abseil-unchecked-statusor-access,-performance-no-automatic-move'
 
 # `--header-filter=(^|/)mbo/` also matches generated paths such as
 # `bazel-out/.../mbo/proto/tests/test.pb.h`. Those files are protoc output, not
