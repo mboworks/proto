@@ -51,7 +51,7 @@ on:
         type: string
         default: ""
       proto_version:
-        description: "The protobuf version to pin in MODULE.bazel (e.g. 34.1, 35.0). If empty the checked-in pin is used as-is."
+        description: "The exact protobuf version to select in MODULE.bazel (e.g. 34.1, 35.0). If empty the checked-in selection is used as-is."
         type: string
         default: ""
       coverage_target:
@@ -169,14 +169,12 @@ jobs:
             echo "::error::Matrix/Input var 'bazel_config' must be one of [asan, coverage, cpp23, fastbuild, opt]."
             exit 1
           fi
-          # Pin the protobuf dependency via a single-line rewrite of MODULE.bazel
-          # (no whole-file/include swapping). Mirrors the llvm_version rewrite above.
+          # Rewrite both the root dependency and single-version override. Changing
+          # only bazel_dep does not affect resolution while the override is present.
           if [ -n "${{inputs.proto_version}}" ]; then
-            # `-E` + `|` delimiter: the protobuf line contains a comma, so a
-            # comma-delimited `s,,,` would misparse (`unknown option to s`).
-            sed -i.bak -E 's|(bazel_dep\(name = "protobuf", version = ")[^"]*|\1${{inputs.proto_version}}|' MODULE.bazel
-            rm -f MODULE.bazel.bak
-            echo "Pinned protobuf to '${{inputs.proto_version}}':"
+            python3 tools/select_protobuf_version.py "${{inputs.proto_version}}"
+            echo "Selected protobuf '${{inputs.proto_version}}' in MODULE.bazel:"
+            grep -A4 -B1 'module_name = "protobuf"' MODULE.bazel
             grep 'name = "protobuf"' MODULE.bazel
           fi
           # Pin the Bazel release that bazelisk launches. bazelisk resolves the
@@ -223,6 +221,16 @@ jobs:
               *) echo "::error::Expected compiler prefix '${EXPECT}' but selected '${COMPILER}'."; exit 1 ;;
             esac
           fi
+
+      - name: Verify protobuf version
+        if: inputs.proto_version != ''
+        run: |
+          set -euo pipefail
+          EXPECTED='${{inputs.proto_version}}'
+          GRAPH="$(bazel ${BAZEL_INIT} mod graph --output=graph)"
+          printf '%s\n' "${GRAPH}"
+          python3 tools/select_protobuf_version.py \
+            --verify-graph "${EXPECTED}" <<<"${GRAPH}"
 
       - name: Build and Test
         if: inputs.bazel_config != 'coverage'

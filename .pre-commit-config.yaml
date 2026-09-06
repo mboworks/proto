@@ -131,6 +131,12 @@ repos:
         entry: python3 -m unittest tools/cache_cleanup_test.py
         files: ^(\.github/workflows/cache_cleanup\.yml|tools/cache_cleanup(_test)?\.py)$
         pass_filenames: false
+      - id: protobuf-version-selection-tests
+        name: Test protobuf compatibility-version selection
+        language: system
+        entry: python3 -m unittest tools/select_protobuf_version_test.py
+        files: ^(MODULE\.bazel|\.github/workflows/(compatibility|main|test)\.yml|tools/select_protobuf_version(_test)?\.py)$
+        pass_filenames: false
       - id: coverage-policy-tests
         name: Test coverage tooling and policy
         language: system

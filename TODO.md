@@ -13,17 +13,17 @@ temporarily misleading or broken.
 
 ### CI-1: Make protobuf compatibility cells select the requested version
 
-- [ ] Rewrite or remove the `single_version_override` for protobuf when `proto_version` is set;
+- [x] Rewrite or remove the `single_version_override` for protobuf when `proto_version` is set;
       changing only `bazel_dep` is insufficient because the checked-in override still forces 35.0.
-- [ ] Assert the resolved protobuf version in every compatibility cell so selection cannot silently
+- [x] Assert the resolved protobuf version in every compatibility cell so selection cannot silently
       regress.
-- [ ] Add tests for the version-selection logic.
-- [ ] Define a rolling compatibility window consisting of the current protobuf major release and
+- [x] Add tests for the version-selection logic.
+- [x] Define a rolling compatibility window consisting of the current protobuf major release and
       the two preceding major release lines; initially test 34.1, 35.0, and 36.1.bcr.1.
-- [ ] Exercise that window with one deliberately narrow configuration: Ubuntu, GCC 14, Bazel
+- [x] Exercise that window with one deliberately narrow configuration: Ubuntu, Clang 22.1.8, Bazel
       9.2.0, and `opt`. Compiler, sanitizer, OS, and Bazel-version coverage remains owned by the
       main matrix and must not be crossed with protobuf versions.
-- [ ] Correct the stale protobuf 34.1 comment in `.bcr/presubmit.yml`.
+- [x] Correct the stale protobuf 34.1 comment in `.bcr/presubmit.yml`.
 
 Acceptance: CI logs prove that each cell resolved its named protobuf version, all three release
 lines pass on the single compatibility configuration, and advancing the current major makes the

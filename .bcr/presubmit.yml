@@ -1,5 +1,5 @@
 matrix:
-  # Bazel 7.x is intentionally absent: the pinned protobuf (34.1) no longer
+  # Bazel 7.x is intentionally absent: the pinned protobuf (35.0) no longer
   # analyzes on Bazel 7.x, so the module's floor is Bazel 8.
   bazel:
     - 8.x
