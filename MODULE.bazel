@@ -17,7 +17,7 @@
 
 module(
     name = "mboworks_proto",
-    version = "1.2.3",
+    version = "1.2.4",
 )
 
 # For local development we include LLVM, Hedron-Compile-Commands, etc.

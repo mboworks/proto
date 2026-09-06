@@ -1,3 +1,5 @@
+# 1.2.4
+
 # 1.2.3
 
 - Run production coverage with the same hermetic LLVM/Clang 22.1.8 toolchain as clang-tidy, using Bazel's LLVM coverage-map and LCOV generation path with stable workspace-relative source paths. Retain the 90% line/function health targets while calibrating the enforced Clang floors to 70% lines and 75% functions; patch thresholds remain unchanged.
