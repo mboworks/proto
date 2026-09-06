@@ -40,13 +40,13 @@
             <td class="headerValue">proto production coverage</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryLo">89.5&nbsp;%</td>
+            <td class="headerCovTableEntryLo">88.9&nbsp;%</td>
             <td class="headerCovTableEntry">190</td>
-            <td class="headerCovTableEntry">170</td>
+            <td class="headerCovTableEntry">169</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-09-06 17:58:46</td>
+            <td class="headerValue">2026-09-06 19:10:30</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryLo">89.5&nbsp;%</td>
@@ -58,9 +58,9 @@
             <td></td>
             <td></td>
             <td class="headerItem">Branches:</td>
-            <td class="headerCovTableEntryMed">88.9&nbsp;%</td>
-            <td class="headerCovTableEntry">90</td>
-            <td class="headerCovTableEntry">80</td>
+            <td class="headerCovTableEntryMed">88.6&nbsp;%</td>
+            <td class="headerCovTableEntry">88</td>
+            <td class="headerCovTableEntry">78</td>
           </tr>
                   <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
                 </table>
@@ -313,153 +313,154 @@
 <span id="L233"><span class="lineNum">     233</span>                 :<span class="tlaGNC">          18 :   }</span></span>
 <span id="L234"><span class="lineNum">     234</span>                 :             : </span>
 <span id="L235"><span class="lineNum">     235</span>         [<span class="tlaGBC" title="branch 0 was taken 22 times"> + </span><span class="tlaGBC" title="branch 1 was taken 11 times"> + </span>]:<span class="tlaGNC">          11 :   ABSL_CHECK(!field_path.empty());</span></span>
-<span id="L236"><span class="lineNum">     236</span>         [<span class="tlaGBC" title="branch 0 was taken 22 times"> + </span><span class="tlaGBC" title="branch 1 was taken 11 times"> + </span>]:<span class="tlaGNC">          22 :   ABSL_CHECK(field_path.back().index == -1)</span></span>
-<span id="L237"><span class="lineNum">     237</span>                 :<span class="tlaGNC">          22 :       &lt;&lt; &quot;Terminally ignoring fields by index is currently not supported ('&quot; &lt;&lt; relative_field_path &lt;&lt; &quot;')&quot;;</span></span>
-<span id="L238"><span class="lineNum">     238</span>                 :<span class="tlaGNC">          11 :   return field_path;</span></span>
-<span id="L239"><span class="lineNum">     239</span>                 :<span class="tlaGNC">          11 : }</span></span>
-<span id="L240"><span class="lineNum">     240</span>                 :             : </span>
-<span id="L241"><span class="lineNum">     241</span>                 :             : // Sets the ignored field paths corresponding to field_paths in differencer.</span>
-<span id="L242"><span class="lineNum">     242</span>                 :             : // Dies if any path is invalid.</span>
-<span id="L243"><span class="lineNum">     243</span>                 :             : void SetIgnoredFieldPathsOrDie(</span>
-<span id="L244"><span class="lineNum">     244</span>                 :             :     const ::google::protobuf::Descriptor&amp; root_descriptor,</span>
-<span id="L245"><span class="lineNum">     245</span>                 :             :     const std::vector&lt;std::string&gt;&amp; field_paths,</span>
-<span id="L246"><span class="lineNum">     246</span>                 :<span class="tlaGNC">          78 :     ::google::protobuf::util::MessageDifferencer* differencer) {</span></span>
-<span id="L247"><span class="lineNum">     247</span>         [<span class="tlaGBC" title="branch 0 was taken 11 times"> + </span><span class="tlaGBC" title="branch 1 was taken 78 times"> + </span>]:<span class="tlaGNC">          78 :   for (const std::string&amp; field_path : field_paths) {</span></span>
-<span id="L248"><span class="lineNum">     248</span>                 :<span class="tlaGNC">          11 :     differencer-&gt;AddIgnoreCriteria(</span></span>
-<span id="L249"><span class="lineNum">     249</span>                 :<span class="tlaGNC">          11 :         std::make_unique&lt;IgnoreFieldPathCriteria&gt;(ParseFieldPathOrDie(field_path, root_descriptor)));</span></span>
-<span id="L250"><span class="lineNum">     250</span>                 :<span class="tlaGNC">          11 :   }</span></span>
-<span id="L251"><span class="lineNum">     251</span>                 :<span class="tlaGNC">          78 : }</span></span>
-<span id="L252"><span class="lineNum">     252</span>                 :             : </span>
-<span id="L253"><span class="lineNum">     253</span>                 :             : // Configures a MessageDifferencer and DefaultFieldComparator to use the logic</span>
-<span id="L254"><span class="lineNum">     254</span>                 :             : // described in comp. The configured differencer is the output of this function,</span>
-<span id="L255"><span class="lineNum">     255</span>                 :             : // but a FieldComparator must be provided to keep ownership clear.</span>
-<span id="L256"><span class="lineNum">     256</span>                 :             : void ConfigureDifferencer(</span>
-<span id="L257"><span class="lineNum">     257</span>                 :             :     const internal::ProtoComparison&amp; comp,</span>
-<span id="L258"><span class="lineNum">     258</span>                 :             :     ::google::protobuf::util::DefaultFieldComparator* comparator,</span>
-<span id="L259"><span class="lineNum">     259</span>                 :             :     ::google::protobuf::util::MessageDifferencer* differencer,</span>
-<span id="L260"><span class="lineNum">     260</span>                 :<span class="tlaGNC">          78 :     const ::google::protobuf::Descriptor* descriptor) {</span></span>
-<span id="L261"><span class="lineNum">     261</span>                 :<span class="tlaGNC">          78 :   differencer-&gt;set_message_field_comparison(comp.field_comp);</span></span>
-<span id="L262"><span class="lineNum">     262</span>                 :<span class="tlaGNC">          78 :   differencer-&gt;set_scope(comp.scope);</span></span>
-<span id="L263"><span class="lineNum">     263</span>                 :<span class="tlaGNC">          78 :   comparator-&gt;set_float_comparison(comp.float_comp);</span></span>
-<span id="L264"><span class="lineNum">     264</span>                 :<span class="tlaGNC">          78 :   comparator-&gt;set_treat_nan_as_equal(comp.treating_nan_as_equal);</span></span>
-<span id="L265"><span class="lineNum">     265</span>                 :<span class="tlaGNC">          78 :   differencer-&gt;set_repeated_field_comparison(comp.repeated_field_comp);</span></span>
-<span id="L266"><span class="lineNum">     266</span>                 :<span class="tlaGNC">          78 :   SetIgnoredFieldsOrDie(*descriptor, comp.ignore_fields, differencer);</span></span>
-<span id="L267"><span class="lineNum">     267</span>                 :<span class="tlaGNC">          78 :   SetIgnoredFieldPathsOrDie(*descriptor, comp.ignore_field_paths, differencer);</span></span>
-<span id="L268"><span class="lineNum">     268</span> [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaGBC" title="branch 1 was taken 72 times"> + </span>][<span class="tlaGBC" title="branch &quot;2&quot; was taken 4 times"> + </span><span class="tlaGBC" title="branch &quot;3&quot; was taken 2 times"> + </span>]:<span class="tlaGNC">          78 :   if (comp.float_comp == internal::kProtoApproximate &amp;&amp; (comp.has_custom_margin || comp.has_custom_fraction)) {</span></span>
+<span id="L236"><span class="lineNum">     236</span>                 :             :   // The failure path is tested by EXPECT_DEATH, whose subprocess coverage is not merged. LCOV_EXCL_LINE</span>
+<span id="L237"><span class="lineNum">     237</span>                 :<span class="tlaGNC">          11 :   ABSL_CHECK_EQ(field_path.back().index, -1)  // LCOV_EXCL_BR_LINE</span></span>
+<span id="L238"><span class="lineNum">     238</span>                 :<span class="tlaUNC">           0 :       &lt;&lt; &quot;Terminally ignoring fields by index is currently not supported ('&quot; &lt;&lt; relative_field_path &lt;&lt; &quot;')&quot;;</span></span>
+<span id="L239"><span class="lineNum">     239</span>                 :<span class="tlaGNC">          11 :   return field_path;</span></span>
+<span id="L240"><span class="lineNum">     240</span>                 :<span class="tlaGNC">          11 : }</span></span>
+<span id="L241"><span class="lineNum">     241</span>                 :             : </span>
+<span id="L242"><span class="lineNum">     242</span>                 :             : // Sets the ignored field paths corresponding to field_paths in differencer.</span>
+<span id="L243"><span class="lineNum">     243</span>                 :             : // Dies if any path is invalid.</span>
+<span id="L244"><span class="lineNum">     244</span>                 :             : void SetIgnoredFieldPathsOrDie(</span>
+<span id="L245"><span class="lineNum">     245</span>                 :             :     const ::google::protobuf::Descriptor&amp; root_descriptor,</span>
+<span id="L246"><span class="lineNum">     246</span>                 :             :     const std::vector&lt;std::string&gt;&amp; field_paths,</span>
+<span id="L247"><span class="lineNum">     247</span>                 :<span class="tlaGNC">          78 :     ::google::protobuf::util::MessageDifferencer* differencer) {</span></span>
+<span id="L248"><span class="lineNum">     248</span>         [<span class="tlaGBC" title="branch 0 was taken 11 times"> + </span><span class="tlaGBC" title="branch 1 was taken 78 times"> + </span>]:<span class="tlaGNC">          78 :   for (const std::string&amp; field_path : field_paths) {</span></span>
+<span id="L249"><span class="lineNum">     249</span>                 :<span class="tlaGNC">          11 :     differencer-&gt;AddIgnoreCriteria(</span></span>
+<span id="L250"><span class="lineNum">     250</span>                 :<span class="tlaGNC">          11 :         std::make_unique&lt;IgnoreFieldPathCriteria&gt;(ParseFieldPathOrDie(field_path, root_descriptor)));</span></span>
+<span id="L251"><span class="lineNum">     251</span>                 :<span class="tlaGNC">          11 :   }</span></span>
+<span id="L252"><span class="lineNum">     252</span>                 :<span class="tlaGNC">          78 : }</span></span>
+<span id="L253"><span class="lineNum">     253</span>                 :             : </span>
+<span id="L254"><span class="lineNum">     254</span>                 :             : // Configures a MessageDifferencer and DefaultFieldComparator to use the logic</span>
+<span id="L255"><span class="lineNum">     255</span>                 :             : // described in comp. The configured differencer is the output of this function,</span>
+<span id="L256"><span class="lineNum">     256</span>                 :             : // but a FieldComparator must be provided to keep ownership clear.</span>
+<span id="L257"><span class="lineNum">     257</span>                 :             : void ConfigureDifferencer(</span>
+<span id="L258"><span class="lineNum">     258</span>                 :             :     const internal::ProtoComparison&amp; comp,</span>
+<span id="L259"><span class="lineNum">     259</span>                 :             :     ::google::protobuf::util::DefaultFieldComparator* comparator,</span>
+<span id="L260"><span class="lineNum">     260</span>                 :             :     ::google::protobuf::util::MessageDifferencer* differencer,</span>
+<span id="L261"><span class="lineNum">     261</span>                 :<span class="tlaGNC">          78 :     const ::google::protobuf::Descriptor* descriptor) {</span></span>
+<span id="L262"><span class="lineNum">     262</span>                 :<span class="tlaGNC">          78 :   differencer-&gt;set_message_field_comparison(comp.field_comp);</span></span>
+<span id="L263"><span class="lineNum">     263</span>                 :<span class="tlaGNC">          78 :   differencer-&gt;set_scope(comp.scope);</span></span>
+<span id="L264"><span class="lineNum">     264</span>                 :<span class="tlaGNC">          78 :   comparator-&gt;set_float_comparison(comp.float_comp);</span></span>
+<span id="L265"><span class="lineNum">     265</span>                 :<span class="tlaGNC">          78 :   comparator-&gt;set_treat_nan_as_equal(comp.treating_nan_as_equal);</span></span>
+<span id="L266"><span class="lineNum">     266</span>                 :<span class="tlaGNC">          78 :   differencer-&gt;set_repeated_field_comparison(comp.repeated_field_comp);</span></span>
+<span id="L267"><span class="lineNum">     267</span>                 :<span class="tlaGNC">          78 :   SetIgnoredFieldsOrDie(*descriptor, comp.ignore_fields, differencer);</span></span>
+<span id="L268"><span class="lineNum">     268</span>                 :<span class="tlaGNC">          78 :   SetIgnoredFieldPathsOrDie(*descriptor, comp.ignore_field_paths, differencer);</span></span>
+<span id="L269"><span class="lineNum">     269</span> [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaGBC" title="branch 1 was taken 72 times"> + </span>][<span class="tlaGBC" title="branch &quot;2&quot; was taken 4 times"> + </span><span class="tlaGBC" title="branch &quot;3&quot; was taken 2 times"> + </span>]:<span class="tlaGNC">          78 :   if (comp.float_comp == internal::kProtoApproximate &amp;&amp; (comp.has_custom_margin || comp.has_custom_fraction)) {</span></span>
 <span class="lineNum">        </span>         [<span class="tlaGBC" title="branch &quot;4&quot; was taken 1 time"> + </span><span class="tlaGBC" title="branch &quot;5&quot; was taken 1 time"> + </span>]
-<span id="L269"><span class="lineNum">     269</span>                 :             :     // Two fields will be considered equal if they're within the fraction _or_</span>
-<span id="L270"><span class="lineNum">     270</span>                 :             :     // within the margin. So setting the fraction to 0.0 makes this effectively</span>
-<span id="L271"><span class="lineNum">     271</span>                 :             :     // a &quot;SetMargin&quot;. Similarly, setting the margin to 0.0 makes this</span>
-<span id="L272"><span class="lineNum">     272</span>                 :             :     // effectively a &quot;SetFraction&quot;.</span>
-<span id="L273"><span class="lineNum">     273</span>                 :<span class="tlaGNC">           5 :     comparator-&gt;SetDefaultFractionAndMargin(comp.float_fraction, comp.float_margin);</span></span>
-<span id="L274"><span class="lineNum">     274</span>                 :<span class="tlaGNC">           5 :   }</span></span>
-<span id="L275"><span class="lineNum">     275</span>                 :<span class="tlaGNC">          78 :   differencer-&gt;set_field_comparator(comparator);</span></span>
-<span id="L276"><span class="lineNum">     276</span>                 :<span class="tlaGNC">          78 : }</span></span>
-<span id="L277"><span class="lineNum">     277</span>                 :             : </span>
-<span id="L278"><span class="lineNum">     278</span>                 :             : }  // namespace</span>
-<span id="L279"><span class="lineNum">     279</span>                 :             : </span>
-<span id="L280"><span class="lineNum">     280</span>                 :             : // Returns true iff actual and expected are comparable and match.  The</span>
-<span id="L281"><span class="lineNum">     281</span>                 :             : // comp argument specifies how two are compared.</span>
-<span id="L282"><span class="lineNum">     282</span>                 :             : bool ProtoCompare(</span>
-<span id="L283"><span class="lineNum">     283</span>                 :             :     const internal::ProtoComparison&amp; comp,</span>
-<span id="L284"><span class="lineNum">     284</span>                 :             :     const ::google::protobuf::Message&amp; actual,</span>
-<span id="L285"><span class="lineNum">     285</span>                 :<span class="tlaGNC">          72 :     const ::google::protobuf::Message&amp; expected) {</span></span>
-<span id="L286"><span class="lineNum">     286</span>         [<span class="tlaGBC" title="branch 0 was taken 1 time"> + </span><span class="tlaGBC" title="branch 1 was taken 71 times"> + </span>]:<span class="tlaGNC">          72 :   if (!ProtoComparable(actual, expected)) {</span></span>
-<span id="L287"><span class="lineNum">     287</span>                 :<span class="tlaGNC">           1 :     return false;</span></span>
-<span id="L288"><span class="lineNum">     288</span>                 :<span class="tlaGNC">           1 :   }</span></span>
-<span id="L289"><span class="lineNum">     289</span>                 :             : </span>
-<span id="L290"><span class="lineNum">     290</span>                 :<span class="tlaGNC">          71 :   ::google::protobuf::util::MessageDifferencer differencer;</span></span>
-<span id="L291"><span class="lineNum">     291</span>                 :<span class="tlaGNC">          71 :   ::google::protobuf::util::DefaultFieldComparator field_comparator;</span></span>
-<span id="L292"><span class="lineNum">     292</span>                 :<span class="tlaGNC">          71 :   ConfigureDifferencer(comp, &amp;field_comparator, &amp;differencer, actual.GetDescriptor());</span></span>
-<span id="L293"><span class="lineNum">     293</span>                 :             : </span>
-<span id="L294"><span class="lineNum">     294</span>                 :             :   // It's important for 'expected' to be the first argument here, as</span>
-<span id="L295"><span class="lineNum">     295</span>                 :             :   // Compare() is not symmetric.  When we do a partial comparison,</span>
-<span id="L296"><span class="lineNum">     296</span>                 :             :   // only fields present in the first argument of Compare() are</span>
-<span id="L297"><span class="lineNum">     297</span>                 :             :   // considered.</span>
-<span id="L298"><span class="lineNum">     298</span>                 :<span class="tlaGNC">          71 :   return differencer.Compare(expected, actual);</span></span>
-<span id="L299"><span class="lineNum">     299</span>                 :<span class="tlaGNC">          72 : }</span></span>
-<span id="L300"><span class="lineNum">     300</span>                 :             : </span>
-<span id="L301"><span class="lineNum">     301</span>                 :             : // Describes the types of the expected and the actual protocol buffer.</span>
-<span id="L302"><span class="lineNum">     302</span>                 :<span class="tlaGNC">           2 : std::string DescribeTypes(const ::google::protobuf::Message&amp; expected, const ::google::protobuf::Message&amp; actual) {</span></span>
-<span id="L303"><span class="lineNum">     303</span>                 :<span class="tlaGNC">           2 :   return absl::StrCat(</span></span>
-<span id="L304"><span class="lineNum">     304</span>                 :<span class="tlaGNC">           2 :       &quot;whose type should be &quot;, expected.GetDescriptor()-&gt;full_name(), &quot; but actually is &quot;,</span></span>
-<span id="L305"><span class="lineNum">     305</span>                 :<span class="tlaGNC">           2 :       actual.GetDescriptor()-&gt;full_name());</span></span>
-<span id="L306"><span class="lineNum">     306</span>                 :<span class="tlaGNC">           2 : }</span></span>
-<span id="L307"><span class="lineNum">     307</span>                 :             : </span>
-<span id="L308"><span class="lineNum">     308</span>                 :             : // Prints the protocol buffer pointed to by proto.</span>
-<span id="L309"><span class="lineNum">     309</span>                 :<span class="tlaGNC">           4 : std::string PrintProtoPointee(const ::google::protobuf::Message* proto) {</span></span>
-<span id="L310"><span class="lineNum">     310</span>         [<span class="tlaGBC" title="branch 0 was taken 1 time"> + </span><span class="tlaGBC" title="branch 1 was taken 3 times"> + </span>]:<span class="tlaGNC">           4 :   if (proto == nullptr) {</span></span>
-<span id="L311"><span class="lineNum">     311</span>                 :<span class="tlaGNC">           1 :     return &quot;&quot;;</span></span>
-<span id="L312"><span class="lineNum">     312</span>                 :<span class="tlaGNC">           1 :   }</span></span>
-<span id="L313"><span class="lineNum">     313</span>                 :             : </span>
-<span id="L314"><span class="lineNum">     314</span>                 :<span class="tlaGNC">           3 :   return absl::StrCat(&quot;which points to &quot;, ::testing::PrintToString(*proto));</span></span>
-<span id="L315"><span class="lineNum">     315</span>                 :<span class="tlaGNC">           4 : }</span></span>
-<span id="L316"><span class="lineNum">     316</span>                 :             : </span>
-<span id="L317"><span class="lineNum">     317</span>                 :             : // Describes the differences between the two protocol buffers.</span>
-<span id="L318"><span class="lineNum">     318</span>                 :             : std::string DescribeDiff(</span>
-<span id="L319"><span class="lineNum">     319</span>                 :             :     const internal::ProtoComparison&amp; comp,</span>
-<span id="L320"><span class="lineNum">     320</span>                 :             :     const ::google::protobuf::Message&amp; actual,</span>
-<span id="L321"><span class="lineNum">     321</span>                 :<span class="tlaGNC">           7 :     const ::google::protobuf::Message&amp; expected) {</span></span>
-<span id="L322"><span class="lineNum">     322</span>                 :<span class="tlaGNC">           7 :   ::google::protobuf::util::MessageDifferencer differencer;</span></span>
-<span id="L323"><span class="lineNum">     323</span>                 :<span class="tlaGNC">           7 :   ::google::protobuf::util::DefaultFieldComparator field_comparator;</span></span>
-<span id="L324"><span class="lineNum">     324</span>                 :<span class="tlaGNC">           7 :   ConfigureDifferencer(comp, &amp;field_comparator, &amp;differencer, actual.GetDescriptor());</span></span>
-<span id="L325"><span class="lineNum">     325</span>                 :             : </span>
-<span id="L326"><span class="lineNum">     326</span>                 :<span class="tlaGNC">           7 :   std::string diff;</span></span>
-<span id="L327"><span class="lineNum">     327</span>                 :<span class="tlaGNC">           7 :   differencer.ReportDifferencesToString(&amp;diff);</span></span>
-<span id="L328"><span class="lineNum">     328</span>                 :             : </span>
-<span id="L329"><span class="lineNum">     329</span>                 :             :   // We must put 'expected' as the first argument here, as Compare()</span>
-<span id="L330"><span class="lineNum">     330</span>                 :             :   // reports the diff in terms of how the protobuf changes from the</span>
-<span id="L331"><span class="lineNum">     331</span>                 :             :   // first argument to the second argument.</span>
-<span id="L332"><span class="lineNum">     332</span>                 :<span class="tlaGNC">           7 :   differencer.Compare(expected, actual);</span></span>
-<span id="L333"><span class="lineNum">     333</span>                 :             : </span>
-<span id="L334"><span class="lineNum">     334</span>                 :             :   // Removes the trailing '\n' in the diff to make the output look nicer.</span>
-<span id="L335"><span class="lineNum">     335</span> [<span class="tlaGBC" title="branch 0 was taken 12 times"> + </span><span class="tlaGBC" title="branch 1 was taken 2 times"> + </span>][<span class="tlaGBC" title="branch &quot;2&quot; was taken 6 times"> + </span><span class="tlaUNC" title="branch &quot;3&quot; was not taken"> - </span>]:<span class="tlaGNC">           7 :   if (!diff.empty() &amp;&amp; *(diff.end() - 1) == '\n') {</span></span>
-<span id="L336"><span class="lineNum">     336</span>                 :<span class="tlaGNC">           6 :     diff.erase(diff.end() - 1);</span></span>
-<span id="L337"><span class="lineNum">     337</span>                 :<span class="tlaGNC">           6 :   }</span></span>
-<span id="L338"><span class="lineNum">     338</span>                 :             : </span>
-<span id="L339"><span class="lineNum">     339</span>                 :<span class="tlaGNC">           7 :   return absl::StrCat(&quot;with the difference:\n&quot;, diff);</span></span>
-<span id="L340"><span class="lineNum">     340</span>                 :<span class="tlaGNC">           7 : }</span></span>
-<span id="L341"><span class="lineNum">     341</span>                 :             : </span>
-<span id="L342"><span class="lineNum">     342</span>                 :             : bool ProtoMatcherBase::MatchAndExplain(</span>
-<span id="L343"><span class="lineNum">     343</span>                 :             :     const ::google::protobuf::Message&amp; arg,</span>
-<span id="L344"><span class="lineNum">     344</span>                 :             :     bool is_matcher_for_pointer,  // true iff this matcher is used to match</span>
-<span id="L345"><span class="lineNum">     345</span>                 :             :                                   // a protobuf pointer.</span>
-<span id="L346"><span class="lineNum">     346</span>                 :<span class="tlaGNC">          67 :     ::testing::MatchResultListener* listener) const {</span></span>
-<span id="L347"><span class="lineNum">     347</span> [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaGBC" title="branch 1 was taken 65 times"> + </span>][<span class="tlaGBC" title="branch &quot;2&quot; was taken 1 time"> + </span><span class="tlaGBC" title="branch &quot;3&quot; was taken 1 time"> + </span>]:<span class="tlaGNC">          67 :   if (must_be_initialized_ &amp;&amp; !arg.IsInitialized()) {</span></span>
-<span id="L348"><span class="lineNum">     348</span>                 :<span class="tlaGNC">           1 :     *listener &lt;&lt; &quot;which isn't fully initialized&quot;;</span></span>
-<span id="L349"><span class="lineNum">     349</span>                 :<span class="tlaGNC">           1 :     return false;</span></span>
-<span id="L350"><span class="lineNum">     350</span>                 :<span class="tlaGNC">           1 :   }</span></span>
-<span id="L351"><span class="lineNum">     351</span>                 :             : </span>
-<span id="L352"><span class="lineNum">     352</span>                 :<span class="tlaGNC">          66 :   const ::google::protobuf::Message* const expected = CreateExpectedProto(arg, listener);</span></span>
-<span id="L353"><span class="lineNum">     353</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaGBC" title="branch 1 was taken 63 times"> + </span>]:<span class="tlaGNC">          66 :   if (expected == nullptr) {</span></span>
-<span id="L354"><span class="lineNum">     354</span>                 :<span class="tlaGNC">           3 :     return false;</span></span>
-<span id="L355"><span class="lineNum">     355</span>                 :<span class="tlaGNC">           3 :   }</span></span>
-<span id="L356"><span class="lineNum">     356</span>                 :             : </span>
-<span id="L357"><span class="lineNum">     357</span>                 :             :   // Protobufs of different types cannot be compared.</span>
-<span id="L358"><span class="lineNum">     358</span>                 :<span class="tlaGNC">          63 :   const bool comparable = ProtoComparable(arg, *expected);</span></span>
-<span id="L359"><span class="lineNum">     359</span> [<span class="tlaGBC" title="branch 0 was taken 61 times"> + </span><span class="tlaGBC" title="branch 1 was taken 2 times"> + </span>][<span class="tlaGBC" title="branch &quot;2&quot; was taken 49 times"> + </span><span class="tlaGBC" title="branch &quot;3&quot; was taken 12 times"> + </span>]:<span class="tlaGNC">          63 :   const bool match = comparable &amp;&amp; ProtoCompare(comp(), arg, *expected);</span></span>
-<span id="L360"><span class="lineNum">     360</span>                 :             : </span>
-<span id="L361"><span class="lineNum">     361</span>                 :             :   // Explaining the match result is expensive.  We don't want to waste</span>
-<span id="L362"><span class="lineNum">     362</span>                 :             :   // time calculating an explanation if the listener isn't interested.</span>
-<span id="L363"><span class="lineNum">     363</span>         [<span class="tlaGBC" title="branch 0 was taken 9 times"> + </span><span class="tlaGBC" title="branch 1 was taken 54 times"> + </span>]:<span class="tlaGNC">          63 :   if (listener-&gt;IsInterested()) {</span></span>
-<span id="L364"><span class="lineNum">     364</span>                 :<span class="tlaGNC">           9 :     const char* sep = &quot;&quot;;</span></span>
-<span id="L365"><span class="lineNum">     365</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaGBC" title="branch 1 was taken 6 times"> + </span>]:<span class="tlaGNC">           9 :     if (is_matcher_for_pointer) {</span></span>
-<span id="L366"><span class="lineNum">     366</span>                 :<span class="tlaGNC">           3 :       *listener &lt;&lt; PrintProtoPointee(&amp;arg);</span></span>
-<span id="L367"><span class="lineNum">     367</span>                 :<span class="tlaGNC">           3 :       sep = &quot;,\n&quot;;</span></span>
-<span id="L368"><span class="lineNum">     368</span>                 :<span class="tlaGNC">           3 :     }</span></span>
-<span id="L369"><span class="lineNum">     369</span>                 :             : </span>
-<span id="L370"><span class="lineNum">     370</span>         [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaGBC" title="branch 1 was taken 7 times"> + </span>]:<span class="tlaGNC">           9 :     if (!comparable) {</span></span>
-<span id="L371"><span class="lineNum">     371</span>                 :<span class="tlaGNC">           2 :       *listener &lt;&lt; sep &lt;&lt; DescribeTypes(*expected, arg);</span></span>
-<span id="L372"><span class="lineNum">     372</span>         [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaGBC" title="branch 1 was taken 1 time"> + </span>]:<span class="tlaGNC">           7 :     } else if (!match) {</span></span>
-<span id="L373"><span class="lineNum">     373</span>                 :<span class="tlaGNC">           6 :       *listener &lt;&lt; sep &lt;&lt; DescribeDiff(comp(), arg, *expected);</span></span>
-<span id="L374"><span class="lineNum">     374</span>                 :<span class="tlaGNC">           6 :     }</span></span>
-<span id="L375"><span class="lineNum">     375</span>                 :<span class="tlaGNC">           9 :   }</span></span>
-<span id="L376"><span class="lineNum">     376</span>                 :             : </span>
-<span id="L377"><span class="lineNum">     377</span>                 :<span class="tlaGNC">          63 :   DeleteExpectedProto(expected);</span></span>
-<span id="L378"><span class="lineNum">     378</span>                 :<span class="tlaGNC">          63 :   return match;</span></span>
-<span id="L379"><span class="lineNum">     379</span>                 :<span class="tlaGNC">          66 : }</span></span>
-<span id="L380"><span class="lineNum">     380</span>                 :             : </span>
-<span id="L381"><span class="lineNum">     381</span>                 :             : }  // namespace mbo::proto::internal</span>
+<span id="L270"><span class="lineNum">     270</span>                 :             :     // Two fields will be considered equal if they're within the fraction _or_</span>
+<span id="L271"><span class="lineNum">     271</span>                 :             :     // within the margin. So setting the fraction to 0.0 makes this effectively</span>
+<span id="L272"><span class="lineNum">     272</span>                 :             :     // a &quot;SetMargin&quot;. Similarly, setting the margin to 0.0 makes this</span>
+<span id="L273"><span class="lineNum">     273</span>                 :             :     // effectively a &quot;SetFraction&quot;.</span>
+<span id="L274"><span class="lineNum">     274</span>                 :<span class="tlaGNC">           5 :     comparator-&gt;SetDefaultFractionAndMargin(comp.float_fraction, comp.float_margin);</span></span>
+<span id="L275"><span class="lineNum">     275</span>                 :<span class="tlaGNC">           5 :   }</span></span>
+<span id="L276"><span class="lineNum">     276</span>                 :<span class="tlaGNC">          78 :   differencer-&gt;set_field_comparator(comparator);</span></span>
+<span id="L277"><span class="lineNum">     277</span>                 :<span class="tlaGNC">          78 : }</span></span>
+<span id="L278"><span class="lineNum">     278</span>                 :             : </span>
+<span id="L279"><span class="lineNum">     279</span>                 :             : }  // namespace</span>
+<span id="L280"><span class="lineNum">     280</span>                 :             : </span>
+<span id="L281"><span class="lineNum">     281</span>                 :             : // Returns true iff actual and expected are comparable and match.  The</span>
+<span id="L282"><span class="lineNum">     282</span>                 :             : // comp argument specifies how two are compared.</span>
+<span id="L283"><span class="lineNum">     283</span>                 :             : bool ProtoCompare(</span>
+<span id="L284"><span class="lineNum">     284</span>                 :             :     const internal::ProtoComparison&amp; comp,</span>
+<span id="L285"><span class="lineNum">     285</span>                 :             :     const ::google::protobuf::Message&amp; actual,</span>
+<span id="L286"><span class="lineNum">     286</span>                 :<span class="tlaGNC">          72 :     const ::google::protobuf::Message&amp; expected) {</span></span>
+<span id="L287"><span class="lineNum">     287</span>         [<span class="tlaGBC" title="branch 0 was taken 1 time"> + </span><span class="tlaGBC" title="branch 1 was taken 71 times"> + </span>]:<span class="tlaGNC">          72 :   if (!ProtoComparable(actual, expected)) {</span></span>
+<span id="L288"><span class="lineNum">     288</span>                 :<span class="tlaGNC">           1 :     return false;</span></span>
+<span id="L289"><span class="lineNum">     289</span>                 :<span class="tlaGNC">           1 :   }</span></span>
+<span id="L290"><span class="lineNum">     290</span>                 :             : </span>
+<span id="L291"><span class="lineNum">     291</span>                 :<span class="tlaGNC">          71 :   ::google::protobuf::util::MessageDifferencer differencer;</span></span>
+<span id="L292"><span class="lineNum">     292</span>                 :<span class="tlaGNC">          71 :   ::google::protobuf::util::DefaultFieldComparator field_comparator;</span></span>
+<span id="L293"><span class="lineNum">     293</span>                 :<span class="tlaGNC">          71 :   ConfigureDifferencer(comp, &amp;field_comparator, &amp;differencer, actual.GetDescriptor());</span></span>
+<span id="L294"><span class="lineNum">     294</span>                 :             : </span>
+<span id="L295"><span class="lineNum">     295</span>                 :             :   // It's important for 'expected' to be the first argument here, as</span>
+<span id="L296"><span class="lineNum">     296</span>                 :             :   // Compare() is not symmetric.  When we do a partial comparison,</span>
+<span id="L297"><span class="lineNum">     297</span>                 :             :   // only fields present in the first argument of Compare() are</span>
+<span id="L298"><span class="lineNum">     298</span>                 :             :   // considered.</span>
+<span id="L299"><span class="lineNum">     299</span>                 :<span class="tlaGNC">          71 :   return differencer.Compare(expected, actual);</span></span>
+<span id="L300"><span class="lineNum">     300</span>                 :<span class="tlaGNC">          72 : }</span></span>
+<span id="L301"><span class="lineNum">     301</span>                 :             : </span>
+<span id="L302"><span class="lineNum">     302</span>                 :             : // Describes the types of the expected and the actual protocol buffer.</span>
+<span id="L303"><span class="lineNum">     303</span>                 :<span class="tlaGNC">           2 : std::string DescribeTypes(const ::google::protobuf::Message&amp; expected, const ::google::protobuf::Message&amp; actual) {</span></span>
+<span id="L304"><span class="lineNum">     304</span>                 :<span class="tlaGNC">           2 :   return absl::StrCat(</span></span>
+<span id="L305"><span class="lineNum">     305</span>                 :<span class="tlaGNC">           2 :       &quot;whose type should be &quot;, expected.GetDescriptor()-&gt;full_name(), &quot; but actually is &quot;,</span></span>
+<span id="L306"><span class="lineNum">     306</span>                 :<span class="tlaGNC">           2 :       actual.GetDescriptor()-&gt;full_name());</span></span>
+<span id="L307"><span class="lineNum">     307</span>                 :<span class="tlaGNC">           2 : }</span></span>
+<span id="L308"><span class="lineNum">     308</span>                 :             : </span>
+<span id="L309"><span class="lineNum">     309</span>                 :             : // Prints the protocol buffer pointed to by proto.</span>
+<span id="L310"><span class="lineNum">     310</span>                 :<span class="tlaGNC">           4 : std::string PrintProtoPointee(const ::google::protobuf::Message* proto) {</span></span>
+<span id="L311"><span class="lineNum">     311</span>         [<span class="tlaGBC" title="branch 0 was taken 1 time"> + </span><span class="tlaGBC" title="branch 1 was taken 3 times"> + </span>]:<span class="tlaGNC">           4 :   if (proto == nullptr) {</span></span>
+<span id="L312"><span class="lineNum">     312</span>                 :<span class="tlaGNC">           1 :     return &quot;&quot;;</span></span>
+<span id="L313"><span class="lineNum">     313</span>                 :<span class="tlaGNC">           1 :   }</span></span>
+<span id="L314"><span class="lineNum">     314</span>                 :             : </span>
+<span id="L315"><span class="lineNum">     315</span>                 :<span class="tlaGNC">           3 :   return absl::StrCat(&quot;which points to &quot;, ::testing::PrintToString(*proto));</span></span>
+<span id="L316"><span class="lineNum">     316</span>                 :<span class="tlaGNC">           4 : }</span></span>
+<span id="L317"><span class="lineNum">     317</span>                 :             : </span>
+<span id="L318"><span class="lineNum">     318</span>                 :             : // Describes the differences between the two protocol buffers.</span>
+<span id="L319"><span class="lineNum">     319</span>                 :             : std::string DescribeDiff(</span>
+<span id="L320"><span class="lineNum">     320</span>                 :             :     const internal::ProtoComparison&amp; comp,</span>
+<span id="L321"><span class="lineNum">     321</span>                 :             :     const ::google::protobuf::Message&amp; actual,</span>
+<span id="L322"><span class="lineNum">     322</span>                 :<span class="tlaGNC">           7 :     const ::google::protobuf::Message&amp; expected) {</span></span>
+<span id="L323"><span class="lineNum">     323</span>                 :<span class="tlaGNC">           7 :   ::google::protobuf::util::MessageDifferencer differencer;</span></span>
+<span id="L324"><span class="lineNum">     324</span>                 :<span class="tlaGNC">           7 :   ::google::protobuf::util::DefaultFieldComparator field_comparator;</span></span>
+<span id="L325"><span class="lineNum">     325</span>                 :<span class="tlaGNC">           7 :   ConfigureDifferencer(comp, &amp;field_comparator, &amp;differencer, actual.GetDescriptor());</span></span>
+<span id="L326"><span class="lineNum">     326</span>                 :             : </span>
+<span id="L327"><span class="lineNum">     327</span>                 :<span class="tlaGNC">           7 :   std::string diff;</span></span>
+<span id="L328"><span class="lineNum">     328</span>                 :<span class="tlaGNC">           7 :   differencer.ReportDifferencesToString(&amp;diff);</span></span>
+<span id="L329"><span class="lineNum">     329</span>                 :             : </span>
+<span id="L330"><span class="lineNum">     330</span>                 :             :   // We must put 'expected' as the first argument here, as Compare()</span>
+<span id="L331"><span class="lineNum">     331</span>                 :             :   // reports the diff in terms of how the protobuf changes from the</span>
+<span id="L332"><span class="lineNum">     332</span>                 :             :   // first argument to the second argument.</span>
+<span id="L333"><span class="lineNum">     333</span>                 :<span class="tlaGNC">           7 :   differencer.Compare(expected, actual);</span></span>
+<span id="L334"><span class="lineNum">     334</span>                 :             : </span>
+<span id="L335"><span class="lineNum">     335</span>                 :             :   // Removes the trailing '\n' in the diff to make the output look nicer.</span>
+<span id="L336"><span class="lineNum">     336</span> [<span class="tlaGBC" title="branch 0 was taken 12 times"> + </span><span class="tlaGBC" title="branch 1 was taken 2 times"> + </span>][<span class="tlaGBC" title="branch &quot;2&quot; was taken 6 times"> + </span><span class="tlaUNC" title="branch &quot;3&quot; was not taken"> - </span>]:<span class="tlaGNC">           7 :   if (!diff.empty() &amp;&amp; *(diff.end() - 1) == '\n') {</span></span>
+<span id="L337"><span class="lineNum">     337</span>                 :<span class="tlaGNC">           6 :     diff.erase(diff.end() - 1);</span></span>
+<span id="L338"><span class="lineNum">     338</span>                 :<span class="tlaGNC">           6 :   }</span></span>
+<span id="L339"><span class="lineNum">     339</span>                 :             : </span>
+<span id="L340"><span class="lineNum">     340</span>                 :<span class="tlaGNC">           7 :   return absl::StrCat(&quot;with the difference:\n&quot;, diff);</span></span>
+<span id="L341"><span class="lineNum">     341</span>                 :<span class="tlaGNC">           7 : }</span></span>
+<span id="L342"><span class="lineNum">     342</span>                 :             : </span>
+<span id="L343"><span class="lineNum">     343</span>                 :             : bool ProtoMatcherBase::MatchAndExplain(</span>
+<span id="L344"><span class="lineNum">     344</span>                 :             :     const ::google::protobuf::Message&amp; arg,</span>
+<span id="L345"><span class="lineNum">     345</span>                 :             :     bool is_matcher_for_pointer,  // true iff this matcher is used to match</span>
+<span id="L346"><span class="lineNum">     346</span>                 :             :                                   // a protobuf pointer.</span>
+<span id="L347"><span class="lineNum">     347</span>                 :<span class="tlaGNC">          67 :     ::testing::MatchResultListener* listener) const {</span></span>
+<span id="L348"><span class="lineNum">     348</span> [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaGBC" title="branch 1 was taken 65 times"> + </span>][<span class="tlaGBC" title="branch &quot;2&quot; was taken 1 time"> + </span><span class="tlaGBC" title="branch &quot;3&quot; was taken 1 time"> + </span>]:<span class="tlaGNC">          67 :   if (must_be_initialized_ &amp;&amp; !arg.IsInitialized()) {</span></span>
+<span id="L349"><span class="lineNum">     349</span>                 :<span class="tlaGNC">           1 :     *listener &lt;&lt; &quot;which isn't fully initialized&quot;;</span></span>
+<span id="L350"><span class="lineNum">     350</span>                 :<span class="tlaGNC">           1 :     return false;</span></span>
+<span id="L351"><span class="lineNum">     351</span>                 :<span class="tlaGNC">           1 :   }</span></span>
+<span id="L352"><span class="lineNum">     352</span>                 :             : </span>
+<span id="L353"><span class="lineNum">     353</span>                 :<span class="tlaGNC">          66 :   const ::google::protobuf::Message* const expected = CreateExpectedProto(arg, listener);</span></span>
+<span id="L354"><span class="lineNum">     354</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaGBC" title="branch 1 was taken 63 times"> + </span>]:<span class="tlaGNC">          66 :   if (expected == nullptr) {</span></span>
+<span id="L355"><span class="lineNum">     355</span>                 :<span class="tlaGNC">           3 :     return false;</span></span>
+<span id="L356"><span class="lineNum">     356</span>                 :<span class="tlaGNC">           3 :   }</span></span>
+<span id="L357"><span class="lineNum">     357</span>                 :             : </span>
+<span id="L358"><span class="lineNum">     358</span>                 :             :   // Protobufs of different types cannot be compared.</span>
+<span id="L359"><span class="lineNum">     359</span>                 :<span class="tlaGNC">          63 :   const bool comparable = ProtoComparable(arg, *expected);</span></span>
+<span id="L360"><span class="lineNum">     360</span> [<span class="tlaGBC" title="branch 0 was taken 61 times"> + </span><span class="tlaGBC" title="branch 1 was taken 2 times"> + </span>][<span class="tlaGBC" title="branch &quot;2&quot; was taken 49 times"> + </span><span class="tlaGBC" title="branch &quot;3&quot; was taken 12 times"> + </span>]:<span class="tlaGNC">          63 :   const bool match = comparable &amp;&amp; ProtoCompare(comp(), arg, *expected);</span></span>
+<span id="L361"><span class="lineNum">     361</span>                 :             : </span>
+<span id="L362"><span class="lineNum">     362</span>                 :             :   // Explaining the match result is expensive.  We don't want to waste</span>
+<span id="L363"><span class="lineNum">     363</span>                 :             :   // time calculating an explanation if the listener isn't interested.</span>
+<span id="L364"><span class="lineNum">     364</span>         [<span class="tlaGBC" title="branch 0 was taken 9 times"> + </span><span class="tlaGBC" title="branch 1 was taken 54 times"> + </span>]:<span class="tlaGNC">          63 :   if (listener-&gt;IsInterested()) {</span></span>
+<span id="L365"><span class="lineNum">     365</span>                 :<span class="tlaGNC">           9 :     const char* sep = &quot;&quot;;</span></span>
+<span id="L366"><span class="lineNum">     366</span>         [<span class="tlaGBC" title="branch 0 was taken 3 times"> + </span><span class="tlaGBC" title="branch 1 was taken 6 times"> + </span>]:<span class="tlaGNC">           9 :     if (is_matcher_for_pointer) {</span></span>
+<span id="L367"><span class="lineNum">     367</span>                 :<span class="tlaGNC">           3 :       *listener &lt;&lt; PrintProtoPointee(&amp;arg);</span></span>
+<span id="L368"><span class="lineNum">     368</span>                 :<span class="tlaGNC">           3 :       sep = &quot;,\n&quot;;</span></span>
+<span id="L369"><span class="lineNum">     369</span>                 :<span class="tlaGNC">           3 :     }</span></span>
+<span id="L370"><span class="lineNum">     370</span>                 :             : </span>
+<span id="L371"><span class="lineNum">     371</span>         [<span class="tlaGBC" title="branch 0 was taken 2 times"> + </span><span class="tlaGBC" title="branch 1 was taken 7 times"> + </span>]:<span class="tlaGNC">           9 :     if (!comparable) {</span></span>
+<span id="L372"><span class="lineNum">     372</span>                 :<span class="tlaGNC">           2 :       *listener &lt;&lt; sep &lt;&lt; DescribeTypes(*expected, arg);</span></span>
+<span id="L373"><span class="lineNum">     373</span>         [<span class="tlaGBC" title="branch 0 was taken 6 times"> + </span><span class="tlaGBC" title="branch 1 was taken 1 time"> + </span>]:<span class="tlaGNC">           7 :     } else if (!match) {</span></span>
+<span id="L374"><span class="lineNum">     374</span>                 :<span class="tlaGNC">           6 :       *listener &lt;&lt; sep &lt;&lt; DescribeDiff(comp(), arg, *expected);</span></span>
+<span id="L375"><span class="lineNum">     375</span>                 :<span class="tlaGNC">           6 :     }</span></span>
+<span id="L376"><span class="lineNum">     376</span>                 :<span class="tlaGNC">           9 :   }</span></span>
+<span id="L377"><span class="lineNum">     377</span>                 :             : </span>
+<span id="L378"><span class="lineNum">     378</span>                 :<span class="tlaGNC">          63 :   DeleteExpectedProto(expected);</span></span>
+<span id="L379"><span class="lineNum">     379</span>                 :<span class="tlaGNC">          63 :   return match;</span></span>
+<span id="L380"><span class="lineNum">     380</span>                 :<span class="tlaGNC">          66 : }</span></span>
+<span id="L381"><span class="lineNum">     381</span>                 :             : </span>
+<span id="L382"><span class="lineNum">     382</span>                 :             : }  // namespace mbo::proto::internal</span>
         </pre>
               </td>
             </tr>
