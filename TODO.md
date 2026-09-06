@@ -18,11 +18,16 @@ temporarily misleading or broken.
 - [ ] Assert the resolved protobuf version in every compatibility cell so selection cannot silently
       regress.
 - [ ] Add tests for the version-selection logic.
-- [ ] Run the complete 32.1, 33.6, 34.1, and 35.0 compatibility matrix successfully.
+- [ ] Define a rolling compatibility window consisting of the current protobuf major release and
+      the two preceding major release lines; initially test 34.1, 35.0, and 36.1.bcr.1.
+- [ ] Exercise that window with one deliberately narrow configuration: Ubuntu, GCC 14, Bazel
+      9.2.0, and `opt`. Compiler, sanitizer, OS, and Bazel-version coverage remains owned by the
+      main matrix and must not be crossed with protobuf versions.
 - [ ] Correct the stale protobuf 34.1 comment in `.bcr/presubmit.yml`.
 
-Acceptance: CI logs prove that each cell resolved its named protobuf version, and all four cells
-pass on both the tested code and the version assertion.
+Acceptance: CI logs prove that each cell resolved its named protobuf version, all three release
+lines pass on the single compatibility configuration, and advancing the current major makes the
+oldest line's removal an explicit reviewable change.
 
 ### CI-2: Make clang-tidy meaningful on pull requests and `main`
 
