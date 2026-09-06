@@ -2,6 +2,7 @@
 
 - Expanded matcher, serialization, field-path, file-error, and status-matcher tests to exceed 96% line/function coverage and 91% branch coverage. Enforce high coverage at 95% lines/functions and 90% branches, with medium boundaries of 90% lines/functions and 85% branches.
 - Fixed previously uninstantiated matcher APIs: typed `WhenDeserializedAs`, typed text-proto matching, typed equivalence semantics, and matcher-transformer composition for tuple comparisons.
+- Excluded Bazel-generated headers from clang-tidy diagnostics so generated protobuf code is not treated as first-party source.
 
 # 1.2.4
 

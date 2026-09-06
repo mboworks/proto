@@ -129,6 +129,12 @@ done
 # every other check still applies to tests.
 readonly TEST_DISABLED_CHECKS='-readability-function-cognitive-complexity,-clang-analyzer-cplusplus.NewDeleteLeaks'
 
+# `--header-filter=(^|/)mbo/` also matches generated paths such as
+# `bazel-out/.../mbo/proto/tests/test.pb.h`. Those files are protoc output, not
+# first-party headers, and cannot satisfy this repository's lint policy.
+readonly HEADER_FILTER='(^|/)mbo/'
+readonly EXCLUDE_HEADER_FILTER='(^|/)bazel-out/'
+
 PARALLELISM="$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)"
 readonly PARALLELISM
 
@@ -192,15 +198,17 @@ trap 'rm -f "${OUTPUT}"' EXIT
 
 if [ "${#SOURCES[@]}" -gt 0 ]; then
   if ! printf '%s\0' "${SOURCES[@]}" \
-    | xargs -0 -n 1 -P "${PARALLELISM}" "${CLANG_TIDY}" --header-filter='(^|/)mbo/' -p . 2>&1 \
+    | xargs -0 -n 1 -P "${PARALLELISM}" "${CLANG_TIDY}" --header-filter="${HEADER_FILTER}" \
+      --exclude-header-filter="${EXCLUDE_HEADER_FILTER}" -p . 2>&1 \
     | tee -a "${OUTPUT}"; then
     STATUS=1
   fi
 fi
 if [ "${#TESTS[@]}" -gt 0 ]; then
   if ! printf '%s\0' "${TESTS[@]}" \
-    | xargs -0 -n 1 -P "${PARALLELISM}" "${CLANG_TIDY}" --header-filter='(^|/)mbo/' \
-      --checks="${TEST_DISABLED_CHECKS}" -p . 2>&1 | tee -a "${OUTPUT}"; then
+    | xargs -0 -n 1 -P "${PARALLELISM}" "${CLANG_TIDY}" --header-filter="${HEADER_FILTER}" \
+      --exclude-header-filter="${EXCLUDE_HEADER_FILTER}" --checks="${TEST_DISABLED_CHECKS}" -p . 2>&1 \
+    | tee -a "${OUTPUT}"; then
     STATUS=1
   fi
 fi
