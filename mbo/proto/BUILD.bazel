@@ -49,6 +49,8 @@ cc_test(
         ":matchers_cc",
         ":status_matchers_cc",
         "//mbo/proto/tests:simple_message_cc_proto",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
         "@com_google_googletest//:gtest",
         "@com_google_googletest//:gtest_main",
     ],

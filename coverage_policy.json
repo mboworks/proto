@@ -1,9 +1,9 @@
 {
   "include": ["mbo/proto/**"],
   "exclude": ["mbo/proto/**/*_test.cc", "mbo/proto/tests/**"],
-  "minimum": { "lines": 70, "functions": 75, "branches": 30 },
-  "target": { "lines": 90, "functions": 90, "branches": 80 },
-  "enforce": { "lines": "medium", "functions": "medium", "branches": "medium" },
+  "minimum": { "lines": 90, "functions": 90, "branches": 85 },
+  "target": { "lines": 95, "functions": 95, "branches": 90 },
+  "enforce": { "lines": "high", "functions": "high", "branches": "high" },
   "patch": {
     "minimum": { "lines": 85, "branches": 70 },
     "target": { "lines": 95, "branches": 85 },

@@ -13,3 +13,19 @@ message TestMessage2 {
   optional TestMessage one = 2;
   repeated TestMessage more = 3;
 }
+
+message RequiredMessage {
+  required int32 value = 1;
+}
+
+message ExtensibleMessage {
+  extensions 100 to max;
+}
+
+extend ExtensibleMessage {
+  optional int32 extension_value = 100;
+}
+
+message ExtensionContainer {
+  optional ExtensibleMessage child = 1;
+}

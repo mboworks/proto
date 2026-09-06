@@ -1,5 +1,9 @@
 # 1.2.5
 
+- Expanded matcher, serialization, field-path, file-error, and status-matcher tests to exceed 96% line/function coverage and 91% branch coverage. Enforce high coverage at 95% lines/functions and 90% branches, with medium boundaries of 90% lines/functions and 85% branches.
+- Fixed previously uninstantiated matcher APIs: typed `WhenDeserializedAs`, typed text-proto matching, typed equivalence semantics, and matcher-transformer composition for tuple comparisons.
+- Excluded Bazel-generated headers from clang-tidy diagnostics, retained canonical header-guard enforcement through the path-stable pre-commit hook, and isolated an LLVM 22 crash in the test-only StatusOr analysis.
+
 # 1.2.4
 
 - Fixed publishing with GitHub immutable releases by updating the shared Bazel release workflow and publishing release assets before the release becomes immutable. Version 1.2.3 remains an unusable, permanently reserved release tag after the legacy workflow created an immutable release before uploading its archive.
