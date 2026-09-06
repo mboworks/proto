@@ -11,6 +11,81 @@ import coverage as coverage_tool  # noqa: E402
 
 
 class CoverageTest(unittest.TestCase):
+    @staticmethod
+    def _baseline_metric(percent):
+        return {"covered": 1, "total": 1, "percent": percent}
+
+    @classmethod
+    def _baseline_measurements(cls, percent):
+        return {
+            "overall": {
+                metric: cls._baseline_metric(percent)
+                for metric in coverage_tool.coverage_policy.METRICS
+            }
+        }
+
+    @staticmethod
+    def _baseline_policy():
+        return {
+            "categories": {},
+            "baseline": {
+                "maximum_drop": {"lines": 0.1, "functions": 0.1, "branches": 0.1}
+            },
+        }
+
+    def test_baseline_rejects_missing_data(self):
+        self.assertEqual(
+            ["schema is not 2; regenerate coverage_baseline.json"],
+            coverage_tool.baseline_failures(
+                self._baseline_measurements(95.0), {}, self._baseline_policy()
+            ),
+        )
+
+    def test_baseline_rejects_missing_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "missing.json"
+            with self.assertRaisesRegex(ValueError, "cannot read coverage baseline"):
+                coverage_tool.load_baseline(path)
+
+    def test_baseline_rejects_malformed_data(self):
+        self.assertEqual(
+            ["baseline must be a JSON object; regenerate coverage_baseline.json"],
+            coverage_tool.baseline_failures(
+                self._baseline_measurements(95.0), [], self._baseline_policy()
+            ),
+        )
+
+    def test_baseline_rejects_malformed_json(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "coverage_baseline.json"
+            path.write_text("{not json}\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "is not valid JSON"):
+                coverage_tool.load_baseline(path)
+
+    def test_baseline_accepts_improvement(self):
+        policy = self._baseline_policy()
+        baseline = {
+            "schema": 2,
+            "scope": coverage_tool.baseline_scope(policy),
+            "measurements": self._baseline_measurements(95.0),
+        }
+        self.assertEqual(
+            [],
+            coverage_tool.baseline_failures(
+                self._baseline_measurements(95.1), baseline, policy
+            ),
+        )
+
+    def test_baseline_accepts_unchanged_measurements(self):
+        policy = self._baseline_policy()
+        measured = self._baseline_measurements(95.0)
+        baseline = {
+            "schema": 2,
+            "scope": coverage_tool.baseline_scope(policy),
+            "measurements": measured,
+        }
+        self.assertEqual([], coverage_tool.baseline_failures(measured, baseline, policy))
+
     def test_baseline_rejects_regressions_beyond_tolerance(self):
         metric = lambda percent: {  # noqa: E731
             "covered": 1,

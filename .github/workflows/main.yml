@@ -116,7 +116,8 @@ jobs:
             git fetch --quiet --no-tags origin main
             BASE_ARGS=(--base-ref origin/main)
           fi
-          python3 tools/coverage.py --lcov coverage.lcov \
+          python3 tools/coverage.py --baseline coverage_baseline.json \
+            --lcov coverage.lcov \
             --json-summary coverage-html/coverage-summary.json \
             --policy coverage_policy.json --summary coverage-summary.md \
             "${BASE_ARGS[@]}"
