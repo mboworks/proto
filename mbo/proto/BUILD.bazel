@@ -43,6 +43,7 @@ cc_library(
 
 cc_test(
     name = "file_test",
+    size = "small",
     srcs = ["file_test.cc"],
     deps = [
         ":file_cc",
@@ -79,6 +80,7 @@ cc_library(
 
 cc_test(
     name = "matchers_test",
+    size = "small",
     srcs = ["matchers_test.cc"],
     deps = [
         ":matchers_cc",
@@ -111,6 +113,7 @@ cc_library(
 
 cc_test(
     name = "parse_text_proto_test",
+    size = "small",
     srcs = ["parse_text_proto_test.cc"],
     deps = [
         ":matchers_cc",
@@ -141,6 +144,7 @@ cc_library(
 
 cc_test(
     name = "silent_error_collector_test",
+    size = "small",
     srcs = ["silent_error_collector_test.cc"],
     deps = [
         ":silent_error_collector_cc",

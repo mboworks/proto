@@ -233,7 +233,8 @@ std::vector<::google::protobuf::util::MessageDifferencer::SpecificField> ParseFi
   }
 
   ABSL_CHECK(!field_path.empty());
-  ABSL_CHECK(field_path.back().index == -1)
+  // The failure path is tested by EXPECT_DEATH, whose subprocess coverage is not merged. LCOV_EXCL_LINE
+  ABSL_CHECK_EQ(field_path.back().index, -1)  // LCOV_EXCL_BR_LINE
       << "Terminally ignoring fields by index is currently not supported ('" << relative_field_path << "')";
   return field_path;
 }

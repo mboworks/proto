@@ -196,7 +196,11 @@ class ProtoMatcherBase {
   // Sets the relative fraction of error for approximate floating point
   // comparison.
   void SetFraction(double fraction) {
-    ABSL_CHECK(0.0 <= fraction && fraction < 1.0) << "Fraction for Approximately must be >= 0.0 and < 1.0";
+    // Failure paths are tested by EXPECT_DEATH, whose subprocess coverage is not merged. LCOV_EXCL_LINE
+    ABSL_CHECK_GE(fraction, 0.0)                                   // LCOV_EXCL_BR_LINE
+        << "Fraction for Approximately must be >= 0.0 and < 1.0";  // LCOV_EXCL_LINE
+    ABSL_CHECK_LT(fraction, 1.0)                                   // LCOV_EXCL_BR_LINE
+        << "Fraction for Approximately must be >= 0.0 and < 1.0";  // LCOV_EXCL_LINE
     comp_->has_custom_fraction = true;
     comp_->float_fraction = fraction;
   }
@@ -572,7 +576,11 @@ class TupleProtoMatcher {
   // Sets the relative fraction of error for approximate floating point
   // comparison.
   void SetFraction(double fraction) {
-    ABSL_CHECK(0.0 <= fraction && fraction <= 1.0) << "Fraction for Relatively must be >= 0.0 and < 1.0";
+    // Failure paths are tested by EXPECT_DEATH, whose subprocess coverage is not merged. LCOV_EXCL_LINE
+    ABSL_CHECK_GE(fraction, 0.0)                                 // LCOV_EXCL_BR_LINE
+        << "Fraction for Relatively must be >= 0.0 and <= 1.0";  // LCOV_EXCL_LINE
+    ABSL_CHECK_LE(fraction, 1.0)                                 // LCOV_EXCL_BR_LINE
+        << "Fraction for Relatively must be >= 0.0 and <= 1.0";  // LCOV_EXCL_LINE
     comp_->has_custom_fraction = true;
     comp_->float_fraction = fraction;
   }

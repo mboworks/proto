@@ -77,6 +77,20 @@ TEST(Matchers, Approximately) {
       kGetExplanation(Approximately(EqualsProto(R"pb(val: 0.9)pb"), 0.01), msg), HasSubstr("modified: val: 0.9 -> 1"));
 }
 
+TEST(Matchers, RejectsInvalidApproximateFractions) {
+  constexpr double kNegativeFraction = -0.1;
+  constexpr double kTooLargeFraction = 1.1;
+  EXPECT_DEATH(
+      (void)Approximately(EqualsProto(TestMessage{}), 0.0, kNegativeFraction),
+      "Fraction for Approximately must be >= 0.0 and < 1.0");
+  EXPECT_DEATH(
+      (void)Approximately(EqualsProto(TestMessage{}), 0.0, 1.0), "Fraction for Approximately must be >= 0.0 and < 1.0");
+  EXPECT_DEATH(
+      (void)Approximately(EqualsProto(), 0.0, kNegativeFraction), "Fraction for Relatively must be >= 0.0 and <= 1.0");
+  EXPECT_DEATH(
+      (void)Approximately(EqualsProto(), 0.0, kTooLargeFraction), "Fraction for Relatively must be >= 0.0 and <= 1.0");
+}
+
 TEST(Matchers, TreatingNaNsAsEqual) {
   const TestMessage msg = ParseTextProtoOrDie(R"pb(val: nan)pb");
   EXPECT_THAT(msg, TreatingNaNsAsEqual(EqualsProto(R"pb(val: nan)pb")));
@@ -164,6 +178,7 @@ TEST(Matchers, IgnoringFieldPathsTerminalIndex) {
   EXPECT_DEATH(
       Matches(IgnoringFieldPaths({"num[0]"}, EqualsProto(R"pb(num: 1 num: 2)pb")))(msg),
       "Check failed: field_path.back\\(\\).index == -1 "
+      "\\(0 vs. -1\\) "
       "Terminally ignoring fields by index is currently not supported "
       "\\('num\\[0\\]'\\)");
 }

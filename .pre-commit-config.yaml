@@ -118,6 +118,28 @@ repos:
         language: python
         entry: .pre-commit/check_header_guards.py
         files: \.h$
+      - id: cpp-source-policy
+        name: Enforce C++ matcher, range-for, StatusOr, and CHECK policy
+        language: python
+        entry: tools/check_cpp_policy.py
+        types_or: [c, c++]
+      - id: bazel-target-policy
+        name: Enforce C++ target naming, tests, and sizes
+        language: python
+        entry: tools/check_build_policy.py
+        files: ^(.*/)?(BUILD\.bazel|BUILD)$
+      - id: headers-claimed
+        name: Enforce BUILD ownership of first-party headers
+        language: python
+        entry: tools/check_headers_claimed.py
+        files: ^(mbo/.*\.h|(.*/)?BUILD\.bazel|tools/check_headers_claimed(_test)?\.py)$
+        pass_filenames: false
+      - id: portable-policy-tests
+        name: Test portable C++ and Bazel policy checkers
+        language: system
+        entry: python3 -m unittest tools/check_build_policy_test.py tools/check_cpp_policy_test.py tools/check_headers_claimed_test.py
+        files: ^(tools/(build_rules|check_(build_policy|cpp_policy|headers_claimed))(_test)?\.py)$
+        pass_filenames: false
       - id: done-gate-covers-all-jobs
         name: done gate covers all jobs
         language: python
