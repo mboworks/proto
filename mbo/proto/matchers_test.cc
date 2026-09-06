@@ -41,7 +41,7 @@ using ::testing::Not;
 using ::testing::SafeMatcherCast;
 
 template<typename T, typename M>
-inline std::string GetExplanation(const M& matcher, const T& value) {
+static std::string GetExplanation(const M& matcher, const T& value) {
   std::stringstream sss;
   SafeMatcherCast<const T&>(matcher).ExplainMatchResultTo(value, &sss);
   return sss.str();
