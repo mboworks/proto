@@ -125,9 +125,12 @@ done
 #     clang-analyzer checks report regardless of header filtering. It reaches us
 #     only through gmock, so it can go with the test partition rather than being
 #     disabled for first-party code, where the check is worth having.
+#   * abseil-unchecked-statusor-access: LLVM 22.1.8 crashes while analysing
+#     template instantiations of the file helpers from file_test.cc. Production
+#     translation units retain this check.
 # `--checks` APPENDS to the `Checks` in .clang-tidy (it does not replace it), so
 # every other check still applies to tests.
-readonly TEST_DISABLED_CHECKS='-readability-function-cognitive-complexity,-clang-analyzer-cplusplus.NewDeleteLeaks'
+readonly TEST_DISABLED_CHECKS='-readability-function-cognitive-complexity,-clang-analyzer-cplusplus.NewDeleteLeaks,-abseil-unchecked-statusor-access'
 
 # `--header-filter=(^|/)mbo/` also matches generated paths such as
 # `bazel-out/.../mbo/proto/tests/test.pb.h`. Those files are protoc output, not

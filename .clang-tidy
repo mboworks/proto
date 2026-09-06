@@ -17,6 +17,7 @@ Checks: >
   -google-build-using-namespace,
   -hicpp-no-assembler,
   -llvm-else-after-return,
+  -llvm-header-guard,
   -llvm-include-order,
   -llvmlibc-*,
   misc-*,

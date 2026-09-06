@@ -37,17 +37,17 @@ namespace internal {
 // Utilities.
 
 // How to compare two fields (equal vs. equivalent).
-typedef ::google::protobuf::util::MessageDifferencer::MessageFieldComparison ProtoFieldComparison;
+using ProtoFieldComparison = ::google::protobuf::util::MessageDifferencer::MessageFieldComparison;
 
 // How to compare two floating-points (exact vs. approximate).
-typedef ::google::protobuf::util::DefaultFieldComparator::FloatComparison ProtoFloatComparison;
+using ProtoFloatComparison = ::google::protobuf::util::DefaultFieldComparator::FloatComparison;
 
 // How to compare repeated fields (whether the order of elements matters).
-typedef ::google::protobuf::util::MessageDifferencer::RepeatedFieldComparison RepeatedFieldComparison;
+using RepeatedFieldComparison = ::google::protobuf::util::MessageDifferencer::RepeatedFieldComparison;
 
 // Whether to compare all fields (full) or only fields present in the
 // expected protobuf (partial).
-typedef ::google::protobuf::util::MessageDifferencer::Scope ProtoComparisonScope;
+using ProtoComparisonScope = ::google::protobuf::util::MessageDifferencer::Scope;
 
 const ProtoFieldComparison kProtoEqual = ::google::protobuf::util::MessageDifferencer::EQUAL;
 const ProtoFieldComparison kProtoEquiv = google::protobuf::util::MessageDifferencer::EQUIVALENT;
@@ -221,8 +221,9 @@ class ProtoMatcherBase {
     if (!comp_->ignore_fields.empty()) {
       *os << "(ignoring fields: ";
       const char* sep = "";
-      for (size_t i = 0; i < comp_->ignore_fields.size(); ++i, sep = ", ") {
-        *os << sep << comp_->ignore_fields[i];
+      for (const std::string& ignore_field : comp_->ignore_fields) {
+        *os << sep << ignore_field;
+        sep = ", ";
       }
       *os << ") ";
     }
@@ -312,7 +313,7 @@ class ProtoMatcher : public ProtoMatcherBase {
     return expected_.get();
   }
 
-  void DeleteExpectedProto(const ::google::protobuf::Message*) const override {}
+  void DeleteExpectedProto([[maybe_unused]] const ::google::protobuf::Message* expected) const override {}
 
   // NOLINTNEXTLINE(readability-identifier-naming)
   const std::shared_ptr<const ::google::protobuf::Message>& expected() const { return expected_; }
@@ -583,18 +584,18 @@ class TupleProtoMatcher {
   template<typename Tuple>
   class Impl : public ::testing::MatcherInterface<Tuple> {
    public:
-    explicit Impl(const ProtoComparison& comp) : comp_(comp) {}
+    explicit Impl(ProtoComparison comp) : comp_(std::move(comp)) {}
 
-    virtual bool MatchAndExplain(Tuple args, ::testing::MatchResultListener* /* listener */) const {
+    bool MatchAndExplain(Tuple args, ::testing::MatchResultListener* /* listener */) const override {
       using ::testing::get;
       return ProtoCompare(comp_, get<0>(args), get<1>(args));
     }
 
-    virtual void DescribeTo(std::ostream* os) const {
+    void DescribeTo(std::ostream* os) const override {
       *os << (comp_.field_comp == kProtoEqual ? "are equal" : "are equivalent");
     }
 
-    virtual void DescribeNegationTo(std::ostream* os) const {
+    void DescribeNegationTo(std::ostream* os) const override {
       *os << (comp_.field_comp == kProtoEqual ? "are not equal" : "are not equivalent");
     }
 
