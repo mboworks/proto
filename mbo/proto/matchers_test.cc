@@ -164,6 +164,7 @@ TEST(Matchers, IgnoringFieldPathsTerminalIndex) {
   EXPECT_DEATH(
       Matches(IgnoringFieldPaths({"num[0]"}, EqualsProto(R"pb(num: 1 num: 2)pb")))(msg),
       "Check failed: field_path.back\\(\\).index == -1 "
+      "\\(0 vs. -1\\) "
       "Terminally ignoring fields by index is currently not supported "
       "\\('num\\[0\\]'\\)");
 }

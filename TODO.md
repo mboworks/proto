@@ -47,18 +47,18 @@ run passes on `main`; and the main job reports a non-empty, auditable scope.
 
 ### POLICY-1: Adopt applicable mbo C++ and Bazel checks
 
-- [ ] Require an explicit `size` on direct Bazel test rules. Add sizes to all four current
+- [x] Require an explicit `size` on direct Bazel test rules. Add sizes to all four current
       `cc_test` rules.
-- [ ] Enforce the `_cc` suffix on `cc_library` targets.
-- [ ] Enforce that every `cc_library` has a same-package test with a direct dependency, with only
+- [x] Enforce the `_cc` suffix on `cc_library` targets.
+- [x] Enforce that every `cc_library` has a same-package test with a direct dependency, with only
       documented allowlist exceptions.
-- [ ] Enforce that every header is claimed by its package BUILD file.
-- [ ] Enforce GoogleTest matcher style and the repository's status assertion conventions.
-- [ ] Replace and forbid range-for loops over inline braced initializer lists; use named
+- [x] Enforce that every header is claimed by its package BUILD file.
+- [x] Enforce GoogleTest matcher style and the repository's status assertion conventions.
+- [x] Replace and forbid range-for loops over inline braced initializer lists; use named
       `constexpr std::array` values.
-- [ ] Replace and forbid comparisons inside boolean `CHECK`/`ABSL_CHECK`; use comparison-specific
+- [x] Replace and forbid comparisons inside boolean `CHECK`/`ABSL_CHECK`; use comparison-specific
       macros that report both operands.
-- [ ] Add tests for each non-trivial policy checker.
+- [x] Add tests for each non-trivial policy checker.
 
 Acceptance: the adopted checks run in pre-commit and CI, their own tests pass, and the existing tree
 has no undocumented exceptions.

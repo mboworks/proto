@@ -233,7 +233,7 @@ std::vector<::google::protobuf::util::MessageDifferencer::SpecificField> ParseFi
   }
 
   ABSL_CHECK(!field_path.empty());
-  ABSL_CHECK(field_path.back().index == -1)
+  ABSL_CHECK_EQ(field_path.back().index, -1)
       << "Terminally ignoring fields by index is currently not supported ('" << relative_field_path << "')";
   return field_path;
 }
