@@ -46,7 +46,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-09-06 17:27:24</td>
+            <td class="headerValue">2026-09-06 17:58:46</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -187,7 +187,7 @@
 <span id="L107"><span class="lineNum">     107</span>                 :             :     std::string_view text_proto,</span>
 <span id="L108"><span class="lineNum">     108</span>                 :<span class="tlaGNC">           2 :     std::source_location loc = std::source_location::current()) {</span></span>
 <span id="L109"><span class="lineNum">     109</span>                 :<span class="tlaGNC">           2 :   T message;</span></span>
-<span id="L110"><span class="lineNum">     110</span>                 :<span class="tlaGNC">           2 :   absl::Status result = proto_internal::ParseTextInternal(text_proto, &amp;message, &quot;ParseText&quot;, loc);</span></span>
+<span id="L110"><span class="lineNum">     110</span>                 :<span class="tlaGNC">           2 :   const absl::Status result = proto_internal::ParseTextInternal(text_proto, &amp;message, &quot;ParseText&quot;, loc);</span></span>
 <span id="L111"><span class="lineNum">     111</span>         [<span class="tlaGBC" title="branch 0 was taken 1 time"> + </span><span class="tlaGBC" title="branch 1 was taken 1 time"> + </span>]:<span class="tlaGNC">           2 :   if (!result.ok()) {</span></span>
 <span id="L112"><span class="lineNum">     112</span>                 :             :     // We are missing the Google internal update mechanisms, so we may loose details here.</span>
 <span id="L113"><span class="lineNum">     113</span>                 :             :     // But Google also did not bless the Abseil open-source versions with anything we could drop here...</span>
