@@ -8,8 +8,8 @@
     "maximum_drop": { "lines": 0.1, "functions": 0.1, "branches": 0.1 }
   },
   "patch": {
-    "minimum": { "lines": 85, "branches": 70 },
-    "target": { "lines": 95, "branches": 85 },
+    "minimum": { "lines": 95, "branches": 85 },
+    "target": { "lines": 98, "branches": 90 },
     "enforce": "medium"
   },
   "categories": {

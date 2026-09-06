@@ -89,10 +89,13 @@ allowed delta fails CI.
 
 ### COVERAGE-2: Raise patch coverage
 
-- [ ] Raise patch minimums from 85% lines and 70% branches toward the mbo/xff baseline of 95% lines
+- [x] Raise patch minimums from 85% lines and 70% branches toward the mbo/xff baseline of 95% lines
       and 85% branches.
-- [ ] Keep patch targets at least 98% lines and 90% branches when adopting the comparison policy.
-- [ ] Do not raise enforcement until representative changes pass with practical headroom.
+- [x] Keep patch targets at least 98% lines and 90% branches when adopting the comparison policy.
+- [x] Do not raise enforcement until representative changes pass with practical headroom.
+
+Evidence: PR 84's production patch covered 16/16 changed lines and 4/4 changed branches. Its
+100%/100% result exceeds the adopted minimums by 5 and 15 percentage points respectively.
 
 Acceptance: the final patch policy is enforced by tests and CI without weakening overall coverage
 or excluding additional production files.

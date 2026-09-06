@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Tests for tools/coverage_policy.py."""
 
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -84,6 +85,22 @@ class CoveragePolicyTest(unittest.TestCase):
                     },
                 }
             )
+
+    def test_repository_patch_policy_matches_the_strict_baseline(self):
+        policy = json.loads(
+            (Path(__file__).parents[1] / "coverage_policy.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        patch = coverage_policy.resolve(
+            policy["patch"], coverage_policy.overall(policy)
+        )
+        self.assertEqual(95.0, patch["lines"].minimum)
+        self.assertEqual(98.0, patch["lines"].target)
+        self.assertEqual("medium", patch["lines"].enforce)
+        self.assertEqual(85.0, patch["branches"].minimum)
+        self.assertEqual(90.0, patch["branches"].target)
+        self.assertEqual("medium", patch["branches"].enforce)
 
 
 if __name__ == "__main__":
