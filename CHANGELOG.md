@@ -1,5 +1,6 @@
 # 1.2.3
 
+- Run production coverage with the same hermetic LLVM/Clang 22.1.8 toolchain as clang-tidy, using Bazel's LLVM coverage-map and LCOV generation path with stable workspace-relative source paths. Retain the 90% line/function health targets while calibrating the enforced Clang floors to 70% lines and 75% functions; patch thresholds remain unchanged.
 - Reduced required CI from 36 to 12 jobs using pairwise GCC 14, LLVM/Clang 22.1.8, Bazel 8/9, sanitizer, C++23, macOS, and protobuf endpoint coverage.
 - Moved the complete protobuf 32/33/34/35 compatibility ladder to a weekly and manually dispatchable workflow.
 - Updated the default development toolchain to LLVM/Clang 22.1.8 and Bazel 9.2.0.
