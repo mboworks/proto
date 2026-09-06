@@ -72,11 +72,7 @@ jobs:
           python-version: "3.13"
       - name: Install coverage tooling
         run: |
-          sudo apt-get install -y gcc-14 g++-14 lcov
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 \
-            --slave /usr/bin/g++ g++ /usr/bin/g++-14 \
-            --slave /usr/bin/gcov gcov /usr/bin/gcov-14
-          sudo update-alternatives --set gcc /usr/bin/gcc-14
+          sudo apt-get install -y lcov
           tools/install_lcov.sh "${RUNNER_TEMP}/lcov"
           echo "${RUNNER_TEMP}/lcov/bin" >>"${GITHUB_PATH}"
       - name: Collect and enforce coverage
@@ -84,7 +80,10 @@ jobs:
           COVERAGE_PAGE: ${{ github.event_name == 'pull_request' && format('pr/{0}', github.event.pull_request.number) || 'main' }}
         run: |
           set -euo pipefail
-          bazel coverage //... \
+          bazel coverage --config=clang -c dbg //... \
+            --experimental_use_llvm_covmap \
+            --experimental_generate_llvm_lcov \
+            --copt=-fcoverage-compilation-dir=. \
             --combined_report=lcov \
             --instrumentation_filter='^//mbo/proto[/:].*'
           cp "$(bazel info output_path)/_coverage/_coverage_report.dat" coverage.lcov
