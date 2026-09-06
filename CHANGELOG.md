@@ -1,3 +1,5 @@
+# 1.2.5
+
 # 1.2.4
 
 - Fixed publishing with GitHub immutable releases by updating the shared Bazel release workflow and publishing release assets before the release becomes immutable. Version 1.2.3 remains an unusable, permanently reserved release tag after the legacy workflow created an immutable release before uploading its archive.
