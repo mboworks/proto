@@ -71,6 +71,8 @@ TEST_F(FileProtoTest, BinaryProtoError) {
   EXPECT_THAT(
       absl::StatusOr<SimpleMessage>(ReadBinaryProtoFile("SomeFile.pb")),
       StatusIs(absl::StatusCode::kAborted, HasSubstr("Cannot parse binary proto file 'SomeFile.pb'")));
+  EXPECT_THAT(ReadBinaryProtoFile::OrNullopt<SimpleMessage>("DoesNotExist.pb").has_value(), false);
+  EXPECT_THAT(WriteBinaryProtoFile("missing/directory/file.pb", SimpleMessage()), Not(IsOk()));
 }
 
 TEST_F(FileProtoTest, TextProto) {
@@ -97,6 +99,21 @@ TEST_F(FileProtoTest, TextProtoError) {
   EXPECT_THAT(
       absl::StatusOr<SimpleMessage>(ReadTextProtoFile("SomeFile.textproto")),
       StatusIs(absl::StatusCode::kAborted, HasSubstr("Cannot parse text proto file 'SomeFile.textproto'")));
+  EXPECT_THAT(ReadTextProtoFile::OrNullopt<SimpleMessage>("DoesNotExist.textproto").has_value(), false);
+  EXPECT_THAT(WriteTextProtoFile("missing/directory/file.textproto", SimpleMessage()), Not(IsOk()));
+}
+
+TEST_F(FileProtoTest, StatusMatcherFailures) {
+  const absl::Status missing = absl::NotFoundError("missing");
+  const absl::StatusOr<int> missing_value = missing;
+  const absl::StatusOr<int> value = 42;
+
+  EXPECT_THAT(missing, Not(IsOk()));
+  EXPECT_THAT(missing_value, Not(IsOkAndHolds(42)));
+  EXPECT_THAT(value, Not(IsOkAndHolds(43)));
+  EXPECT_THAT(absl::OkStatus(), Not(StatusIs(absl::StatusCode::kNotFound, HasSubstr("missing"))));
+  EXPECT_THAT(missing, Not(StatusIs(absl::StatusCode::kAborted, HasSubstr("missing"))));
+  EXPECT_THAT(missing, Not(StatusIs(absl::StatusCode::kNotFound, HasSubstr("different"))));
 }
 
 MATCHER(IsBinaryProtoExtension, "") {

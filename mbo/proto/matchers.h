@@ -90,7 +90,7 @@ template<class Proto>
 Proto MakePartialProtoFromAscii(const std::string& str) {
   Proto proto;
   std::string error_text;
-  CHECK(ParsePartialFromAscii(str, &proto, &error_text))
+  ABSL_CHECK(ParsePartialFromAscii(str, &proto, &error_text))
       << "Failed to parse \"" << str << "\" as a " << proto.GetDescriptor()->full_name() << ":\n"
       << error_text;
   return proto;
@@ -373,7 +373,7 @@ class WhenDeserializedMatcherBase {
 
   WhenDeserializedMatcherBase() = delete;
 
-  explicit WhenDeserializedMatcherBase(InnerMatcher&& proto_matcher) : proto_matcher_(std::move(proto_matcher)) {}
+  explicit WhenDeserializedMatcherBase(InnerMatcher proto_matcher) : proto_matcher_(std::move(proto_matcher)) {}
 
   WhenDeserializedMatcherBase(const WhenDeserializedMatcherBase&) = default;
   WhenDeserializedMatcherBase& operator=(const WhenDeserializedMatcherBase&) = delete;
@@ -418,7 +418,7 @@ class WhenDeserializedMatcherBase {
       const {
     // Deserializes the string arg as a protobuf of the same type as the
     // expected protobuf.
-    std::unique_ptr<const Proto> deserialized_arg(Deserialize(arg));
+    const std::unique_ptr<const Proto> deserialized_arg(Deserialize(arg));
     if (!listener->IsInterested()) {
       // No need to explain the match result.
       return (deserialized_arg != nullptr) && proto_matcher_.Matches(*deserialized_arg);
@@ -495,13 +495,13 @@ class WhenDeserializedAsMatcher : public WhenDeserializedMatcherBase<Proto> {
   explicit WhenDeserializedAsMatcher(const InnerMatcher& inner_matcher)
       : WhenDeserializedMatcherBase<Proto>(inner_matcher) {}
 
-  virtual Proto* MakeEmptyProto() const {
+  Proto* MakeEmptyProto() const override {
     return new Proto;  // NOLINT(cppcoreguidelines-owning-memory)
   }
 
-  virtual std::string ExpectedTypeName() const { return Proto().GetDescriptor()->full_name(); }
+  std::string ExpectedTypeName() const override { return std::string{Proto().GetDescriptor()->full_name()}; }
 
-  virtual std::string TypeArgName() const { return ExpectedTypeName(); }
+  std::string TypeArgName() const override { return ExpectedTypeName(); }
 };
 
 // Implements EqualsProto for 2-tuple matchers.
@@ -531,6 +531,10 @@ class TupleProtoMatcher {
   // Allows matcher transformers, e.g., Approximately(), Partially(), etc. to
   // change the behavior of this 2-tuple matcher.
   TupleProtoMatcher& MutableImpl() { return *this; }
+
+  // Matches the polymorphic matcher interface used by matcher transformers.
+  // NOLINTNEXTLINE(readability-identifier-naming)
+  TupleProtoMatcher& mutable_impl() { return MutableImpl(); }
 
   // Makes this matcher compare floating-points approximately.
   void SetCompareApproximately() { comp_->float_comp = kProtoApproximate; }
@@ -654,7 +658,7 @@ inline ::testing::PolymorphicMatcher<internal::ProtoStringMatcher> EquivToProto(
 
 template<class Proto>
 inline internal::PolymorphicProtoMatcher EquivToProto(const std::string& str) {
-  return EqualsProto(internal::MakePartialProtoFromAscii<Proto>(str));
+  return EquivToProto(internal::MakePartialProtoFromAscii<Proto>(str));
 }
 
 // Approximately(m) returns a matcher that is the same as m, except
