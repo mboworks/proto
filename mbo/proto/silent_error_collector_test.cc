@@ -25,6 +25,7 @@
 #include "gtest/gtest.h"
 
 namespace mbo::proto {
+namespace {
 
 using ::testing::ElementsAreArray;
 using ::testing::IsEmpty;
@@ -69,4 +70,5 @@ TEST_F(SilentErrorCollectorTest, Test) {
   // NOLINTEND(*-magic-numbers)
 }
 
+}  // namespace
 }  // namespace mbo::proto

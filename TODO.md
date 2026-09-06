@@ -31,14 +31,14 @@ oldest line's removal an explicit reviewable change.
 
 ### CI-2: Make clang-tidy meaningful on pull requests and `main`
 
-- [ ] Lint changed source files and translation units affected by changed headers on pull requests.
-- [ ] Remove the explicit `mbo/proto/matchers.h` exclusion.
-- [ ] Promote compilation-wide inputs, including public headers and clang-tidy orchestration files,
+- [x] Lint changed source files and translation units affected by changed headers on pull requests.
+- [x] Remove the explicit `mbo/proto/matchers.h` exclusion.
+- [x] Promote compilation-wide inputs, including public headers and clang-tidy orchestration files,
       to the appropriate full sweep.
-- [ ] Run a whole-tree clang-tidy sweep on `main`; do not diff `origin/main...HEAD` after a main push.
-- [ ] Resolve the current first-party full-sweep findings rather than hiding them through broader
+- [x] Run a whole-tree clang-tidy sweep on `main`; do not diff `origin/main...HEAD` after a main push.
+- [x] Resolve the current first-party full-sweep findings rather than hiding them through broader
       exclusions.
-- [ ] Extend the clang-tidy scope/orchestration tests to cover pull-request and main-push behavior.
+- [x] Extend the clang-tidy scope/orchestration tests to cover pull-request and main-push behavior.
 
 Acceptance: a deliberately introduced diagnostic in `matchers.h` fails a pull request; a full-tree
 run passes on `main`; and the main job reports a non-empty, auditable scope.

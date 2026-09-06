@@ -146,6 +146,10 @@ readonly PARALLELISM
 
 declare -a SOURCES=()
 declare -a TESTS=()
+FULL_SWEEP=false
+if [ "${1:-}" = "--all-files" ]; then
+  FULL_SWEEP=true
+fi
 while IFS= read -r FILE; do
   case "${FILE}" in
     # Not built by bazel at all: an SMHasher3 plugin, copied into that project by
@@ -157,6 +161,13 @@ while IFS= read -r FILE; do
     *) SOURCES+=("${FILE}") ;;
   esac
 done < <(python3 tools/clang_tidy_scope.py compile_commands.json "${@}")
+
+readonly TOTAL=$((${#SOURCES[@]} + ${#TESTS[@]}))
+if ${FULL_SWEEP} && [ "${TOTAL}" -eq 0 ]; then
+  die "whole-tree sweep selected no first-party translation units"
+fi
+echo "clang-tidy scope: ${TOTAL} first-party translation unit(s)"
+printf '  %s\n' ${SOURCES[@]+"${SOURCES[@]}"} ${TESTS[@]+"${TESTS[@]}"}
 
 # A source file with no entry in the compile DB is NOT linted with the right
 # flags - clang-tidy falls back to guessed defaults, fails to find even <gtest>,
