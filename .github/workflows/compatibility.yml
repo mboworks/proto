@@ -18,7 +18,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        proto_version: ["32.1", "33.6", "34.1", "35.0"]
+        # Current protobuf major and the two preceding major release lines.
+        proto_version: ["34.1", "35.0", "36.1.bcr.1"]
     uses: ./.github/workflows/test.yml
     with:
       continue-on-error: false

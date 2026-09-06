@@ -180,14 +180,26 @@ jobs:
             gcc_version: 14
             bazel_version: 9.2.0
             bazel_config: cpp23
-          # Normal jobs exercise checked-in protobuf 35. This endpoint protects
-          # the oldest documented family; the complete ladder runs weekly.
+          # Keep compatibility one-dimensional: one Clang/Bazel/opt configuration
+          # for the current protobuf major and the two preceding major lines.
           - os: ubuntu-latest
             compiler: clang
             llvm_version: 22.1.8
             bazel_version: 9.2.0
             bazel_config: opt
-            proto_version: "32.1"
+            proto_version: "34.1"
+          - os: ubuntu-latest
+            compiler: clang
+            llvm_version: 22.1.8
+            bazel_version: 9.2.0
+            bazel_config: opt
+            proto_version: "35.0"
+          - os: ubuntu-latest
+            compiler: clang
+            llvm_version: 22.1.8
+            bazel_version: 9.2.0
+            bazel_config: opt
+            proto_version: "36.1.bcr.1"
 
     uses: ./.github/workflows/test.yml
     with:
