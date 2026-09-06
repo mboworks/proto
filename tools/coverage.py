@@ -217,8 +217,27 @@ def baseline_scope(policy: dict) -> dict:
     }
 
 
+def load_baseline(path: Path) -> dict:
+    """Loads a baseline with actionable errors for absent or malformed files."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError as error:
+        raise ValueError(f"cannot read coverage baseline {path}: {error}") from error
+    try:
+        baseline = json.loads(text)
+    except json.JSONDecodeError as error:
+        raise ValueError(
+            f"coverage baseline {path} is not valid JSON: {error.msg} at line {error.lineno}"
+        ) from error
+    if not isinstance(baseline, dict):
+        raise ValueError(f"coverage baseline {path} must be a JSON object")
+    return baseline
+
+
 def baseline_failures(measured: dict, baseline: dict, policy: dict) -> list[str]:
     """Reports measurement regressions and incompatible baseline data."""
+    if not isinstance(baseline, dict):
+        return ["baseline must be a JSON object; regenerate coverage_baseline.json"]
     if baseline.get("schema") != 2:
         return ["schema is not 2; regenerate coverage_baseline.json"]
     if baseline.get("scope") != baseline_scope(policy):
@@ -430,7 +449,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.baseline and args.write_baseline:
         baseline = {
             "schema": 2,
-            "description": "Bazel LCOV with GCC 14; scope and exclusions are defined by coverage_policy.json",
+            "description": "Bazel LCOV with the primary hermetic Clang toolchain; scope and exclusions are defined by coverage_policy.json",
             "scope": baseline_scope(policy),
             "measurements": measured,
         }
@@ -465,7 +484,11 @@ def main(argv: list[str] | None = None) -> int:
         )
     baseline_errors = []
     if args.baseline and not args.write_baseline:
-        baseline = json.loads(args.baseline.read_text(encoding="utf-8"))
+        try:
+            baseline = load_baseline(args.baseline)
+        except ValueError as error:
+            print(error, file=sys.stderr)
+            return 2
         baseline_errors = baseline_failures(measured, baseline, policy)
     errors = failures(measured, effective) + patch_failures
     for error in errors:

@@ -78,10 +78,10 @@ operations and no contradictory instructions.
 
 ### COVERAGE-1: Protect coverage above the absolute thresholds
 
-- [ ] Add a baseline maximum-drop policy, initially no more than 0.1 percentage points for lines,
+- [x] Add a baseline maximum-drop policy, initially no more than 0.1 percentage points for lines,
       functions, and branches, matching mbo.
-- [ ] Add unit tests for missing, malformed, improved, unchanged, and regressed baselines.
-- [ ] Preserve the current overall policy: lines 90/95/high, functions 90/95/high, and branches
+- [x] Add unit tests for missing, malformed, improved, unchanged, and regressed baselines.
+- [x] Preserve the current overall policy: lines 90/95/high, functions 90/95/high, and branches
       85/90/high.
 
 Acceptance: a change that remains above the high target but drops a protected metric beyond the

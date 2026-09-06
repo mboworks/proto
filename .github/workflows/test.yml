@@ -260,7 +260,8 @@ jobs:
             --prefix "${PWD}/coverage-source-tree" --show-details \
             --title "proto production coverage"
           python3 tools/coverage_html.py coverage-html/lcov coverage_policy.json "${{ inputs.coverage_target }}"
-          python3 tools/coverage.py --lcov coverage.lcov \
+          python3 tools/coverage.py --baseline coverage_baseline.json \
+            --lcov coverage.lcov \
             --json-summary coverage-html/coverage-summary.json \
             --policy coverage_policy.json --summary coverage-summary.md
           python3 tools/coverage_index.py report coverage-html/coverage-summary.json \

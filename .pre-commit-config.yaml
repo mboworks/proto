@@ -163,7 +163,7 @@ repos:
         name: Test coverage tooling and policy
         language: system
         entry: python3 -m unittest tools/coverage_test.py tools/coverage_sources_test.py tools/coverage_html_test.py tools/coverage_index_test.py tools/coverage_lcovrc_test.py tools/coverage_policy_test.py
-        files: ^(coverage_policy\.json|tools/coverage(_html|_index|_lcovrc|_policy|_sources)?(_test)?\.py)$
+        files: ^(coverage_(baseline|policy)\.json|\.github/workflows/(main|test)\.yml|tools/coverage(_html|_index|_lcovrc|_policy|_sources)?(_test)?\.py)$
         pass_filenames: false
       - id: align-markdown-tables
         name: Align Markdown tables

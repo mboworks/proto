@@ -1,0 +1,23 @@
+{
+  "schema": 2,
+  "description": "Bazel LCOV with the primary hermetic Clang toolchain; scope and exclusions are defined by coverage_policy.json",
+  "scope": {
+    "include": ["mbo/proto/**"],
+    "exclude": ["mbo/proto/**/*_test.cc", "mbo/proto/tests/**"],
+    "categories": {
+      "proto": { "include": ["mbo/proto/**"] }
+    }
+  },
+  "measurements": {
+    "overall": {
+      "lines": { "covered": 715, "total": 743, "percent": 96.23 },
+      "functions": { "covered": 189, "total": 197, "percent": 95.94 },
+      "branches": { "covered": 203, "total": 222, "percent": 91.44 }
+    },
+    "proto": {
+      "lines": { "covered": 715, "total": 743, "percent": 96.23 },
+      "functions": { "covered": 189, "total": 197, "percent": 95.94 },
+      "branches": { "covered": 203, "total": 222, "percent": 91.44 }
+    }
+  }
+}
