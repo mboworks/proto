@@ -1,0 +1,76 @@
+{
+  "schema": 2,
+  "measurements": {
+    "overall": {
+      "lines": {
+        "covered": 384,
+        "total": 494,
+        "percent": 77.73
+      },
+      "functions": {
+        "covered": 109,
+        "total": 134,
+        "percent": 81.34
+      },
+      "branches": {
+        "covered": 305,
+        "total": 988,
+        "percent": 30.87
+      }
+    },
+    "proto": {
+      "lines": {
+        "covered": 384,
+        "total": 494,
+        "percent": 77.73
+      },
+      "functions": {
+        "covered": 109,
+        "total": 134,
+        "percent": 81.34
+      },
+      "branches": {
+        "covered": 305,
+        "total": 988,
+        "percent": 30.87
+      }
+    }
+  },
+  "minimums": {
+    "overall": {
+      "lines": 77.0,
+      "functions": 80.0,
+      "branches": 30.0
+    },
+    "proto": {
+      "lines": 77.0,
+      "functions": 80.0,
+      "branches": 30.0
+    }
+  },
+  "targets": {
+    "overall": {
+      "lines": 90.0,
+      "functions": 90.0,
+      "branches": 80.0
+    },
+    "proto": {
+      "lines": 90.0,
+      "functions": 90.0,
+      "branches": 80.0
+    }
+  },
+  "enforcement": {
+    "overall": {
+      "lines": "medium",
+      "functions": "medium",
+      "branches": "medium"
+    },
+    "proto": {
+      "lines": "medium",
+      "functions": "medium",
+      "branches": "medium"
+    }
+  },
+  "reasons": {}
+}
