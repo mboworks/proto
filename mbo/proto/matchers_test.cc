@@ -26,8 +26,15 @@
 #include "mbo/proto/tests/test.pb.h"
 
 namespace mbo::proto {
-namespace {
 
+template<typename T, typename M>
+static std::string GetExplanation(const M& matcher, const T& value) {
+  std::stringstream sss;
+  ::testing::SafeMatcherCast<const T&>(matcher).ExplainMatchResultTo(value, &sss);
+  return sss.str();
+}
+
+namespace {
 using ::mbo::proto::ParseTextProtoOrDie;
 using ::mbo::proto::tests::ExtensibleMessage;
 using ::mbo::proto::tests::ExtensionContainer;
@@ -38,14 +45,6 @@ using ::testing::EndsWith;
 using ::testing::HasSubstr;
 using ::testing::Matches;
 using ::testing::Not;
-using ::testing::SafeMatcherCast;
-
-template<typename T, typename M>
-static std::string GetExplanation(const M& matcher, const T& value) {
-  std::stringstream sss;
-  SafeMatcherCast<const T&>(matcher).ExplainMatchResultTo(value, &sss);
-  return sss.str();
-}
 
 TEST(Matchers, EqualsProto) {
   const TestMessage msg = ParseTextProtoOrDie(R"pb(num: 42 name: "name")pb");
