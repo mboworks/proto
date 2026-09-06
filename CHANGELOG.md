@@ -1,5 +1,7 @@
 # 1.2.4
 
+- Fixed publishing with GitHub immutable releases by updating the shared Bazel release workflow and publishing release assets before the release becomes immutable. Version 1.2.3 remains an unusable, permanently reserved release tag after the legacy workflow created an immutable release before uploading its archive.
+
 # 1.2.3
 
 - Run production coverage with the same hermetic LLVM/Clang 22.1.8 toolchain as clang-tidy, using Bazel's LLVM coverage-map and LCOV generation path with stable workspace-relative source paths. Retain the 90% line/function health targets while calibrating the enforced Clang floors to 70% lines and 75% functions; patch thresholds remain unchanged.
