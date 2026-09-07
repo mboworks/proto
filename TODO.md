@@ -104,11 +104,11 @@ or excluding additional production files.
 
 ### CI-3: Cache coverage and clang-tidy builds
 
-- [ ] Route coverage and clang-tidy Bazel outputs through bounded disk caches.
-- [ ] Restore from main before branch-specific keys and save only when useful.
-- [ ] Add cache-size checks and cleanup behavior so toolchains do not crowd out compiled outputs.
-- [ ] Investigate and eliminate the recurring GitHub Actions cache HTTP 400 warnings.
-- [ ] Add explicit timeouts to long-running jobs; use mbo/xff timings as the initial bounds.
+- [x] Route coverage and clang-tidy Bazel outputs through bounded disk caches.
+- [x] Restore from main before branch-specific keys and save only when useful.
+- [x] Add cache-size checks and cleanup behavior so toolchains do not crowd out compiled outputs.
+- [x] Investigate and eliminate the recurring GitHub Actions cache HTTP 400 warnings.
+- [x] Add explicit timeouts to long-running jobs; use mbo/xff timings as the initial bounds.
 
 Acceptance: consecutive representative runs show cache restoration and materially less cold-build
 work, cache failures are actionable, and hung jobs terminate within their documented bounds.

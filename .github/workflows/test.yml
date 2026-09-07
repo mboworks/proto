@@ -65,6 +65,7 @@ env:
 jobs:
   test:
     runs-on: ${{inputs.os}}
+    timeout-minutes: 20
     continue-on-error: ${{inputs.continue-on-error}}
     steps:
       - uses: actions/checkout@v7
@@ -83,14 +84,16 @@ jobs:
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{inputs.gcc_version}} 100 --slave /usr/bin/g++ g++ /usr/bin/g++-${{inputs.gcc_version}} --slave /usr/bin/gcov gcov /usr/bin/gcov-${{inputs.gcc_version}}
           sudo update-alternatives --set gcc /usr/bin/gcc-${{inputs.gcc_version}}
 
+      # Persist compiled action outputs only. The Bazel output root contains the
+      # multi-gigabyte LLVM distribution and must not consume GitHub's cache quota.
       - uses: actions/cache/restore@v6
         id: cache_restore
         with:
-          path: "~/.cache/bazel"
+          path: "~/.cache/bazel_disk-cache"
           key: ${{env.CACHE_KEY_PREFIX}}-${{github.ref}}-${{github.sha}}
           restore-keys: |
-            ${{env.CACHE_KEY_PREFIX}}-${{github.ref}}
             ${{env.CACHE_KEY_PREFIX}}-refs/heads/main
+            ${{env.CACHE_KEY_PREFIX}}-${{github.ref}}
             ${{env.CACHE_KEY_PREFIX}}
 
       - name: Setup
@@ -114,6 +117,8 @@ jobs:
           CACHE_ROOT=~/.cache
           BAZEL_INIT+=("--output_user_root=${CACHE_ROOT}/bazel")
           BAZEL_ARGS+=("--repository_cache=${CACHE_ROOT}/bazel_repo-cache")
+          BAZEL_ARGS+=("--disk_cache=${CACHE_ROOT}/bazel_disk-cache")
+          BAZEL_ARGS+=("--experimental_disk_cache_gc_max_size=500M")
           EXPECT=""
           if [ "${{inputs.compiler}}" == "clang" ]; then
             # `--config=clang` selects the hermetic toolchains_llvm toolchain via
@@ -280,25 +285,26 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-      - uses: actions/cache/save@v6
+      - name: Check Bazel disk cache size
         if: ${{!startsWith(github.ref, 'refs/tags/')}}
+        id: cache_size
+        run: |
+          cache_path="${HOME}/.cache/bazel_disk-cache"
+          cache_size_kib=0
+          if [[ -d "${cache_path}" ]]; then
+            cache_size_kib="$(du -sk "${cache_path}" | awk '{print $1}')"
+          fi
+          echo "Bazel disk cache: ${cache_size_kib} KiB (save limit: 512000 KiB)"
+          if (( cache_size_kib >= 500 * 1024 )); then
+            echo "::warning::Not saving Bazel disk cache at or above 500 MiB."
+            echo "save=false" >>"${GITHUB_OUTPUT}"
+          else
+            echo "save=true" >>"${GITHUB_OUTPUT}"
+          fi
+
+      - uses: actions/cache/save@v6
+        if: ${{!startsWith(github.ref, 'refs/tags/') && steps.cache_restore.outputs.cache-hit != 'true' && steps.cache_size.outputs.save == 'true'}}
         id: cache_save
         with:
-          path: "~/.cache/bazel"
+          path: "~/.cache/bazel_disk-cache"
           key: ${{env.CACHE_KEY_PREFIX}}-${{github.ref}}-${{github.sha}}
-
-      - name: Cleanup old caches
-        if: ${{!startsWith(github.ref, 'refs/tags/') && github.actor != 'dependabot[bot]' && steps.cache_restore.outputs.cache-hit}}
-        run: |
-          set -euo pipefail
-          PREFIX="${{env.CACHE_KEY_PREFIX}}-${{github.ref}}"
-          echo "Fetching list of old caches for key prefix '${PREFIX}'..."
-          cacheKeyList=$(gh cache list  --limit 250 --json id,key,ref,createdAt --jq "map(select(.key|startswith(\"${PREFIX}\")))|sort_by(.createdAt)|.[:-1]|.[].id")
-          echo "Deleting caches..."
-          for cacheKey in ${cacheKeyList}; do
-            echo "Deleting cache: '${cacheKey}'"
-            gh cache delete "${cacheKey}" || echo "Error deleting: '${cacheKey}'."
-          done
-        env:
-          GH_TOKEN: ${{secrets.CACHE_ACCESS}}
-          GH_REPO: ${{github.repository}}

@@ -11,6 +11,7 @@ import os
 import sys
 import unittest
 from contextlib import redirect_stdout
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import cache_cleanup  # noqa: E402
@@ -50,6 +51,37 @@ class MainTest(unittest.TestCase):
         finally:
             sys.stdin = original_stdin
         self.assertEqual(output.getvalue(), "1\n4\n")
+
+
+class WorkflowCachePolicyTest(unittest.TestCase):
+    def setUp(self):
+        root = Path(__file__).parents[1]
+        self.main = (root / ".github/workflows/main.yml").read_text(encoding="utf-8")
+        self.runner = (root / ".github/workflows/test.yml").read_text(
+            encoding="utf-8"
+        )
+
+    def test_reusable_runner_caches_only_bounded_disk_outputs(self):
+        self.assertNotIn('path: "~/.cache/bazel"', self.runner)
+        self.assertIn('path: "~/.cache/bazel_disk-cache"', self.runner)
+        self.assertIn("--experimental_disk_cache_gc_max_size=500M", self.runner)
+        self.assertIn("steps.cache_restore.outputs.cache-hit != 'true'", self.runner)
+        self.assertIn("timeout-minutes: 20", self.runner)
+
+    def test_heavy_jobs_use_separate_bounded_caches(self):
+        self.assertIn("key: clang-tidy-", self.main)
+        self.assertIn("key: coverage-", self.main)
+        self.assertEqual(
+            self.main.count("--experimental_disk_cache_gc_max_size=500M"), 2
+        )
+        self.assertGreaterEqual(self.main.count("timeout-minutes: 20"), 2)
+
+    def test_main_restore_precedes_branch_restore(self):
+        main_restore = "-${{github.ref}}"
+        for workflow in (self.main, self.runner):
+            main_index = workflow.index("-refs/heads/main")
+            branch_index = workflow.index(main_restore, main_index)
+            self.assertLess(main_index, branch_index)
 
 
 if __name__ == "__main__":
