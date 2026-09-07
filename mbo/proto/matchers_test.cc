@@ -212,10 +212,11 @@ TEST(Matchers, DescribesConfiguredComparison) {
 
   EXPECT_THAT(
       ::testing::DescribeMatcher<TestMessage>(matcher),
-      HasSubstr("is (ignoring repeated field ordering) (ignoring fields: "
-                "mbo.proto.tests.TestMessage.name, mbo.proto.tests.TestMessage.num) approximately "
-                "(absolute error of float or double fields <= 0.25 or relative error of float or double fields <= "
-                "0.125) partially equal (treating NaNs as equal) to <val: 1>"));
+      HasSubstr(
+          "is (ignoring repeated field ordering) (ignoring fields: "
+          "mbo.proto.tests.TestMessage.name, mbo.proto.tests.TestMessage.num) approximately "
+          "(absolute error of float or double fields <= 0.25 or relative error of float or double fields <= "
+          "0.125) partially equal (treating NaNs as equal) to <val: 1>"));
   EXPECT_THAT(
       ::testing::DescribeMatcher<TestMessage>(matcher, true), HasSubstr("is not (ignoring repeated field ordering)"));
 }
@@ -275,8 +276,9 @@ TEST(Matchers, ReportsIncompatibleMessageTypes) {
 
   EXPECT_THAT(
       kGetExplanation(EqualsProto(expected), actual),
-      HasSubstr("whose type should be mbo.proto.tests.TestMessage but actually is "
-                "mbo.proto.tests.TestMessage2"));
+      HasSubstr(
+          "whose type should be mbo.proto.tests.TestMessage but actually is "
+          "mbo.proto.tests.TestMessage2"));
   const internal::ProtoComparison comparison;
   EXPECT_THAT(internal::ProtoCompare(comparison, expected, actual), false);
   const TestMessage2* actual_ptr = &actual;

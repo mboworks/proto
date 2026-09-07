@@ -39,9 +39,10 @@ absl::Status ParseTextInternal(
   if (parser.ParseFromString(std::string(text_proto), message)) {
     return absl::OkStatus();
   }
-  return absl::InvalidArgumentError(absl::StrFormat(
-      "%s<%s>\nFile: '%s', Line: %d: %s\nError: %s", func, message->GetDescriptor()->name(), loc.file_name(),
-      loc.line(), loc.function_name(), error_collector.GetErrors()));
+  return absl::InvalidArgumentError(
+      absl::StrFormat(
+          "%s<%s>\nFile: '%s', Line: %d: %s\nError: %s", func, message->GetDescriptor()->name(), loc.file_name(),
+          loc.line(), loc.function_name(), error_collector.GetErrors()));
 }
 
 void ParseTextOrDieInternal(

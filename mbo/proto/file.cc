@@ -56,9 +56,10 @@ absl::Status ReadBinaryProtoFile(
     return absl::AbortedError(absl::StrFormat("Cannot parse binary proto file '%s' @%s.", filename, SrcLoc(src_loc)));
   }
   if (!result.IsInitialized()) {
-    return absl::DataLossError(absl::StrFormat(
-        "Cannot read binary proto file '%s' with uninitialized '%s' @ %s: %s", filename, result.GetTypeName(),
-        SrcLoc(src_loc), result.InitializationErrorString()));
+    return absl::DataLossError(
+        absl::StrFormat(
+            "Cannot read binary proto file '%s' with uninitialized '%s' @ %s: %s", filename, result.GetTypeName(),
+            SrcLoc(src_loc), result.InitializationErrorString()));
   }
   return absl::OkStatus();
 }
@@ -79,8 +80,9 @@ absl::Status ReadTextProtoFile(
   if (parser.Parse(&zstream, &result)) {
     return absl::OkStatus();
   }
-  return absl::AbortedError(absl::StrFormat(
-      "Cannot parse text proto file '%s' @%s: %s.", filename, SrcLoc(src_loc), error_collector.GetErrors(", ")));
+  return absl::AbortedError(
+      absl::StrFormat(
+          "Cannot parse text proto file '%s' @%s: %s.", filename, SrcLoc(src_loc), error_collector.GetErrors(", ")));
 }
 
 }  // namespace proto_internal
