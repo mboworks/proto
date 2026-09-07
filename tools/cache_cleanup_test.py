@@ -76,6 +76,19 @@ class WorkflowCachePolicyTest(unittest.TestCase):
         )
         self.assertGreaterEqual(self.main.count("timeout-minutes: 20"), 2)
 
+    def test_setup_bazel_does_not_own_build_caches(self):
+        for workflow in (self.main, self.runner):
+            setup_count = workflow.count("uses: bazel-contrib/setup-bazel@0.19.0")
+            self.assertGreater(setup_count, 0)
+            for setting in (
+                "bazelisk-cache: false",
+                "disk-cache: false",
+                "external-cache: false",
+                "repository-cache: false",
+            ):
+                self.assertEqual(workflow.count(setting), setup_count)
+            self.assertNotIn("bazelbuild/setup-bazelisk", workflow)
+
     def test_main_restore_precedes_branch_restore(self):
         main_restore = "-${{github.ref}}"
         for workflow in (self.main, self.runner):
