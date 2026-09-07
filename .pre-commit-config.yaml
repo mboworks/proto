@@ -201,12 +201,15 @@ repos:
       - id: buildifier-lint
         args: ["--warnings=all"]
 
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v19.1.6
+  - repo: local
     hooks:
       - id: clang-format
-        # These files contain intentional column-zero preprocessor directives
-        # that the adopted formatter rewrites. Keep that legacy baseline local.
+        name: clang-format
+        language: system
+        entry: tools/clang_format.sh -i
+        require_serial: true
+        # LLVM 22.1.8 indents required column-zero macro and compiler-diagnostic
+        # directives in these files, changing their intentional layout.
         exclude: ^mbo/proto/(parse_text_proto\.h|parse_text_proto_test\.cc)$
         types_or: [c, c++, cuda]
 

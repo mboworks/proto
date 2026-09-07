@@ -300,9 +300,9 @@ The reliance on a C++20 compiler is because it uses `std::source_location` since
 
 The project only comes with a Bazel BUILD.bazel file and can be added to other Bazel projects.
 
-The project pins clang-format 19.1.6 through pre-commit for source formatting. Development builds
-can use the hermetic LLVM/Clang 22.1.8 toolchain with
-`bazel [build|test] --config=clang ...`; no system LLVM installation is required for that path.
+The project runs clang-format 22.1.8 from the hermetic Bazel LLVM toolchain through pre-commit.
+Development builds use the same toolchain with `bazel [build|test] --config=clang ...`; no system
+LLVM installation is required.
 
 ## MODULE.bazel
 

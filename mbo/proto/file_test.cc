@@ -30,12 +30,14 @@
 #include "mbo/proto/matchers.h"
 #include "mbo/proto/status_matchers.h"
 #include "mbo/proto/tests/simple_message.pb.h"
+#include "mbo/proto/tests/test.pb.h"
 
 namespace mbo::proto {
 namespace {
 // NOLINTBEGIN(*-magic-numbers)
 
 using ::mbo::proto::EqualsProto;
+using ::mbo::proto::tests::RequiredMessage;
 using ::mbo::proto::tests::SimpleMessage;
 using ::testing::HasSubstr;
 using ::testing::Not;
@@ -85,6 +87,13 @@ TEST_F(FileProtoTest, BinaryProtoError) {
       StatusIs(absl::StatusCode::kAborted, HasSubstr("Cannot parse binary proto file 'SomeFile.pb'")));
   EXPECT_THAT(ReadBinaryProtoFile::OrNullopt<SimpleMessage>("DoesNotExist.pb").has_value(), false);
   EXPECT_THAT(WriteBinaryProtoFile("missing/directory/file.pb", SimpleMessage()), Not(IsOk()));
+}
+
+TEST_F(FileProtoTest, BinaryProtoRejectsMissingRequiredField) {
+  ASSERT_TRUE(WriteFile("uninitialized.pb", ""));
+  EXPECT_THAT(
+      absl::StatusOr<RequiredMessage>(ReadBinaryProtoFile("uninitialized.pb")),
+      StatusIs(absl::StatusCode::kAborted, HasSubstr("Cannot parse binary proto file 'uninitialized.pb'")));
 }
 
 TEST_F(FileProtoTest, TextProto) {
