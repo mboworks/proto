@@ -176,9 +176,9 @@ Acceptance: codespell checks all C++ and Markdown files without broad file exclu
 
 ### TOOLING-1: Align formatter versions
 
-- [ ] Upgrade the clang-format pre-commit hook from 19.1.6 to the hermetic LLVM 22.1.8 baseline.
-- [ ] Format and review the resulting changes as a dedicated mechanical commit.
-- [ ] Remove the `parse_text_proto` formatting exclusions or document narrow, line-level reasons if
+- [x] Upgrade the clang-format pre-commit hook from 19.1.6 to the hermetic LLVM 22.1.8 baseline.
+- [x] Format and review the resulting changes as a dedicated mechanical commit.
+- [x] Remove the `parse_text_proto` formatting exclusions or document narrow, line-level reasons if
       LLVM 22 still cannot preserve required preprocessor layout.
 
 Acceptance: the checked-in formatter, clang compiler, and clang-tidy major versions agree, and all
