@@ -7,7 +7,7 @@ its two-layer pull-request description format and readiness requirements.
 
 # Code Rules
 
-All code must adhere to the [RULES.dm](RULES.md) and mostly follows the [Google style](https://google.github.io/styleguide/). Where it diverges, clang-tidy rules are in effect as much as possible.
+All code must adhere to the [RULES.md](RULES.md) and mostly follows the [Google style](https://google.github.io/styleguide/). Where it diverges, clang-tidy rules are in effect as much as possible.
 
 # Run pre-commit
 

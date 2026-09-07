@@ -63,7 +63,7 @@ repos:
       - id: compare-versions
         name: compare-versions
         description: |
-          Compare the versions in CHANGELOG.md and MODULES.bazel.
+          Compare the versions in CHANGELOG.md and MODULE.bazel.
         language: system
         entry: .pre-commit/check_version.sh
         pass_filenames: False

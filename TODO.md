@@ -153,13 +153,13 @@ Acceptance: the staged release archive builds all public surfaces in every BCR p
 
 ### DOC-1: Correct user-facing version and support information
 
-- [ ] Replace the README's obsolete protobuf 27-30 claim with the verified compatibility range.
-- [ ] Update the installation example from `mboworks_proto` 1.2.2 to the latest published release,
+- [x] Replace the README's obsolete protobuf 27-30 claim with the verified compatibility range.
+- [x] Update the installation example from `mboworks_proto` 1.2.2 to the latest published release,
       without advertising an unreleased version.
-- [ ] Replace `MODULES.bazel` with `MODULE.bazel` throughout documentation and generated release
+- [x] Replace `MODULES.bazel` with `MODULE.bazel` throughout documentation and generated release
       notes.
-- [ ] Fix the broken `RULES.dm` link in `CONTRIBUTING.md`.
-- [ ] Reconcile the documented clang-format requirement with the checked-in formatter version.
+- [x] Fix the broken `RULES.dm` link in `CONTRIBUTING.md`.
+- [x] Reconcile the documented clang-format requirement with the checked-in formatter version.
 
 Acceptance: README, contributor docs, release notes, CI, MODULE metadata, and BCR metadata agree.
 
