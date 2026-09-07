@@ -1,0 +1,21 @@
+{
+  "pages": {
+    "AGENTS.md": "AGENTS.html",
+    "CHANGELOG.md": "CHANGELOG.html",
+    "CODE_OF_CONDUCT.md": "CODE_OF_CONDUCT.html",
+    "CONTRIBUTING.md": "CONTRIBUTING.html",
+    "GIT_RULES.md": "GIT_RULES.html",
+    "README.md": "index.html",
+    "RULES.md": "RULES.html",
+    "STYLE_CPP.md": "STYLE_CPP.html",
+    "STYLE_SH.md": "STYLE_SH.html",
+    "TODO.md": "TODO.html",
+    "docs/coverage.md": "docs/coverage.html"
+  },
+  "links": [
+    {
+      "label": "Coverage",
+      "href": "/{repo}/coverage/tag/{version}/"
+    }
+  ]
+}

@@ -124,3 +124,6 @@ Copy [dev.MODULE.bazel](https://github.com/mboworks/${PACKAGE_NAME}/blob/main/ba
 include("//:dev.MODULE.bazel")
 \`\`\`
 EOF
+
+printf '\n'
+bash tools/release_notes.sh "${TAG}"
