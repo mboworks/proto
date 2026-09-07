@@ -1,8 +1,13 @@
 This package contains a collection of utilities around Google's [Protocolbuffer](https://github.com/protocolbuffers/protobuf). The functions offered in this packages are widely used across Google's C++ code base and have saved tens of thousands of engineering hours. Some of these functions were originally implemented by the author and later re-implemented or cloned (see below).
 
-The project works with Google's proto library version 27, 28, 29 and 30. Packages are available at [Bazel Central Registry](https://registry.bazel.build/modules/mboworks_proto) and [GitHub](https://github.com/mboworks/proto/releases).
+The project maintains a rolling compatibility window covering the current Protocol Buffers major
+release and the two preceding major release lines. The exact versions currently verified are
+[34.1, 35.0, and 36.1.bcr.1](.github/workflows/compatibility.yml). Packages are available at
+[Bazel Central Registry](https://registry.bazel.build/modules/mboworks_proto) and
+[GitHub](https://github.com/mboworks/proto/releases).
 
 [![Test](https://github.com/mboworks/proto/actions/workflows/main.yml/badge.svg)](https://github.com/mboworks/proto/actions/workflows/main.yml)
+[![Compatibility](https://github.com/mboworks/proto/actions/workflows/compatibility.yml/badge.svg)](https://github.com/mboworks/proto/actions/workflows/compatibility.yml)
 
 # Parse Proto
 
@@ -289,22 +294,24 @@ int main() {
 
 # Installation and requirements
 
-This repository requires a C++20 compiler (in case of MacOS XCode 15 is needed) and Bazel 8 or newer. Required CI uses GCC 14 and LLVM/Clang 22.1.8 on Linux/Ubuntu and macOS, with Bazel 8 and 9 compatibility rungs. A scheduled compatibility workflow tests Google's proto libraries in versions [32, 33, 34, 35].
+This repository requires a C++20 compiler (in case of MacOS XCode 15 is needed) and Bazel 8 or newer. Required CI uses GCC 14 and LLVM/Clang 22.1.8 on Linux/Ubuntu and macOS, with Bazel 8 and 9 compatibility rungs. The [scheduled compatibility workflow](.github/workflows/compatibility.yml) verifies Protocol Buffers versions 34.1, 35.0, and 36.1.bcr.1.
 
 The reliance on a C++20 compiler is because it uses `std::source_location` since Google's Abseil `absl::SourceLocation` has not been open sourced.
 
 The project only comes with a Bazel BUILD.bazel file and can be added to other Bazel projects.
 
-The project is formatted with specific clang-format settings which require clang 16+ (in case of MacOs LLVM 16+ can be installed using brew). For simplicity in dev mode the project pulls the appropriate clang tools and can be compiled with those tools using `bazel [build|test] --config=clang ...`.
+The project pins clang-format 19.1.6 through pre-commit for source formatting. Development builds
+can use the hermetic LLVM/Clang 22.1.8 toolchain with
+`bazel [build|test] --config=clang ...`; no system LLVM installation is required for that path.
 
-## MODULES.bazel
+## MODULE.bazel
 
 The project is consumed via Bazel modules (bzlmod); WORKSPACE mode is no longer supported. The [BCR](https://registry.bazel.build/modules/mboworks_proto) version declares the dependency versions this module is pinned to; those can be bumped locally. The protobuf version can be overridden in your own `MODULE.bazel` (e.g. via `single_version_override`) to any release the project supports.
 
 Check [Releases](https://registry.bazel.build/modules/mboworks_proto) for details. All that is needed is a `bazel_dep` instruction with the correct version.
 
 ```bzl
-bazel_dep(name = "mboworks_proto", version = "1.2.2")
+bazel_dep(name = "mboworks_proto", version = "1.2.4")
 ```
 
 # Clone

@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -27,6 +28,21 @@ bazel_dep(name = "protobuf", version = "36.1.bcr.1", repo_name = "com_google_pro
 
 
 class SelectProtobufVersionTest(unittest.TestCase):
+    def test_readme_lists_compatibility_matrix_versions(self):
+        root = Path(__file__).parents[1]
+        workflow = (root / ".github/workflows/compatibility.yml").read_text(
+            encoding="utf-8"
+        )
+        readme = (root / "README.md").read_text(encoding="utf-8")
+        matrix = re.search(r"proto_version: \[(.*)\]", workflow)
+        self.assertIsNotNone(matrix)
+        versions = re.findall(r'"([^"]+)"', matrix.group(1))
+        self.assertIn(
+            f"[{', '.join(versions[:-1])}, and {versions[-1]}]"
+            "(.github/workflows/compatibility.yml)",
+            readme,
+        )
+
     def test_compatibility_passes_cache_cleanup_secret(self):
         workflow = (
             Path(__file__).parents[1] / ".github/workflows/compatibility.yml"
