@@ -3,36 +3,36 @@
   "measurements": {
     "overall": {
       "lines": {
-        "covered": 715,
-        "total": 743,
-        "percent": 96.23
+        "covered": 716,
+        "total": 740,
+        "percent": 96.76
       },
       "functions": {
-        "covered": 189,
-        "total": 197,
-        "percent": 95.94
+        "covered": 192,
+        "total": 200,
+        "percent": 96.0
       },
       "branches": {
-        "covered": 203,
-        "total": 222,
-        "percent": 91.44
+        "covered": 202,
+        "total": 220,
+        "percent": 91.82
       }
     },
     "proto": {
       "lines": {
-        "covered": 715,
-        "total": 743,
-        "percent": 96.23
+        "covered": 716,
+        "total": 740,
+        "percent": 96.76
       },
       "functions": {
-        "covered": 189,
-        "total": 197,
-        "percent": 95.94
+        "covered": 192,
+        "total": 200,
+        "percent": 96.0
       },
       "branches": {
-        "covered": 203,
-        "total": 222,
-        "percent": 91.44
+        "covered": 202,
+        "total": 220,
+        "percent": 91.82
       }
     }
   },
