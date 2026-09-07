@@ -69,7 +69,13 @@ jobs:
     continue-on-error: ${{inputs.continue-on-error}}
     steps:
       - uses: actions/checkout@v7
-      - uses: bazelbuild/setup-bazelisk@v3
+      - uses: bazel-contrib/setup-bazel@0.19.0
+        with:
+          bazelisk-cache: false
+          bazelisk-version: 1.x
+          disk-cache: false
+          external-cache: false
+          repository-cache: false
       - name: Install coverage tooling
         if: inputs.bazel_config == 'coverage'
         run: |
