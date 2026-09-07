@@ -55,12 +55,6 @@ absl::Status ReadBinaryProtoFile(
   if (!result.ParseFromIstream(&input)) {
     return absl::AbortedError(absl::StrFormat("Cannot parse binary proto file '%s' @%s.", filename, SrcLoc(src_loc)));
   }
-  if (!result.IsInitialized()) {
-    return absl::DataLossError(
-        absl::StrFormat(
-            "Cannot read binary proto file '%s' with uninitialized '%s' @ %s: %s", filename, result.GetTypeName(),
-            SrcLoc(src_loc), result.InitializationErrorString()));
-  }
   return absl::OkStatus();
 }
 
