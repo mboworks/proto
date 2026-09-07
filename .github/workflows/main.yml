@@ -39,6 +39,7 @@ jobs:
   clang-tidy:
     needs: [trunk, pre-commit]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
         with:
@@ -47,6 +48,21 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
+      - name: Route Bazel to a bounded disk cache
+        run: |
+          {
+            echo "common --disk_cache=$HOME/.cache/bazel_disk-cache"
+            echo "common --experimental_disk_cache_gc_max_size=500M"
+          } >.bazelrc.user
+      - uses: actions/cache/restore@v6
+        id: clang_tidy_cache_restore
+        with:
+          path: "~/.cache/bazel_disk-cache"
+          key: clang-tidy-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            clang-tidy-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-refs/heads/main
+            clang-tidy-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}
+            clang-tidy-
       - name: Select the scope to lint
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -70,10 +86,24 @@ jobs:
         run: |
           mapfile -t CLANG_TIDY_INPUTS <.clang-tidy-inputs
           tools/clang_tidy.sh "${CLANG_TIDY_INPUTS[@]}"
+      - name: Check clang-tidy disk cache size
+        if: always()
+        id: clang_tidy_cache_size
+        run: |
+          size="$(du -sk "${HOME}/.cache/bazel_disk-cache" 2>/dev/null | awk '{print $1}')"
+          size="${size:-0}"
+          echo "Bazel disk cache: ${size} KiB (save limit: 512000 KiB)"
+          (( size < 500 * 1024 )) && echo "save=true" >>"${GITHUB_OUTPUT}" || echo "save=false" >>"${GITHUB_OUTPUT}"
+      - uses: actions/cache/save@v6
+        if: always() && steps.clang_tidy_cache_restore.outputs.cache-hit != 'true' && steps.clang_tidy_cache_size.outputs.save == 'true'
+        with:
+          path: "~/.cache/bazel_disk-cache"
+          key: clang-tidy-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}-${{github.sha}}
 
   coverage:
     needs: [trunk, pre-commit]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
         with:
@@ -82,6 +112,21 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
+      - name: Route Bazel to a bounded disk cache
+        run: |
+          {
+            echo "common --disk_cache=$HOME/.cache/bazel_disk-cache"
+            echo "common --experimental_disk_cache_gc_max_size=500M"
+          } >.bazelrc.user
+      - uses: actions/cache/restore@v6
+        id: coverage_cache_restore
+        with:
+          path: "~/.cache/bazel_disk-cache"
+          key: coverage-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}-${{github.sha}}
+          restore-keys: |
+            coverage-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-refs/heads/main
+            coverage-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}
+            coverage-
       - name: Install coverage tooling
         run: |
           sudo apt-get install -y lcov
@@ -135,6 +180,19 @@ jobs:
             coverage-target.txt
           retention-days: 14
           if-no-files-found: error
+      - name: Check coverage disk cache size
+        if: always()
+        id: coverage_cache_size
+        run: |
+          size="$(du -sk "${HOME}/.cache/bazel_disk-cache" 2>/dev/null | awk '{print $1}')"
+          size="${size:-0}"
+          echo "Bazel disk cache: ${size} KiB (save limit: 512000 KiB)"
+          (( size < 500 * 1024 )) && echo "save=true" >>"${GITHUB_OUTPUT}" || echo "save=false" >>"${GITHUB_OUTPUT}"
+      - uses: actions/cache/save@v6
+        if: always() && steps.coverage_cache_restore.outputs.cache-hit != 'true' && steps.coverage_cache_size.outputs.save == 'true'
+        with:
+          path: "~/.cache/bazel_disk-cache"
+          key: coverage-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}-${{github.sha}}
 
   test-core:
     needs: [pre-commit, trunk]
