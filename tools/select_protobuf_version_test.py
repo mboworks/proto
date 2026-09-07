@@ -8,6 +8,7 @@ from __future__ import annotations
 import os
 import sys
 import unittest
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import select_protobuf_version  # noqa: E402
@@ -26,6 +27,12 @@ bazel_dep(name = "protobuf", version = "36.1.bcr.1", repo_name = "com_google_pro
 
 
 class SelectProtobufVersionTest(unittest.TestCase):
+    def test_compatibility_passes_cache_cleanup_secret(self):
+        workflow = (
+            Path(__file__).parents[1] / ".github/workflows/compatibility.yml"
+        ).read_text(encoding="utf-8")
+        self.assertIn("    secrets: inherit\n", workflow)
+
     def test_selects_unpatched_older_version(self):
         updated = select_protobuf_version.select_protobuf_version(_MODULE, "34.1")
         self.assertIn('version = "34.1"', updated)
