@@ -15,6 +15,7 @@ concurrency:
 
 jobs:
   protobuf:
+    secrets: inherit
     strategy:
       fail-fast: false
       matrix:
