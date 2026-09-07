@@ -1,0 +1,107 @@
+{
+  "schema": 2,
+  "measurements": {
+    "overall": {
+      "lines": {
+        "covered": 716,
+        "total": 740,
+        "percent": 96.76
+      },
+      "functions": {
+        "covered": 192,
+        "total": 200,
+        "percent": 96.0
+      },
+      "branches": {
+        "covered": 202,
+        "total": 220,
+        "percent": 91.82
+      }
+    },
+    "proto": {
+      "lines": {
+        "covered": 716,
+        "total": 740,
+        "percent": 96.76
+      },
+      "functions": {
+        "covered": 192,
+        "total": 200,
+        "percent": 96.0
+      },
+      "branches": {
+        "covered": 202,
+        "total": 220,
+        "percent": 91.82
+      }
+    }
+  },
+  "minimums": {
+    "overall": {
+      "lines": 90.0,
+      "functions": 90.0,
+      "branches": 85.0
+    },
+    "proto": {
+      "lines": 90.0,
+      "functions": 90.0,
+      "branches": 85.0
+    }
+  },
+  "targets": {
+    "overall": {
+      "lines": 95.0,
+      "functions": 95.0,
+      "branches": 90.0
+    },
+    "proto": {
+      "lines": 95.0,
+      "functions": 95.0,
+      "branches": 90.0
+    }
+  },
+  "enforcement": {
+    "overall": {
+      "lines": "high",
+      "functions": "high",
+      "branches": "high"
+    },
+    "proto": {
+      "lines": "high",
+      "functions": "high",
+      "branches": "high"
+    }
+  },
+  "reasons": {},
+  "patch": {
+    "lines": {
+      "covered": 7,
+      "total": 7,
+      "percent": 100.0
+    },
+    "functions": {
+      "covered": 0,
+      "total": 0,
+      "percent": null
+    },
+    "branches": {
+      "covered": 0,
+      "total": 0,
+      "percent": null
+    }
+  },
+  "patch_policy": {
+    "minimum": {
+      "lines": 95.0,
+      "branches": 85.0
+    },
+    "target": {
+      "lines": 98.0,
+      "branches": 90.0
+    },
+    "enforce": {
+      "lines": "medium",
+      "branches": "medium"
+    }
+  }
+}
