@@ -29,7 +29,15 @@ repos:
         types: ["yaml"]
         files: ^\.github/workflows/
         entry: actionlint
-        args: ["-shellcheck", ""]
+        # GitHub supports queue: max; actionlint does not yet recognize this key.
+        # https://docs.github.com/en/actions/concepts/workflows-and-actions/concurrency
+        args:
+          [
+            "-shellcheck",
+            "",
+            "-ignore",
+            'unexpected key "queue" for "concurrency" section',
+          ]
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.3
