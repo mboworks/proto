@@ -1,0 +1,118 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>STYLE_CPP.md - proto 1.2.4</title><style>
+:root { color-scheme: light dark; font: 17px/1.6 system-ui, sans-serif; }
+body { max-width: 76rem; margin: auto; padding: 2rem; }
+a { color: light-dark(#075da8, #8cc8ff); }
+nav { display: flex; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid #888; }
+pre { padding: 1rem; overflow: auto; background: light-dark(#f3f5f7, #20252b); }
+code { font-size: .9em; } img { max-width: 100%; }
+table { display: block; overflow: auto; border-collapse: collapse; }
+th, td { border: 1px solid #888; padding: .4rem .7rem; }
+blockquote { border-left: 4px solid #888; margin-left: 0; padding-left: 1rem; }
+</style><body><nav><a href="/proto/site/tag/1.2.4/">Home</a><a href="/proto/site/tag/1.2.4/documents.html">Documentation</a><a href="https://github.com/mboworks/proto/releases/tag/1.2.4">Release &amp; downloads</a><a href="https://github.com/mboworks/proto/tree/23a69bde2df5b70bdd88e0fe5d99681e73315cfe">Source</a><a href="/proto/coverage/tag/1.2.4/">Coverage</a></nav><p>proto 1.2.4</p><main><h1 dir="auto" id="c-style">C++ style</h1>
+<p dir="auto">This guide sits on top of the repository's machine-enforced configuration. When the prose and a<br>
+checked-in tool configuration disagree, the tool configuration wins.</p>
+<h2 dir="auto" id="toolchain">Toolchain</h2>
+<ul dir="auto">
+<li>Use C++20 and keep both Clang and GCC builds working.</li>
+<li>Format all C++ with <a href="https://github.com/mboworks/proto/blob/23a69bde2df5b70bdd88e0fe5d99681e73315cfe/.clang-format"><code class="notranslate">.clang-format</code></a>. Do not hand-format around it.</li>
+<li>Run clang-tidy with <a href="https://github.com/mboworks/proto/blob/23a69bde2df5b70bdd88e0fe5d99681e73315cfe/.clang-tidy"><code class="notranslate">.clang-tidy</code></a>. Generate <code class="notranslate">compile_commands.json</code> first with<br>
+<a href="https://github.com/mboworks/proto/blob/23a69bde2df5b70bdd88e0fe5d99681e73315cfe/compile_commands-update.sh"><code class="notranslate">./compile_commands-update.sh</code></a>, then run<br>
+<code class="notranslate">pre-commit run clang-tidy --all-files</code>.</li>
+<li>Treat warnings as errors in first-party code. Do not suppress a warning repository-wide when a<br>
+narrow code fix or documented local suppression is possible.</li>
+</ul>
+<h2 dir="auto" id="naming">Naming</h2>
+<ul dir="auto">
+<li>Types, classes, structs, enums, aliases, and functions use <code class="notranslate">CamelCase</code>.</li>
+<li>Variables, parameters, data members, and namespaces use <code class="notranslate">lower_case</code>.</li>
+<li>Private data members have a trailing underscore.</li>
+<li>Constants use <code class="notranslate">kCamelCase</code>.</li>
+<li>Macros use <code class="notranslate">UPPER_CASE</code>. Exported macros are prefixed <code class="notranslate">MBO_</code>.</li>
+<li>C++ library Bazel targets use the existing <code class="notranslate">_cc</code> suffix convention.</li>
+</ul>
+<h2 dir="auto" id="code-organization">Code organization</h2>
+<ul dir="auto">
+<li>Exported code lives below <code class="notranslate">mbo/</code> and uses the namespace matching its path, currently<br>
+<code class="notranslate">mbo::proto</code>.</li>
+<li>Do not create a namespace component named only <code class="notranslate">internal</code>. Use a descriptive suffix such as<br>
+<code class="notranslate">proto_internal</code> for implementation details.</li>
+<li>Header guards are the upper-cased path and filename with non-alphanumeric characters replaced by<br>
+underscores and one trailing underscore, for example <code class="notranslate">MBO_PROTO_FILE_H_</code>.</li>
+<li>Public headers are self-contained: include what they use and verify they compile independently.</li>
+<li>Forward declarations and their implementations stay together unless an established pimpl-style<br>
+layout requires otherwise.</li>
+<li>Avoid macros. Undefine translation-unit-local helper macros immediately after their final use.</li>
+<li>Use the <code class="notranslate">std::</code> spelling of C library names (<code class="notranslate">std::size_t</code>, <code class="notranslate">std::uint64_t</code>, <code class="notranslate">std::memcpy</code>).</li>
+</ul>
+<h2 dir="auto" id="interfaces-and-ownership">Interfaces and ownership</h2>
+<ul dir="auto">
+<li>Prefer values for small, copyable types and <code class="notranslate">const T&amp;</code> for larger required inputs.</li>
+<li>Use pointers only when null is meaningful or pointer semantics are intrinsic to the API.</li>
+<li>Use <code class="notranslate">std::string_view</code> for non-owning text input and <code class="notranslate">std::span</code> for non-owning contiguous ranges.</li>
+<li>Use smart pointers for ownership. A raw pointer never communicates ownership.</li>
+<li>Mark single-argument constructors <code class="notranslate">explicit</code> unless implicit conversion is intentional and<br>
+documented.</li>
+<li>Add <code class="notranslate">[[nodiscard]]</code> to results whose accidental loss is likely to be a defect, especially status<br>
+and validation results.</li>
+<li>Do not expose implementation-only dependencies from a public target. Use Bazel<br>
+<code class="notranslate">implementation_deps</code> where appropriate.</li>
+</ul>
+<h2 dir="auto" id="error-handling">Error handling</h2>
+<ul dir="auto">
+<li>Use <code class="notranslate">absl::Status</code> for operations that can fail without returning a value and<br>
+<code class="notranslate">absl::StatusOr&lt;T&gt;</code> when they return a value.</li>
+<li>Include actionable context in errors: the operation, relevant path or field, and underlying<br>
+failure where available.</li>
+<li>Do not log and return the same error at a library boundary; the caller owns presentation.</li>
+<li>Fatal checks are for violated invariants, not ordinary invalid input or environmental failures.</li>
+<li>Exceptions are not part of the library's public error model.</li>
+</ul>
+<h2 dir="auto" id="formatting-conventions">Formatting conventions</h2>
+<ul dir="auto">
+<li>Let clang-format decide line wrapping and brace placement.</li>
+<li>Put explanatory comments above the code they describe rather than at the end of a long line.</li>
+<li>Use a trailing comma to opt a complex aggregate into one-field-per-line formatting.</li>
+<li>Prefer designated initializers where they clarify field meaning and preserve aggregate semantics.</li>
+<li>Keep related definitions together, but separate unrelated definition blocks with a blank line.</li>
+</ul>
+<h2 dir="auto" id="includes">Includes</h2>
+<ul dir="auto">
+<li>Include the matching header first in a <code class="notranslate">.cc</code> file.</li>
+<li>Then include C and C++ standard-library headers, third-party headers, and project headers.</li>
+<li>Do not depend on transitive includes.</li>
+<li>Keep include paths rooted at the repository, for example <code class="notranslate">#include "mbo/proto/file.h"</code>.</li>
+<li>Do not include dependency implementation headers unless the public API explicitly requires them.</li>
+</ul>
+<h2 dir="auto" id="tests">Tests</h2>
+<ul dir="auto">
+<li>Every behavior change includes a test or a clear explanation of why no test is possible.</li>
+<li>Prefer a fixture (<code class="notranslate">TEST_F</code>) when tests share setup, helpers, or state; use a plain <code class="notranslate">TEST</code> when a<br>
+fixture would add no value.</li>
+<li>Use <code class="notranslate">EXPECT_THAT</code> and <code class="notranslate">ASSERT_THAT</code> with GoogleTest/GoogleMock matchers when they produce clearer<br>
+failures than comparison macros.</li>
+<li>Use <code class="notranslate">ASSERT_*</code> only when continuing would be invalid or unsafe; otherwise collect failures with<br>
+<code class="notranslate">EXPECT_*</code>.</li>
+<li>Name tests for observable behavior, not implementation details.</li>
+<li>Test success, malformed input, boundary values, and relevant dependency failures.</li>
+<li>Keep test data local and deterministic. Do not depend on the network, wall-clock timing, locale,<br>
+or the developer's filesystem.</li>
+<li>Direct Bazel tests declare an appropriate <code class="notranslate">size</code> when new tests are added.</li>
+</ul>
+<h2 dir="auto" id="bazel">Bazel</h2>
+<ul dir="auto">
+<li>Keep direct dependencies explicit and preserve strict include/layering checks.</li>
+<li>A <code class="notranslate">cc_library</code> lists public headers in <code class="notranslate">hdrs</code>, implementation files in <code class="notranslate">srcs</code>, and private-only<br>
+dependencies in <code class="notranslate">implementation_deps</code>.</li>
+<li>Public libraries have a direct test in the same package unless their behavior is exercised only<br>
+through an unavoidable generated-code boundary.</li>
+<li>Developer-only dependencies belong in <code class="notranslate">bazelmod/dev.MODULE.bazel</code>; a published module consumer<br>
+must not need them.</li>
+<li>Tags such as <code class="notranslate">manual</code>, sanitizer exclusions, or coverage exclusions require a concrete reason.</li>
+</ul>
+<h2 dir="auto" id="documentation">Documentation</h2>
+<ul dir="auto">
+<li>Document public types and functions in their declarations.</li>
+<li>Explain contracts, ownership, lifetime, error behavior, and surprising complexity.</li>
+<li>Comments explain why; names and structure should explain what.</li>
+<li>Keep examples compilable in spirit and update them with the interface they demonstrate.</li>
+</ul></main><footer>Release snapshot · 23a69bde2df5b70bdd88e0fe5d99681e73315cfe</footer></body></html>

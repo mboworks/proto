@@ -1,0 +1,91 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>RULES.md - proto 1.2.4</title><style>
+:root { color-scheme: light dark; font: 17px/1.6 system-ui, sans-serif; }
+body { max-width: 76rem; margin: auto; padding: 2rem; }
+a { color: light-dark(#075da8, #8cc8ff); }
+nav { display: flex; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid #888; }
+pre { padding: 1rem; overflow: auto; background: light-dark(#f3f5f7, #20252b); }
+code { font-size: .9em; } img { max-width: 100%; }
+table { display: block; overflow: auto; border-collapse: collapse; }
+th, td { border: 1px solid #888; padding: .4rem .7rem; }
+blockquote { border-left: 4px solid #888; margin-left: 0; padding-left: 1rem; }
+</style><body><nav><a href="/proto/site/tag/1.2.4/">Home</a><a href="/proto/site/tag/1.2.4/documents.html">Documentation</a><a href="https://github.com/mboworks/proto/releases/tag/1.2.4">Release &amp; downloads</a><a href="https://github.com/mboworks/proto/tree/23a69bde2df5b70bdd88e0fe5d99681e73315cfe">Source</a><a href="/proto/coverage/tag/1.2.4/">Coverage</a></nav><p>proto 1.2.4</p><main><p dir="auto">Some rules for the code layout and its development.</p>
+<p dir="auto">Language-specific conventions are documented in <a href="STYLE_CPP.html"><code class="notranslate">STYLE_CPP.md</code></a> and<br>
+<a href="STYLE_SH.html"><code class="notranslate">STYLE_SH.md</code></a>. The checked-in formatter, linter, and compiler configurations enforce<br>
+the mechanical parts of those guides.</p>
+<ul dir="auto">
+<li>Everything is under Apache 2 license, see file <code class="notranslate">LICENSE</code>.</li>
+<li>All sources must be unix-text files: <a href="https://en.wikipedia.org/wiki/Text_file" rel="nofollow">https://en.wikipedia.org/wiki/Text_file</a>
+<ul dir="auto">
+<li>Lines end in {LF}.</li>
+<li>The files are either empty or end in {LF}.</li>
+</ul>
+</li>
+<li>This library uses C++20 and is intended to be compiled with <code class="notranslate">clang</code>.</li>
+<li>All code must be formatted using <code class="notranslate">clang-format</code> with '.clang-format'.
+<ul dir="auto">
+<li>This provides consistent formatting.</li>
+<li>The choices are meant to enable fast structural reading by humans.</li>
+<li>It cares less about writing because there is auto formatting and code is<br>
+read much more often then written.</li>
+<li>Auto formatting also prevents pointless discussions like where '*' goes.</li>
+<li>The guide mostly follows Google style: <a href="https://google.github.io/styleguide/" rel="nofollow">https://google.github.io/styleguide/</a></li>
+</ul>
+</li>
+<li>All exported library code is in the directory 'mbo'.</li>
+<li>Directory 'mbo' has no actual library rules, but may have test rules.</li>
+<li>No namespace may be named 'internal'.</li>
+<li>Each subdirectory:
+<ul dir="auto">
+<li>has all its code in a namespace: "mbo::{dir}"</li>
+<li>there may be functional sub-namespace, e.g.: "mbo::{dir}::{sub}"</li>
+<li>internal code goes into special sub-namespace:
+<ul dir="auto">
+<li>Code in these namespace is not allowed to be used outside this library</li>
+<li>"mbo::{dir}::{dir}_internal</li>
+<li>"mbo::{dir}::{sub}_internal</li>
+<li>"mbo::{dir}::{sub}::{sub}_internal</li>
+<li>This ensures that "internal" namespace do not conflict.</li>
+</ul>
+</li>
+<li>Sub namespaces 'detail' are allowed.
+<ul dir="auto">
+<li>Such sub-namespaces imply usable (exported) functionality</li>
+<li>"mbo::{dir}::detail</li>
+<li>"mbo::{dir}::{sub}::detail</li>
+<li>In contrast to internal namespaces the detail namespaces use just "detail"<br>
+which can result in namespace conflicts. To avoid that they have to be<br>
+fully qualified.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Forward declared symbols must be fully implemented in the same source file.
+<ul dir="auto">
+<li>The exception are 'Impl' classes / structs in a header's class when the<br>
+actual implementation is in a name-corresponding implementation file. This<br>
+is useful for visibility and name resolution.</li>
+</ul>
+</li>
+<li>All public / exported code must:
+<ul dir="auto">
+<li>be tested,</li>
+<li>have documentation.</li>
+</ul>
+</li>
+<li>All headers must have macro-guards: "{path}<em>{file}</em>" with '/' becoming '_'.
+<ul dir="auto">
+<li>A '__' between {path} and {file} would be better, but C++ does not allow it.</li>
+<li>Filenames may not start with the basename of any directory in their same<br>
+directory followed by an '<em>' as that would lead to conflicting macro guards.<br>
+E.g.: "foo/bar.h" and "foo_bar.h" would have macro guard "FOO_BAR_H</em>".</li>
+</ul>
+</li>
+<li>Macros are to be avoided at all costs, or prefixed by 'MBO_'.
+<ul dir="auto">
+<li>Macros for local application must be undefined as close after the last use<br>
+as possible.</li>
+<li>Where possible macros should be named "{path}<em>{file}</em>{usecase}".</li>
+</ul>
+</li>
+<li>Use <code class="notranslate">std::size_t</code> as <code class="notranslate">size_t</code>.</li>
+</ul></main><footer>Release snapshot · 23a69bde2df5b70bdd88e0fe5d99681e73315cfe</footer></body></html>

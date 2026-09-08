@@ -1,0 +1,122 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>CHANGELOG.md - proto 1.2.4</title><style>
+:root { color-scheme: light dark; font: 17px/1.6 system-ui, sans-serif; }
+body { max-width: 76rem; margin: auto; padding: 2rem; }
+a { color: light-dark(#075da8, #8cc8ff); }
+nav { display: flex; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid #888; }
+pre { padding: 1rem; overflow: auto; background: light-dark(#f3f5f7, #20252b); }
+code { font-size: .9em; } img { max-width: 100%; }
+table { display: block; overflow: auto; border-collapse: collapse; }
+th, td { border: 1px solid #888; padding: .4rem .7rem; }
+blockquote { border-left: 4px solid #888; margin-left: 0; padding-left: 1rem; }
+</style><body><nav><a href="/proto/site/tag/1.2.4/">Home</a><a href="/proto/site/tag/1.2.4/documents.html">Documentation</a><a href="https://github.com/mboworks/proto/releases/tag/1.2.4">Release &amp; downloads</a><a href="https://github.com/mboworks/proto/tree/23a69bde2df5b70bdd88e0fe5d99681e73315cfe">Source</a><a href="/proto/coverage/tag/1.2.4/">Coverage</a></nav><p>proto 1.2.4</p><main><h1 dir="auto" id="124">1.2.4</h1>
+<ul dir="auto">
+<li>Fixed publishing with GitHub immutable releases by updating the shared Bazel release workflow and publishing release assets before the release becomes immutable. Version 1.2.3 remains an unusable, permanently reserved release tag after the legacy workflow created an immutable release before uploading its archive.</li>
+</ul>
+<h1 dir="auto" id="123">1.2.3</h1>
+<ul dir="auto">
+<li>Run production coverage with the same hermetic LLVM/Clang 22.1.8 toolchain as clang-tidy, using Bazel's LLVM coverage-map and LCOV generation path with stable workspace-relative source paths. Retain the 90% line/function health targets while calibrating the enforced Clang floors to 70% lines and 75% functions; patch thresholds remain unchanged.</li>
+<li>Reduced required CI from 36 to 12 jobs using pairwise GCC 14, LLVM/Clang 22.1.8, Bazel 8/9, sanitizer, C++23, macOS, and protobuf endpoint coverage.</li>
+<li>Moved the complete protobuf 32/33/34/35 compatibility ladder to a weekly and manually dispatchable workflow.</li>
+<li>Updated the default development toolchain to LLVM/Clang 22.1.8 and Bazel 9.2.0.</li>
+</ul>
+<h1 dir="auto" id="122">1.2.2</h1>
+<ul dir="auto">
+<li>Renamed the Bazel module from <code class="notranslate">helly25_proto</code> to <code class="notranslate">mboworks_proto</code> for publication under MBO Works.</li>
+<li>Updated bazel-skylib to 1.9.2 and the compile-commands extractor pin to its latest verified fork commit.</li>
+<li>Made the release archive independent of development-only compile-command tooling.</li>
+<li>Force a Bazel-9-compatible <code class="notranslate">rules_android</code> (0.7.2) via MVS, so downstream consumers (and the BCR presubmit) don't hit protobuf's transitive <code class="notranslate">rules_android</code> 0.6.4 failing to load on Bazel 9.</li>
+</ul>
+<h1 dir="auto" id="121">1.2.1</h1>
+<ul dir="auto">
+<li>Require Bazel 8 or newer and bzlmod; dropped WORKSPACE support.</li>
+<li>Switched to a hermetic LLVM/clang toolchain (<code class="notranslate">toolchains_llvm</code> 1.8.0, LLVM 20.1.8).</li>
+<li>Updated dependencies: abseil-cpp 20250814.2, re2 2025-11-05.bcr.1, googletest 1.17.0.bcr.2, rules_cc 0.2.19, bazel_skylib 1.9.0, platforms 1.1.0.</li>
+<li>Bumped the default protobuf to 34.1; CI now tests protobuf versions [32, 33, 34, 35].</li>
+<li>Migrated <code class="notranslate">SilentErrorCollector</code> to protobuf's <code class="notranslate">RecordError</code>/<code class="notranslate">RecordWarning</code> API so it builds against protobuf 35 (which removed the deprecated <code class="notranslate">AddError</code>/<code class="notranslate">AddWarning</code>).</li>
+</ul>
+<h1 dir="auto" id="120">1.2.0</h1>
+<ul dir="auto">
+<li>Added std::optional variants for file reading.</li>
+<li>Added <code class="notranslate">HasBinaryProtoExtension</code> and <code class="notranslate">HasTextProtoExtension</code>.</li>
+</ul>
+<h1 dir="auto" id="110">1.1.0</h1>
+<ul dir="auto">
+<li>Added <code class="notranslate">ReadBinaryProtoFile</code>, <code class="notranslate">ReadTextProtoFile</code>, <code class="notranslate">WriteBinaryProtoFile</code>, <code class="notranslate">WriteTextProtoFile</code>.</li>
+</ul>
+<h1 dir="auto" id="102">1.0.2</h1>
+<ul dir="auto">
+<li>Applied DWYU cleanup.</li>
+</ul>
+<h1 dir="auto" id="101">1.0.1</h1>
+<ul dir="auto">
+<li>Repackage 1.0.0.</li>
+</ul>
+<h1 dir="auto" id="100">1.0.0</h1>
+<ul dir="auto">
+<li>Changed to empty root BUILD file for release packages.</li>
+<li>Cut and packaged version 1.0.0 (no functionality changes compared to 0.6.4).</li>
+</ul>
+<h1 dir="auto" id="064">0.6.4</h1>
+<ul dir="auto">
+<li>Added LLVM-20.1.0 config for Linux-Arm64 and MacOs-Arm64 platforms.</li>
+</ul>
+<h1 dir="auto" id="063">0.6.3</h1>
+<ul dir="auto">
+<li>Made macro <code class="notranslate">PARSE_TEXT_PROTO</code> issue a deprecation warning.</li>
+<li>Raised minimum zlib version when built with proto version 27.0 for MacOS.</li>
+<li>Enabled Bazel layering_check.</li>
+</ul>
+<h1 dir="auto" id="062">0.6.2</h1>
+<ul dir="auto">
+<li>Updated protobuf dev dependency to v30.0 to ensure compatibility.</li>
+<li>Updated CI matrix to cover more combinations.</li>
+<li>Implemented (again) the elusive <code class="notranslate">PARSE_TEXT_PROTO</code> from 2010 as referenced by clang-tidy's documentation.</li>
+</ul>
+<h1 dir="auto" id="061">0.6.1</h1>
+<ul dir="auto">
+<li>Updated license/copyright to add SPDX headers.</li>
+<li>Updated internal tooling.</li>
+<li>Released to baze-central-registry for the first time.</li>
+</ul>
+<h1 dir="auto" id="060">0.6.0</h1>
+<ul dir="auto">
+<li>Added Bazel module support.</li>
+<li>Added new modern <code class="notranslate">SilentErrorCollector</code>.</li>
+<li>Updated Clang to 19.1.6.</li>
+<li>Verified and updated protobuf to v30-rc.2. Note that at least v28.3 ... v29.3 are affected by <a class="issue-link js-issue-link" data-error-text="Failed to load title" data-id="2683570181" data-permission-text="Title is private" data-url="https://github.com/protocolbuffers/protobuf/issues/19364" data-hovercard-type="issue" data-hovercard-url="/protocolbuffers/protobuf/issues/19364/hovercard" href="https://github.com/protocolbuffers/protobuf/issues/19364">protocolbuffers/protobuf#19364</a> which is fixed in v30-rc.2 Note that the affected versions work fine with Clang 19.1.6.</li>
+<li>Added a patch for MODULE.bazel to be set to protobuf version 28, in order to reduce requirements on complex projects.</li>
+<li>Added a build matrix merge check to guarantee various combinations work.</li>
+<li>Pinned bazel version to 7.2.1.</li>
+<li>Updated other dependencies to latest.</li>
+</ul>
+<h1 dir="auto" id="05">0.5</h1>
+<ul dir="auto">
+<li>Added support for com_google_protobuf &gt;= Protocol Buffers v26.</li>
+<li>Moved <code class="notranslate">ParseTextProtoHelper</code> into namespace <code class="notranslate">mbo::proto::proto_internal</code>.</li>
+<li>Changed <code class="notranslate">ParseTextProtoHelper</code> to only accept derived proto messages on operator access.</li>
+<li>Changed <code class="notranslate">ParseTextProtoHelper</code> to die on parsing failure.</li>
+<li>Added <code class="notranslate">ParseText&lt;T&gt;() -&gt; absl::StatusOr&lt;T&gt;</code>.</li>
+<li>Improved error message detail for all parsing functions.</li>
+<li>Updated all dependencies.</li>
+<li>Verified protobuf versions 25.2, 26.0, 26.1, 27.0, 27.1, 27.2, 28.0-rc1.</li>
+<li>Added Clang support.</li>
+<li>Updated GH actions.</li>
+</ul>
+<h1 dir="auto" id="04">0.4</h1>
+<ul dir="auto">
+<li>Changed <code class="notranslate">ParseTextProto</code>, <code class="notranslate">ParseTextProtoOrDie</code> to only work for actual derived proto types.</li>
+<li>Added <code class="notranslate">ParseProto</code> which returns <code class="notranslate">absl::StatusOr&lt;MessageType&gt;</code>.</li>
+<li>Updated external dependencies.</li>
+</ul>
+<h1 dir="auto" id="03">0.3</h1>
+<ul dir="auto">
+<li>Added missing dependency.</li>
+</ul>
+<h1 dir="auto" id="02">0.2</h1>
+<ul dir="auto">
+<li>Small fixes, mostly to support a few older abseil/re2 versions.</li>
+</ul>
+<h1 dir="auto" id="01">0.1</h1>
+<ul dir="auto">
+<li>Initial release</li>
+</ul></main><footer>Release snapshot · 23a69bde2df5b70bdd88e0fe5d99681e73315cfe</footer></body></html>

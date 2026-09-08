@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>AGENTS.md - proto 1.2.4</title><style>
+:root { color-scheme: light dark; font: 17px/1.6 system-ui, sans-serif; }
+body { max-width: 76rem; margin: auto; padding: 2rem; }
+a { color: light-dark(#075da8, #8cc8ff); }
+nav { display: flex; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid #888; }
+pre { padding: 1rem; overflow: auto; background: light-dark(#f3f5f7, #20252b); }
+code { font-size: .9em; } img { max-width: 100%; }
+table { display: block; overflow: auto; border-collapse: collapse; }
+th, td { border: 1px solid #888; padding: .4rem .7rem; }
+blockquote { border-left: 4px solid #888; margin-left: 0; padding-left: 1rem; }
+</style><body><nav><a href="/proto/site/tag/1.2.4/">Home</a><a href="/proto/site/tag/1.2.4/documents.html">Documentation</a><a href="https://github.com/mboworks/proto/releases/tag/1.2.4">Release &amp; downloads</a><a href="https://github.com/mboworks/proto/tree/23a69bde2df5b70bdd88e0fe5d99681e73315cfe">Source</a><a href="/proto/coverage/tag/1.2.4/">Coverage</a></nav><p>proto 1.2.4</p><main><h1 dir="auto" id="agent-and-contributor-rules---proto">Agent and contributor rules - proto</h1>
+<p dir="auto">These rules apply to human and automated contributors. Keep changes reviewable, preserve existing<br>
+project-specific behavior, and use automation for mechanical policy. <a href="STYLE_CPP.html"><code class="notranslate">STYLE_CPP.md</code></a><br>
+and <a href="STYLE_SH.html"><code class="notranslate">STYLE_SH.md</code></a> are canonical for their languages; <a href="RULES.html"><code class="notranslate">RULES.md</code></a> contains<br>
+the repository's broader code-layout rules.</p>
+<h2 dir="auto" id="development-workflow">Development workflow</h2>
+<p dir="auto">Build and test with <code class="notranslate">bazel test //...</code>. Run <code class="notranslate">pre-commit run --all-files</code> for repository-wide<br>
+changes, or <code class="notranslate">pre-commit run --files FILE...</code> for focused changes. Generate <code class="notranslate">compile_commands.json</code><br>
+with <code class="notranslate">./compile_commands-update.sh</code> before running the clang-tidy hook locally.</p>
+<p dir="auto">Do not commit Bazel output links, compilation databases, coverage output, local rc files, or tool<br>
+caches. Do not weaken warnings, sanitizer checks, lint rules, or coverage thresholds merely to make<br>
+a change pass; fix the cause or document a narrowly scoped exception.</p>
+<h2 dir="auto" id="c-and-bazel">C++ and Bazel</h2>
+<ul dir="auto">
+<li>Format C++ with the checked-in <code class="notranslate">.clang-format</code> configuration.</li>
+<li>Keep public headers self-contained and use the repository's path-based header guards.</li>
+<li>Add or update tests with behavior changes. Prefer GoogleTest matchers and assertions that expose<br>
+useful failure values.</li>
+<li>Keep direct dependencies explicit in BUILD files and retain strict include checking.</li>
+<li>Name C++ library targets with the existing <code class="notranslate">_cc</code> suffix convention.</li>
+<li>Keep developer-only Bazel dependencies in <code class="notranslate">bazelmod/dev.MODULE.bazel</code>; published module users must<br>
+not require them.</li>
+</ul>
+<h2 dir="auto" id="releases">Releases</h2>
+<p dir="auto">Versions in <code class="notranslate">MODULE.bazel</code> and <code class="notranslate">CHANGELOG.md</code> must agree. Release tags are numeric semantic versions<br>
+without a <code class="notranslate">v</code> prefix. Use <code class="notranslate">tools/trigger_release.sh</code>; release workflows create the GitHub release and<br>
+open the Bazel Central Registry publication pull request.</p>
+<h2 dir="auto" id="documentation-and-shell">Documentation and shell</h2>
+<p dir="auto">Keep user-visible behavior and build requirements documented in the same change. Shell scripts use<br>
+strict mode where practical and must pass shfmt and ShellCheck. Keep Markdown tables aligned with<br>
+<code class="notranslate">tools/align_markdown_tables.py</code>.</p></main><footer>Release snapshot · 23a69bde2df5b70bdd88e0fe5d99681e73315cfe</footer></body></html>
