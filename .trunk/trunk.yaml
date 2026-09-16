@@ -49,11 +49,11 @@ lint:
         parse_regex: ${semver}
         run: buildifier --version
   # clang-tidy is deliberately NOT a trunk linter: trunk pins clang-tidy 16, which
-  # mis-parses this C++23 codebase, and its `--export-fixes` runs then rewrote the
+  # mis-parses modern C++ code, and its `--export-fixes` runs then rewrote the
   # working tree with build-breaking "fixes". trunk.io 403s any modern clang-tidy
-  # download, so a version bump here is not possible. It now lives in the local-only
-  # `clang-tidy` pre-commit hook (tools/clang_tidy.sh, hermetic clang >= 18); CI's
-  # hard gate stays the bazel -Werror matrix. Do not re-add it here.
+  # download, so it lives in tools/clang_tidy.sh with a hermetic version gate.
+  # Pre-commit runs one bounded coordinator; the dedicated CI job is a hard gate.
+  # Do not re-add it here.
   enabled:
     - buildifier@8.5.1
     - checkov@3.3.6

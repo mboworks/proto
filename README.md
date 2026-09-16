@@ -1,3 +1,5 @@
+# Proto <img src="docs/assets/mboworks-logo.png" alt="MBO Works" width="64" height="64" align="right">
+
 This package contains a collection of utilities around Google's [Protocolbuffer](https://github.com/protocolbuffers/protobuf). The functions offered in this packages are widely used across Google's C++ code base and have saved tens of thousands of engineering hours. Some of these functions were originally implemented by the author and later re-implemented or cloned (see below).
 
 The project maintains a rolling compatibility window covering the current Protocol Buffers major
@@ -360,3 +362,6 @@ the proto Builder or when it was open sourced).
 
 This clone was established 2023.07.15. The source has since been moved and modified but remains as
 close to the original source as possible.
+
+Development, CI cache policy, clang-tidy resource limits, and publishing are documented in
+[Infrastructure and publishing](docs/infrastructure.md).

@@ -64,6 +64,10 @@ env:
 
 jobs:
   test:
+    permissions:
+      actions: write
+      contents: read
+      pull-requests: read
     runs-on: ${{inputs.os}}
     timeout-minutes: 20
     continue-on-error: ${{inputs.continue-on-error}}
@@ -92,15 +96,11 @@ jobs:
 
       # Persist compiled action outputs only. The Bazel output root contains the
       # multi-gigabyte LLVM distribution and must not consume GitHub's cache quota.
-      - uses: actions/cache/restore@v6
+      - uses: ./.github/actions/bazel-cache-restore
         id: cache_restore
         with:
-          path: "~/.cache/bazel_disk-cache"
-          key: ${{env.CACHE_KEY_PREFIX}}-${{github.ref}}-${{github.sha}}
-          restore-keys: |
-            ${{env.CACHE_KEY_PREFIX}}-refs/heads/main
-            ${{env.CACHE_KEY_PREFIX}}-${{github.ref}}
-            ${{env.CACHE_KEY_PREFIX}}
+          namespace: ${{ inputs.bazel_config == 'coverage' && 'coverage' || env.CACHE_KEY_PREFIX }}
+          legacy-prefix: ${{ env.CACHE_KEY_PREFIX }}-
 
       - name: Setup
         # Resolve the C++ toolchain selection and the Bazel invocation flags
@@ -122,9 +122,9 @@ jobs:
           declare -a BAZEL_ARGS=()
           CACHE_ROOT=~/.cache
           BAZEL_INIT+=("--output_user_root=${CACHE_ROOT}/bazel")
+          echo "BAZEL_CACHE_OUTPUT_ROOT=${CACHE_ROOT}/bazel" >>"${GITHUB_ENV}"
           BAZEL_ARGS+=("--repository_cache=${CACHE_ROOT}/bazel_repo-cache")
           BAZEL_ARGS+=("--disk_cache=${CACHE_ROOT}/bazel_disk-cache")
-          BAZEL_ARGS+=("--experimental_disk_cache_gc_max_size=500M")
           EXPECT=""
           if [ "${{inputs.compiler}}" == "clang" ]; then
             # `--config=clang` selects the hermetic toolchains_llvm toolchain via
@@ -257,6 +257,11 @@ jobs:
         run: |
           set -euo pipefail
           bazel ${BAZEL_INIT} coverage ${BAZEL_ARGS} //... \
+            --profile="${RUNNER_TEMP}/coverage-preparation.json.gz" \
+            --experimental_profile_additional_tasks=repository_fetch \
+            --experimental_profile_additional_tasks=starlark_repository_fn \
+            --experimental_profile_additional_tasks=starlark_builtin_fn \
+            --experimental_profile_additional_tasks=fetch \
             --combined_report=lcov \
             --instrumentation_filter='^//mbo/proto[/:].*'
           cp "$(bazel ${BAZEL_INIT} info output_path)/_coverage/_coverage_report.dat" coverage.lcov
@@ -279,6 +284,14 @@ jobs:
             "${{ inputs.coverage_target }}" coverage-html/index.html
           cat coverage-summary.md >>"${GITHUB_STEP_SUMMARY}"
 
+      - name: Preserve coverage preparation profile
+        if: always() && inputs.bazel_config == 'coverage'
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-preparation-profile
+          path: ${{ runner.temp }}/coverage-preparation.json.gz
+          retention-days: 7
+          if-no-files-found: warn
       - uses: actions/upload-artifact@v7
         if: always() && inputs.bazel_config == 'coverage'
         with:
@@ -291,26 +304,8 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-      - name: Check Bazel disk cache size
-        if: ${{!startsWith(github.ref, 'refs/tags/')}}
-        id: cache_size
-        run: |
-          cache_path="${HOME}/.cache/bazel_disk-cache"
-          cache_size_kib=0
-          if [[ -d "${cache_path}" ]]; then
-            cache_size_kib="$(du -sk "${cache_path}" | awk '{print $1}')"
-          fi
-          echo "Bazel disk cache: ${cache_size_kib} KiB (save limit: 512000 KiB)"
-          if (( cache_size_kib >= 500 * 1024 )); then
-            echo "::warning::Not saving Bazel disk cache at or above 500 MiB."
-            echo "save=false" >>"${GITHUB_OUTPUT}"
-          else
-            echo "save=true" >>"${GITHUB_OUTPUT}"
-          fi
-
-      - uses: actions/cache/save@v6
-        if: ${{!startsWith(github.ref, 'refs/tags/') && steps.cache_restore.outputs.cache-hit != 'true' && steps.cache_size.outputs.save == 'true'}}
-        id: cache_save
+      - uses: ./.github/actions/bazel-cache-save
+        if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
         with:
-          path: "~/.cache/bazel_disk-cache"
-          key: ${{env.CACHE_KEY_PREFIX}}-${{github.ref}}-${{github.sha}}
+          key: ${{ steps.cache_restore.outputs.key }}
+          output-user-root: ${{ env.BAZEL_CACHE_OUTPUT_ROOT }}

@@ -12,6 +12,10 @@ permissions:
 
 jobs:
   coverage:
+    permissions:
+      actions: write
+      contents: read
+      pull-requests: read
     uses: ./.github/workflows/test.yml
     with:
       continue-on-error: false

@@ -58,6 +58,9 @@ jobs:
 
   clang-tidy:
     needs: [trunk, pre-commit]
+    permissions:
+      contents: read
+      actions: write
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -78,17 +81,12 @@ jobs:
         run: |
           {
             echo "common --disk_cache=$HOME/.cache/bazel_disk-cache"
-            echo "common --experimental_disk_cache_gc_max_size=500M"
           } >.bazelrc.user
-      - uses: actions/cache/restore@v6
+      - uses: ./.github/actions/bazel-cache-restore
         id: clang_tidy_cache_restore
         with:
-          path: "~/.cache/bazel_disk-cache"
-          key: clang-tidy-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}-${{github.sha}}
-          restore-keys: |
-            clang-tidy-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-refs/heads/main
-            clang-tidy-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}
-            clang-tidy-
+          namespace: clang-tidy
+          legacy-prefix: clang-tidy-
       - name: Select the scope to lint
         env:
           EVENT_NAME: ${{ github.event_name }}
@@ -111,23 +109,17 @@ jobs:
       - name: Run clang-tidy
         run: |
           mapfile -t CLANG_TIDY_INPUTS <.clang-tidy-inputs
+          export CLANG_TIDY_JOBS="$(getconf _NPROCESSORS_ONLN)"
           tools/clang_tidy.sh "${CLANG_TIDY_INPUTS[@]}"
-      - name: Check clang-tidy disk cache size
-        if: always()
-        id: clang_tidy_cache_size
-        run: |
-          size="$(du -sk "${HOME}/.cache/bazel_disk-cache" 2>/dev/null | awk '{print $1}')"
-          size="${size:-0}"
-          echo "Bazel disk cache: ${size} KiB (save limit: 512000 KiB)"
-          (( size < 500 * 1024 )) && echo "save=true" >>"${GITHUB_OUTPUT}" || echo "save=false" >>"${GITHUB_OUTPUT}"
-      - uses: actions/cache/save@v6
-        if: always() && steps.clang_tidy_cache_restore.outputs.cache-hit != 'true' && steps.clang_tidy_cache_size.outputs.save == 'true'
+      - uses: ./.github/actions/bazel-cache-save
+        if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
         with:
-          path: "~/.cache/bazel_disk-cache"
-          key: clang-tidy-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}-${{github.sha}}
+          key: ${{ steps.clang_tidy_cache_restore.outputs.key }}
 
   coverage:
-    needs: [trunk, pre-commit]
+    permissions:
+      contents: read
+      actions: write
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -148,17 +140,12 @@ jobs:
         run: |
           {
             echo "common --disk_cache=$HOME/.cache/bazel_disk-cache"
-            echo "common --experimental_disk_cache_gc_max_size=500M"
           } >.bazelrc.user
-      - uses: actions/cache/restore@v6
+      - uses: ./.github/actions/bazel-cache-restore
         id: coverage_cache_restore
         with:
-          path: "~/.cache/bazel_disk-cache"
-          key: coverage-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}-${{github.sha}}
-          restore-keys: |
-            coverage-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-refs/heads/main
-            coverage-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}
-            coverage-
+          namespace: coverage
+          legacy-prefix: coverage-
       - name: Install coverage tooling
         run: |
           sudo apt-get install -y lcov
@@ -173,6 +160,11 @@ jobs:
             --experimental_use_llvm_covmap \
             --experimental_generate_llvm_lcov \
             --copt=-fcoverage-compilation-dir=. \
+            --profile="${RUNNER_TEMP}/coverage-preparation.json.gz" \
+            --experimental_profile_additional_tasks=repository_fetch \
+            --experimental_profile_additional_tasks=starlark_repository_fn \
+            --experimental_profile_additional_tasks=starlark_builtin_fn \
+            --experimental_profile_additional_tasks=fetch \
             --combined_report=lcov \
             --instrumentation_filter='^//mbo/proto[/:].*'
           cp "$(bazel info output_path)/_coverage/_coverage_report.dat" coverage.lcov
@@ -201,6 +193,14 @@ jobs:
           python3 tools/coverage_index.py report \
             coverage-html/coverage-summary.json "${COVERAGE_PAGE}" coverage-html/index.html
           cat coverage-summary.md >>"${GITHUB_STEP_SUMMARY}"
+      - name: Preserve coverage preparation profile
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-preparation-profile
+          path: ${{ runner.temp }}/coverage-preparation.json.gz
+          retention-days: 7
+          if-no-files-found: warn
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -212,21 +212,16 @@ jobs:
             coverage-target.txt
           retention-days: 14
           if-no-files-found: error
-      - name: Check coverage disk cache size
-        if: always()
-        id: coverage_cache_size
-        run: |
-          size="$(du -sk "${HOME}/.cache/bazel_disk-cache" 2>/dev/null | awk '{print $1}')"
-          size="${size:-0}"
-          echo "Bazel disk cache: ${size} KiB (save limit: 512000 KiB)"
-          (( size < 500 * 1024 )) && echo "save=true" >>"${GITHUB_OUTPUT}" || echo "save=false" >>"${GITHUB_OUTPUT}"
-      - uses: actions/cache/save@v6
-        if: always() && steps.coverage_cache_restore.outputs.cache-hit != 'true' && steps.coverage_cache_size.outputs.save == 'true'
+      - uses: ./.github/actions/bazel-cache-save
+        if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
         with:
-          path: "~/.cache/bazel_disk-cache"
-          key: coverage-${{hashFiles('MODULE.bazel.lock', '.bazelversion')}}-${{github.ref}}-${{github.sha}}
+          key: ${{ steps.coverage_cache_restore.outputs.key }}
 
   test-core:
+    permissions:
+      actions: write
+      contents: read
+      pull-requests: read
     needs: [pre-commit, trunk]
     secrets: inherit
     strategy:
@@ -266,6 +261,10 @@ jobs:
       bazel_version: ${{ matrix.bazel_version }}
 
   test-special:
+    permissions:
+      actions: write
+      contents: read
+      pull-requests: read
     needs: [pre-commit, trunk]
     secrets: inherit
     strategy:
@@ -316,6 +315,9 @@ jobs:
       proto_version: ${{ matrix.proto_version }}
 
   done:
+    permissions:
+      actions: read
+      contents: read
     needs:
       [
         release-site-tests,
@@ -350,6 +352,23 @@ jobs:
             exit 1
           fi
           echo "done covers all $(grep -c . <<<"${declared}") workflow jobs."
+      - uses: actions/download-artifact@v8
+        if: always() && github.ref == 'refs/heads/main'
+        with:
+          pattern: cache-metrics-*
+          path: cache-metrics
+          merge-multiple: true
+      - name: Report cache storage
+        if: always() && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh cache list --limit 10000 --json key,ref,sizeInBytes >cache-inventory.json; then
+            python3 tools/cache_report.py --metrics cache-metrics --inventory cache-inventory.json >>"${GITHUB_STEP_SUMMARY}"
+          else
+            echo 'Cache inventory unavailable.' >>"${GITHUB_STEP_SUMMARY}"
+          fi
       - name: Fail if any dependency did not succeed
         if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
         run: exit 1
