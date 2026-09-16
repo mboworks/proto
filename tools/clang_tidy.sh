@@ -141,7 +141,7 @@ readonly TEST_DISABLED_CHECKS='-readability-function-cognitive-complexity,-clang
 readonly HEADER_FILTER='(^|/)mbo/'
 readonly EXCLUDE_HEADER_FILTER='(^|/)bazel-out/'
 
-PARALLELISM="$(getconf _NPROCESSORS_ONLN 2>/dev/null || echo 1)"
+PARALLELISM="${CLANG_TIDY_JOBS:-auto}"
 readonly PARALLELISM
 
 declare -a SOURCES=()
@@ -150,7 +150,9 @@ FULL_SWEEP=false
 if [ "${1:-}" = "--all-files" ]; then
   FULL_SWEEP=true
 fi
+SCOPE="$(python3 tools/clang_tidy_scope.py compile_commands.json "${@}")"
 while IFS= read -r FILE; do
+  [ -n "${FILE}" ] || continue
   case "${FILE}" in
     # Not built by bazel at all: an SMHasher3 plugin, copied into that project by
     # mbo/hash/measurements/build_smhasher3.sh and compiled by ITS cmake. It has
@@ -160,7 +162,7 @@ while IFS= read -r FILE; do
     *_test.cc | *_test.cpp | *_test.cxx) TESTS+=("${FILE}") ;;
     *) SOURCES+=("${FILE}") ;;
   esac
-done < <(python3 tools/clang_tidy_scope.py compile_commands.json "${@}")
+done <<<"${SCOPE}"
 
 readonly TOTAL=$((${#SOURCES[@]} + ${#TESTS[@]}))
 if ${FULL_SWEEP} && [ "${TOTAL}" -eq 0 ]; then
@@ -205,30 +207,31 @@ fi
 # DB. WarningsAsErrors in .clang-tidy makes any finding a non-zero exit.
 # Both groups must run, and a finding in either has to fail, so no `exec` here.
 STATUS=0
-# Output is teed so it can be scanned afterwards, while still streaming to the
-# user as it is produced.
+# The coordinator retains all diagnostics for the parse-error check below.
 # An explicit template, not `mktemp -t`: BSD mktemp (macOS) takes a bare prefix
 # there, while GNU mktemp (Linux, and so CI) requires the trailing X's and fails
 # with "too few X's in template". A full path template is accepted by both.
 OUTPUT="$(mktemp "${TMPDIR:-/tmp}/clang_tidy_out.XXXXXX")"
 trap 'rm -f "${OUTPUT}"' EXIT
 
-if [ "${#SOURCES[@]}" -gt 0 ]; then
-  if ! printf '%s\0' "${SOURCES[@]}" \
-    | xargs -0 -n 1 -P "${PARALLELISM}" "${CLANG_TIDY}" --header-filter="${HEADER_FILTER}" \
-      --exclude-header-filter="${EXCLUDE_HEADER_FILTER}" -p . 2>&1 \
-    | tee -a "${OUTPUT}"; then
-    STATUS=1
-  fi
+declare -a RUNNER_ARGS=(
+  --clang-tidy "${CLANG_TIDY}"
+  --compile-database .
+  --output "${OUTPUT}"
+  --test-disabled-checks="${TEST_DISABLED_CHECKS}"
+  --header-filter="${HEADER_FILTER}"
+  --exclude-header-filter="${EXCLUDE_HEADER_FILTER}"
+)
+if [[ "${PARALLELISM}" != auto ]]; then
+  RUNNER_ARGS+=(--jobs "${PARALLELISM}")
 fi
-if [ "${#TESTS[@]}" -gt 0 ]; then
-  if ! printf '%s\0' "${TESTS[@]}" \
-    | xargs -0 -n 1 -P "${PARALLELISM}" "${CLANG_TIDY}" --header-filter="${HEADER_FILTER}" \
-      --exclude-header-filter="${EXCLUDE_HEADER_FILTER}" --checks="${TEST_DISABLED_CHECKS}" -p . 2>&1 \
-    | tee -a "${OUTPUT}"; then
-    STATUS=1
-  fi
-fi
+for FILE in ${SOURCES[@]+"${SOURCES[@]}"}; do
+  RUNNER_ARGS+=(--source "${FILE}")
+done
+for FILE in ${TESTS[@]+"${TESTS[@]}"}; do
+  RUNNER_ARGS+=(--test "${FILE}")
+done
+python3 tools/clang_tidy_runner.py "${RUNNER_ARGS[@]}" || STATUS=$?
 
 # A `clang-diagnostic-error` means the translation unit did not PARSE - a missing
 # header, an unresolvable include. That is a broken environment, not a finding

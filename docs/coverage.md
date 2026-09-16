@@ -11,3 +11,7 @@ the same model to changed coverable lines and branches.
 
 Tests and generated proto sources are excluded: the report measures the maintained library sources.
 Threshold changes should be based on a generated report and should never conceal a regression.
+
+Retained reports keep main first, then interleave releases and PRs by tagged/merged commit position
+in main history. See [Infrastructure and publishing](infrastructure.md) for ordering, freshness,
+and deployment details.

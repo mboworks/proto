@@ -158,8 +158,8 @@ repos:
       - id: cache-cleanup-tests
         name: Test cache cleanup selection
         language: system
-        entry: python3 -m unittest tools/cache_cleanup_test.py
-        files: ^(\.github/workflows/(cache_cleanup|main|test)\.yml|tools/cache_cleanup(_test)?\.py)$
+        entry: python3 -m unittest tools/cache_cleanup_test.py tools/bazel_cache_test.py tools/cache_report_test.py
+        files: ^(\.github/workflows/(cache_cleanup|compatibility|main|release|test)\.yml|tools/(cache_cleanup|bazel_cache|cache_report)(_test)?\.py|\.github/actions/bazel-cache-(restore|save)/action\.yml)$
         pass_filenames: false
       - id: protobuf-version-selection-tests
         name: Test protobuf compatibility-version selection
@@ -170,8 +170,8 @@ repos:
       - id: coverage-policy-tests
         name: Test coverage tooling and policy
         language: system
-        entry: python3 -m unittest tools/coverage_test.py tools/coverage_sources_test.py tools/coverage_html_test.py tools/coverage_index_test.py tools/coverage_lcovrc_test.py tools/coverage_policy_test.py
-        files: ^(coverage_(baseline|policy)\.json|\.github/workflows/(main|test)\.yml|tools/coverage(_html|_index|_lcovrc|_policy|_sources)?(_test)?\.py)$
+        entry: python3 -m unittest tools/coverage_test.py tools/coverage_sources_test.py tools/coverage_html_test.py tools/coverage_index_test.py tools/coverage_lcovrc_test.py tools/coverage_policy_test.py tools/site_artwork_test.py
+        files: ^(coverage_(baseline|policy)\.json|\.github/workflows/(main|test|coverage_pages|pages)\.yml|tools/site_artwork(_test)?\.py|docs/assets/.*|tools/coverage(_html|_index|_lcovrc|_policy|_sources)?(_test)?\.py)$
         pass_filenames: false
       - id: align-markdown-tables
         name: Align Markdown tables
@@ -188,13 +188,14 @@ repos:
         name: clang-tidy
         language: script
         entry: tools/clang_tidy.sh
+        require_serial: true
         files: (\.(cc|cpp|cxx|h|hh|hpp|hxx|inc|ipp|bzl)$|\.h\.in$)
         types: [file]
       - id: clang-tidy-scope-test
         name: Test clang-tidy scope selection
         language: system
-        entry: python3 -m unittest tools/clang_tidy_ci_test.py tools/clang_tidy_scope_test.py
-        files: ^(\.github/workflows/main\.yml|tools/clang_tidy_(ci|scope)(_test)?\.py)$
+        entry: python3 -m unittest tools/clang_tidy_ci_test.py tools/clang_tidy_scope_test.py tools/clang_tidy_runner_test.py
+        files: ^(\.github/workflows/main\.yml|\.pre-commit-config\.yaml|tools/clang_tidy\.sh|tools/clang_tidy_(ci|scope|runner)(_test)?\.py)$
         pass_filenames: false
       - id: trunk-fmt
         name: trunk fmt

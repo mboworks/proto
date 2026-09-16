@@ -31,6 +31,7 @@ WIDE_PATHS = frozenset(
         "tools/clang_tidy.sh",
         "tools/clang_tidy_ci.py",
         "tools/clang_tidy_scope.py",
+        "tools/clang_tidy_runner.py",
     }
 )
 

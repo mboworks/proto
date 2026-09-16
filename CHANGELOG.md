@@ -1,5 +1,10 @@
 # 1.2.5
 
+- Bound local clang-tidy to one coordinator and at most two default workers, with explicit job overrides and per-file progress.
+- Refresh and measure bounded main-only CI caches, verify replacements before retiring older generations, and start coverage alongside lint.
+- Retain targeted Bazel preparation traces for main/PR and release coverage, including failed runs, to diagnose delays beyond compilation.
+- Order retained coverage by merge/tag history and add shared MBO Works artwork, Pages favicons.
+
 - Expanded matcher, serialization, field-path, file-error, and status-matcher tests to exceed 96% line/function coverage and 91% branch coverage. Enforce high coverage at 95% lines/functions and 90% branches, with medium boundaries of 90% lines/functions and 85% branches.
 - Fixed previously uninstantiated matcher APIs: typed `WhenDeserializedAs`, typed text-proto matching, typed equivalence semantics, and matcher-transformer composition for tuple comparisons.
 - Excluded Bazel-generated headers from clang-tidy diagnostics, retained canonical header-guard enforcement through the path-stable pre-commit hook, and isolated an LLVM 22 crash in the test-only StatusOr analysis.

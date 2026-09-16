@@ -11,6 +11,7 @@
     "STYLE_SH.md": "STYLE_SH.html",
     "TODO.md": "TODO.html",
     "docs/coverage.md": "docs/coverage.html",
+    "docs/infrastructure.md": "docs/infrastructure.html",
     "docs/release-website.md": "docs/release-website.html"
   },
   "links": [
