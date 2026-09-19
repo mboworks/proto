@@ -1,5 +1,8 @@
 # 1.2.5
 
+- Refresh coverage metadata when PRs close or reopen, show one pre/post-merge result per PR,
+  publish valid coverage when unrelated jobs fail, and support serialized source-run backfill.
+
 - Retain complete coverage reports per CI run and attempt, order the overview by actual PR merge/tag timestamps, preserve aggregation provenance, and hide closed-unmerged PRs from the overview.
 
 - Bound local clang-tidy to one coordinator and at most two default workers, with explicit job overrides and per-file progress.
