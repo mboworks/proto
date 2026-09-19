@@ -1,5 +1,7 @@
 # 1.2.5
 
+- Retain complete coverage reports per CI run and attempt, order the overview by actual PR merge/tag timestamps, preserve aggregation provenance, and hide closed-unmerged PRs from the overview.
+
 - Bound local clang-tidy to one coordinator and at most two default workers, with explicit job overrides and per-file progress.
 - Refresh and measure bounded main-only CI caches, verify replacements before retiring older generations, and start coverage alongside lint.
 - Retain targeted Bazel preparation traces for main/PR and release coverage, including failed runs, to diagnose delays beyond compilation.
