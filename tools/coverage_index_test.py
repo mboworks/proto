@@ -3,11 +3,9 @@
 
 import json
 import os
-import shutil
 import subprocess
 import sys
 import tempfile
-import textwrap
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -27,6 +25,134 @@ def _summary(percent: float) -> dict:
 
 
 class CoverageIndexTest(unittest.TestCase):
+    def test_metadata_refresh_shares_the_report_publication_queue(self):
+        workflow = Path(".github/workflows/coverage_pages.yml").read_text()
+        pages = Path(".github/workflows/pages.yml").read_text()
+        for text in (workflow, pages):
+            self.assertIn("  group: coverage-pages\n  queue: max\n  cancel-in-progress: false", text)
+        self.assertIn("pull_request_target:\n    types: [closed, reopened]", workflow)
+        self.assertIn("      source_run_id:", workflow)
+        self.assertIn("github.event.workflow_run.id || inputs.source_run_id", workflow)
+        self.assertIn('[[ "${SOURCE_RUN_ID}" =~ ^[1-9][0-9]*$ ]]', workflow)
+        self.assertIn('.status == "completed"', workflow)
+        self.assertIn('.path == ".github/workflows/main.yml"', workflow)
+        self.assertIn('.path == ".github/workflows/release.yml"', workflow)
+        self.assertIn('run-id: ${{ steps.coverage-result.outputs.id }}', workflow)
+        for field in ("created_at", "updated_at", "head_sha", "run_attempt", "run_started_at"):
+            self.assertIn("${{ steps.coverage-result.outputs." + field + " }}", workflow)
+        self.assertNotIn("github.event.workflow_run.conclusion == 'success'", workflow)
+        self.assertIn('.name == "coverage" and .conclusion == "success"', workflow)
+        self.assertIn('jobs?filter=latest&per_page=100', workflow)
+        self.assertIn("path: source\n          ref: main", workflow)
+        for step in ("uses: actions/download-artifact@v8", "name: Select and stage the report"):
+            self.assertIn(step + "\n        if: steps.coverage-result.outputs.eligible == 'true'", workflow)
+        refresh = workflow.split("      - name: Refresh metadata and publish retained reports", 1)[1]
+        self.assertNotIn("workflow_run", refresh)
+        self.assertNotIn("report/coverage-html", refresh)
+        self.assertIn("pulls?state=all&per_page=100", refresh)
+        self.assertLess(refresh.index("coverage_index.py history"), refresh.index("coverage_index.py site"))
+        self.assertLess(refresh.index("coverage_index.py site"), refresh.index("git -C site push"))
+
+    def test_merge_refresh_reorders_existing_report_without_replacing_measurements(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            repository = root / "repository"
+            repository.mkdir()
+            subprocess.run(["git", "init", "-q", str(repository)], check=True)
+            subprocess.run(["git", "-C", str(repository), "-c", "user.name=Test",
+                            "-c", "user.email=test@example.com", "commit", "--allow-empty", "-qm", "merge"], check=True)
+            sha = subprocess.check_output(["git", "-C", str(repository), "rev-parse", "HEAD"], text=True).strip()
+            reports = root / "reports"
+            original = {}
+            for number in (881, 882):
+                target = f"pr/{number}"
+                folder = reports / target
+                folder.mkdir(parents=True)
+                metadata = coverage_index.report_metadata(
+                    _summary(95), target, "2026-09-19T17:00:00Z", "2026-09-19T17:00:00Z",
+                    "2026-09-19T17:01:00Z", number, 1, "tested-head")
+                original[number] = metadata
+                (folder / "coverage-meta.json").write_text(json.dumps(metadata))
+                (folder / "details.html").write_text("retained detailed coverage")
+            pulls = [{"number": 881, "state": "closed", "merged_at": "2026-09-18T12:00:00Z", "merge_commit_sha": sha},
+                     {"number": 882, "state": "open", "merged_at": None, "merge_commit_sha": None}]
+            coverage_index.update_history(reports, repository, pulls)
+            before = coverage_index.render_site(reports)
+            self.assertLess(before.index("PR #881"), before.index("PR #882"))
+            pulls[1].update(state="closed", merged_at="2026-09-19T18:12:50Z", merge_commit_sha=sha)
+            coverage_index.update_history(reports, repository, pulls)
+            after = coverage_index.render_site(reports)
+            self.assertLess(after.index("PR #882"), after.index("PR #881"))
+            refreshed = json.loads((reports / "pr/882/coverage-meta.json").read_text())
+            self.assertEqual(refreshed["source"], original[882]["source"])
+            self.assertEqual(refreshed["coverage"], original[882]["coverage"])
+            self.assertEqual((reports / "pr/882/details.html").read_text(), "retained detailed coverage")
+
+    def test_pr_phases_use_exact_commits_and_collapse_attempts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            pulls = [
+                {"number": 1, "state": "closed", "merged_at": "2026-09-19T12:00:00Z", "merge_commit_sha": "merge-one"},
+                {"number": 2, "state": "closed", "merged_at": "2026-09-19T13:00:00Z", "merge_commit_sha": "merge-two"},
+                {"number": 3, "state": "closed", "merged_at": "2026-09-19T11:00:00Z", "merge_commit_sha": "nested"},
+            ]
+            (root / "pull-requests.json").write_text(json.dumps(pulls))
+
+            def write(target, run, sha, attempt=1):
+                folder = root / f"runs/{run}/{attempt}"
+                folder.mkdir(parents=True)
+                metadata = coverage_index.report_metadata(
+                    _summary(run), target, "2026-09-19T10:00:00Z", "2026-09-19T10:00:00Z",
+                    "2026-09-19T10:01:00Z", run, attempt, sha)
+                (folder / "coverage-meta.json").write_text(json.dumps(metadata))
+                return folder
+
+            write("pr/1", 10, "head-one")
+            write("pr/2", 20, "head-two")
+            write("pr/3", 30, "nested-head")
+            self.assertIn("PR 1 (pre-merge)", coverage_index.render_site(root))
+            write("main", 40, "unrelated")
+            self.assertEqual(len(coverage_index.selected_reports(root)), 3)
+            write("main", 50, "merge-two")
+            write("main", 45, "merge-one")  # Older main report arrives after the newer one.
+            write("main", 45, "merge-one", attempt=2)
+            write("pr/1", 60, "late-pre-merge")  # A late PR run cannot replace post-merge.
+            selected = {metadata["target"]: (metadata, path)
+                        for metadata, path in coverage_index.selected_reports(root)}
+            self.assertEqual(selected["pr/1"][1], "runs/45/2")
+            self.assertEqual(selected["pr/1"][0]["coverage"]["lines"]["percent"], 45)
+            self.assertEqual(selected["pr/2"][1], "runs/50/1")
+            self.assertEqual(selected["pr/3"][0]["phase"], "pre-merge")
+            overview = coverage_index.render_site(root)
+            self.assertIn("PR 1 (post-merge)", overview)
+            self.assertNotIn("PR 1 (pre-merge)", overview)
+            self.assertNotIn("main branch", overview)
+            history = coverage_index.render_run_history(root)
+            self.assertEqual(history.count("PR 1 (pre-merge)"), 1)
+            self.assertEqual(history.count("PR 1 (post-merge)"), 1)
+            self.assertLess(history.index("PR 1 (post-merge)"), history.index("PR 1 (pre-merge)"))
+            self.assertIn('href="../runs/45/2/"', history)
+            self.assertNotIn('href="../runs/45/1/"', history)
+            self.assertNotIn("main branch", history)
+            # A merge result is useful even if no pre-merge report was published.
+            pulls.append({"number": 4, "state": "closed", "merged_at": "2026-09-19T14:00:00Z",
+                          "merge_commit_sha": "merge-four"})
+            folder = write("main", 70, "merge-four")
+            current = root / "main"
+            current.mkdir()
+            (current / "coverage-meta.json").write_text((folder / "coverage-meta.json").read_text())
+            (root / "pull-requests.json").write_text(json.dumps(pulls))
+            overview = coverage_index.render_site(root)
+            self.assertIn("PR 4 (post-merge)", overview)
+            self.assertIn('href="runs/70/1/"', overview)
+            self.assertNotIn('href="main/"', overview)
+            pulls[2].update(merged_at=None, state="closed")
+            (root / "pull-requests.json").write_text(json.dumps(pulls))
+            self.assertNotIn("PR 3", coverage_index.render_site(root))
+            pulls[2]["state"] = "open"
+            (root / "pull-requests.json").write_text(json.dumps(pulls))
+            self.assertIn("PR 3 (pre-merge)", coverage_index.render_site(root))
+
     def test_report_contains_policy_table_and_lcov_link(self):
         rendered = coverage_index.render_report(_summary(95.0), "pr/42")
         self.assertIn("proto coverage: pr/42", rendered)
@@ -85,6 +211,39 @@ class CoverageIndexTest(unittest.TestCase):
         self.assertLess(rendered.index('colspan="3">Lines'), rendered.index('colspan="3">Branches'))
         self.assertLess(rendered.index('colspan="3">Branches'), rendered.index('colspan="3">Functions'))
 
+    def test_full_table_orders_groups_and_categories(self):
+        summary = _summary(95.0)
+        overall = summary["measurements"]["overall"]
+        for category in (
+            "extensions / zeta",
+            "extensions / alpha",
+            "program / zeta",
+            "program / alpha",
+        ):
+            summary["minimums"][category] = summary["minimums"]["overall"]
+            summary["targets"][category] = summary["targets"]["overall"]
+            summary["enforcement"][category] = summary["enforcement"]["overall"]
+        summary["measurements"].update(
+            {
+                "extensions / zeta": overall,
+                "extensions / alpha": overall,
+                "program / zeta": overall,
+                "program / alpha": overall,
+            }
+        )
+        rendered = coverage_index.render_report(summary, "pr/42")
+        order = [
+            rendered.index(name)
+            for name in (
+                "overall",
+                "program / alpha",
+                "program / zeta",
+                "extensions / alpha",
+                "extensions / zeta",
+            )
+        ]
+        self.assertEqual(order, sorted(order))
+
     def test_rate_covered_and_total_share_the_rating_background(self):
         rendered = coverage_index.render_report(_summary(95.0), "pr/42")
         self.assertIn(
@@ -138,6 +297,22 @@ class CoverageIndexTest(unittest.TestCase):
         self.assertIn('<td class="status-bad">BAD: L</td>', rendered)
         self.assertEqual(2, rendered.count('<td class="medium">90.00%</td>'))
 
+    def test_patch_without_branches_renders_that_metric_as_not_applicable(self):
+        summary = _summary(95.0)
+        summary["patch"] = {
+            "lines": {"covered": 38, "total": 38, "percent": 100.0},
+            "functions": {"covered": 0, "total": 0, "percent": None},
+            "branches": {"covered": 0, "total": 0, "percent": None},
+        }
+        summary["patch_policy"] = {
+            "minimum": {"lines": 95},
+            "target": {"lines": 98},
+            "enforce": {"lines": "medium"},
+        }
+        rendered = coverage_index.render_report(summary, "pr/42")
+        self.assertIn('<td class="status-good">GOOD</td>', rendered)
+        self.assertIn('<td class="high">100.00%</td><td>n/a</td>', rendered)
+
     def test_override_reason_is_available_on_the_compact_policy_row(self):
         summary = _summary(95.0)
         summary["measurements"]["extensions / new"] = summary["measurements"]["overall"]
@@ -148,7 +323,7 @@ class CoverageIndexTest(unittest.TestCase):
         rendered = coverage_index.render_report(summary, "pr/42")
         self.assertIn('title="New module onboarding.">extensions / new</td>', rendered)
 
-    def test_site_interleaves_prs_and_releases_by_reference_time_with_main_first(self):
+    def test_site_interleaves_prs_and_releases_by_main_history(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for report in ("main", "pr/9", "pr/42", "tag/0.9.0", "tag/0.10.0"):
@@ -178,7 +353,7 @@ class CoverageIndexTest(unittest.TestCase):
             self.assertIn("release 0.10.0", rendered)
             self.assertIn("release 0.9.0", rendered)
             self.assertIn(
-                'href="https://github.com/mboworks/proto/releases/tag/0.10.0">release 0.10.0</a>',
+                'href="https://github.com/mboworks/proto/releases/tag/v0.10.0">release v0.10.0</a>',
                 rendered,
             )
             self.assertIn('href="https://github.com/mboworks/proto/pull/42">PR #42</a>', rendered)
@@ -187,7 +362,7 @@ class CoverageIndexTest(unittest.TestCase):
             self.assertIn('href="https://github.com/mboworks/proto/commit/abc"><code>abc</code></a>', rendered)
             self.assertIn('href="https://github.com/mboworks/proto/actions/runs/1">run 1</a>', rendered)
             self.assertIn("font-variant-numeric: tabular-nums", rendered)
-            order = ["main", "pr/9", "tag/0.9.0", "pr/42", "tag/0.10.0"]
+            order = ["pr/9", "tag/0.9.0", "pr/42", "tag/0.10.0"]
             offsets = [rendered.index(f'href="{target}/"') for target in order]
             self.assertEqual(offsets, sorted(offsets))
             self.assertNotIn("<ul>", rendered)
@@ -210,10 +385,10 @@ class CoverageIndexTest(unittest.TestCase):
             git("init")
             git("commit", "--allow-empty", "-m", "older merge")
             older = git("rev-parse", "HEAD")
-            git("tag", "0.9.0")
+            git("tag", "v0.9.0")
             git("commit", "--allow-empty", "-m", "release commit")
             release = git("rev-parse", "HEAD")
-            git("tag", "-a", "0.10.0", "-m", "release")
+            git("tag", "-a", "v0.10.0", "-m", "release")
             git("commit", "--allow-empty", "-m", "newer merge")
             newer = git("rev-parse", "HEAD")
             reports = root / "reports"
@@ -252,7 +427,7 @@ class CoverageIndexTest(unittest.TestCase):
                 metadata = json.loads((reports / target / "coverage-meta.json").read_text())
                 self.assertIsNone(metadata["history"])
             rendered = coverage_index.render_site(reports)
-            order = ["main", "pr/1", "tag/0.10.0", "tag/0.9.0", "pr/900"]
+            order = ["pr/1", "tag/0.10.0", "tag/0.9.0", "pr/900"]
             offsets = [rendered.index(f'href="{target}/"') for target in order]
             self.assertEqual(offsets, sorted(offsets))
             self.assertNotIn('href="pr/2/"', rendered)
@@ -287,7 +462,7 @@ class CoverageIndexTest(unittest.TestCase):
             git("init")
             git("commit", "--allow-empty", "-m", "initial")
             main = git("branch", "--show-current")
-            git("tag", "1.0.0")
+            git("tag", "v1.0.0")
             git("checkout", "-b", "integration")
             git("checkout", "-b", "first")
             git("commit", "--allow-empty", "-m", "first feature")
@@ -304,7 +479,7 @@ class CoverageIndexTest(unittest.TestCase):
             unmerged = git("rev-parse", "HEAD")
             git("checkout", main)
             git("commit", "--allow-empty", "-m", "release before integration")
-            git("tag", "2.0.0")
+            git("tag", "v2.0.0")
             reports = root / "reports"
             originals = {}
             targets = ("main", "pr/1", "pr/99", "pr/5", "pr/77", "pr/88", "tag/1.0.0", "tag/2.0.0")
@@ -347,10 +522,10 @@ class CoverageIndexTest(unittest.TestCase):
                 self.assertEqual(metadata["coverage"], originals[target]["coverage"])
                 self.assertEqual((reports / target / "lcov/index.html").read_text(), f"details-{run}")
             rendered = coverage_index.render_site(reports)
-            ordered = ["main", "pr/5", "pr/99", "tag/2.0.0", "tag/1.0.0", "pr/1"]
+            ordered = ["pr/5", "pr/99", "tag/2.0.0", "tag/1.0.0", "pr/1"]
             offsets = [rendered.index(f'href="{target}/"') for target in ordered]
             self.assertEqual(offsets, sorted(offsets))
-            self.assertIn("Aggregated PRs retain their own reports", rendered)
+            self.assertIn("Aggregated PRs retain their own pre-merge reports", rendered)
 
             # Squashing the aggregation removes nested merges from main ancestry.
             # PR metadata identifies the parent; its recorded head must contain each child.
@@ -401,12 +576,9 @@ class CoverageIndexTest(unittest.TestCase):
             (report / "coverage-meta.json").write_text(json.dumps(metadata))
             coverage_index.archive_reports(root)
             rendered = (root / "runs/index.html").read_text()
-            paths = ["101/1", "100/2", "100/1"]
-            offsets = [rendered.index(f'href="{path}/"') for path in paths]
-            self.assertEqual(offsets, sorted(offsets))
-            for path in paths:
-                self.assertIn(f'href="{path}/coverage-summary.json"', rendered)
-            self.assertIn("original-tested-head"[:7], rendered)
+            self.assertIn('href="../pr/868/"', rendered)
+            self.assertNotIn('href="../runs/100/1/"', rendered)
+            self.assertNotIn('href="../runs/100/2/"', rendered)
             self.assertIn("integration-tested-head"[:7], rendered)
             self.assertIn('href="runs/"', coverage_index.render_site(root))
 
@@ -444,7 +616,7 @@ class CoverageIndexTest(unittest.TestCase):
             (report / "coverage-meta.json").write_text(json.dumps(metadata))
             coverage_index.archive_reports(root)
             self.assertFalse((root / "runs/0").exists())
-            self.assertIn("No archived coverage runs", (root / "runs/index.html").read_text())
+            self.assertIn("No PR or release coverage results", (root / "runs/index.html").read_text())
             metadata["source"].update(run_id=200, run_attempt=1)
             (report / "coverage-meta.json").write_text(json.dumps(metadata))
             with mock.patch.object(coverage_index.shutil, "copytree", side_effect=OSError("copy failed")):
@@ -454,138 +626,6 @@ class CoverageIndexTest(unittest.TestCase):
             self.assertEqual(list((root / "runs/200").glob(".archive-*")), [])
             coverage_index.archive_reports(root)
             self.assertTrue((root / "runs/200/1/coverage-meta.json").exists())
-
-    def test_archived_navigation_resolves_without_mutating_current_report(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            for run, target in enumerate(("main", "pr/42", "tag/1.2.5"), 1):
-                report = root / target
-                (report / "lcov/source").mkdir(parents=True)
-                metadata = coverage_index.report_metadata(
-                    _summary(95), target, "2026-09-01T00:00:00Z", "2026-09-01T00:00:00Z",
-                    "2026-09-01T00:01:00Z", run, 1, "measured-head",
-                )
-                (report / "coverage-meta.json").write_text(json.dumps(metadata))
-                original = coverage_index.render_report(_summary(95), target)
-                (report / "index.html").write_text(original)
-                prefix = "../" * (len(target.split("/")) + 2)
-                detail = ('<a href="../../index.html">Report overview</a>'
-                          f'<a href="{prefix}index.html">All coverage reports</a>'
-                          '<pre>original measured source</pre>')
-                (report / "lcov/source/file.cc.gcov.html").write_text(detail)
-                coverage_index.archive_reports(root)
-                archive = root / f"runs/{run}/1"
-                self.assertIn('href="../../../">All reports', (archive / "index.html").read_text())
-                self.assertIn('href="lcov/"', (archive / "index.html").read_text())
-                archived_detail = (archive / "lcov/source/file.cc.gcov.html").read_text()
-                self.assertIn('href="../../../../../index.html">All coverage reports', archived_detail)
-                self.assertIn('href="../../index.html">Report overview', archived_detail)
-                self.assertIn('<pre>original measured source</pre>', archived_detail)
-                self.assertEqual((report / "index.html").read_text(), original)
-                self.assertEqual((report / "lcov/source/file.cc.gcov.html").read_text(), detail)
-
-    def test_squashed_aggregation_fetches_only_the_recorded_head_when_requested(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            upstream = root / "upstream"
-            upstream.mkdir()
-
-            def git(repo, *args):
-                return subprocess.check_output(
-                    ["git", "-C", str(repo), "-c", "user.name=Coverage Test",
-                     "-c", "user.email=coverage@example.invalid", "-c", "commit.gpgsign=false",
-                     "-c", "core.hooksPath=/dev/null", *args], text=True, stderr=subprocess.DEVNULL,
-                ).strip()
-
-            git(upstream, "init", "-b", "main")
-            git(upstream, "commit", "--allow-empty", "-m", "initial")
-            git(upstream, "checkout", "-b", "integration")
-            git(upstream, "commit", "--allow-empty", "-m", "child merge")
-            child = git(upstream, "rev-parse", "HEAD")
-            git(upstream, "commit", "--allow-empty", "-m", "parent head")
-            parent_head = git(upstream, "rev-parse", "HEAD")
-            git(upstream, "checkout", "main")
-            git(upstream, "commit", "--allow-empty", "-m", "squashed integration")
-            squashed = git(upstream, "rev-parse", "HEAD")
-            repository = root / "clone"
-            git(root, "clone", "--single-branch", "--branch", "main", upstream.as_uri(), str(repository))
-            missing = subprocess.run(["git", "-C", str(repository), "cat-file", "-e", parent_head],
-                                     capture_output=True, check=False)
-            self.assertNotEqual(missing.returncode, 0)
-            pulls = [
-                {"number": 1, "merged_at": "2026-08-20T00:00:00Z", "merge_commit_sha": child,
-                 "base": {"ref": "integration", "repo": {"full_name": "owner/repo"}}},
-                {"number": 2, "merged_at": "2026-08-21T00:00:00Z", "merge_commit_sha": squashed,
-                 "head": {"ref": "integration", "sha": parent_head,
-                          "repo": {"full_name": "owner/repo"}}},
-            ]
-            report = root / "reports/pr/1"
-            report.mkdir(parents=True)
-            metadata = coverage_index.report_metadata(
-                _summary(95), "pr/1", "2026-08-20T00:00:00Z", "2026-08-20T00:00:00Z",
-                "2026-08-20T00:01:00Z", 1, 1, child,
-            )
-            path = report / "coverage-meta.json"
-            path.write_text(json.dumps(metadata))
-            coverage_index.update_history(root / "reports", repository, pulls)
-            self.assertIsNone(json.loads(path.read_text())["history"])
-            coverage_index.update_history(root / "reports", repository, pulls, fetch_heads=True)
-            refreshed = json.loads(path.read_text())
-            self.assertEqual(refreshed["history"]["integration_commit"], squashed)
-            self.assertEqual(refreshed["source"], metadata["source"])
-            self.assertEqual(git(repository, "rev-parse", "FETCH_HEAD"), parent_head)
-
-    def test_publisher_archives_before_replacement_and_preserves_late_runs(self):
-        project = Path(__file__).resolve().parent.parent
-        workflow = (project / ".github/workflows/coverage_pages.yml").read_text()
-        stage = workflow.split("      - name: Stage and index the report\n", 1)[1]
-        script = textwrap.dedent(stage.split("        run: |\n", 1)[1].split(
-            "          git -C site config user.name", 1)[0])
-        self.assertIn("pulls?state=all&per_page=100", script)
-        self.assertIn("--fetch-aggregation-heads", script)
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            (root / "source/tools").mkdir(parents=True)
-            for name in ("coverage_index.py", "coverage_policy.py"):
-                shutil.copyfile(project / "tools" / name, root / "source/tools" / name)
-            subprocess.run(["git", "init", str(root / "source")], check=True, capture_output=True)
-            subprocess.run(["git", "-C", str(root / "source"), "-c", "user.name=Coverage Test",
-                            "-c", "user.email=coverage@example.invalid", "-c", "commit.gpgsign=false",
-                            "-c", "core.hooksPath=/dev/null", "commit", "--allow-empty", "-m", "main"],
-                           check=True, capture_output=True)
-            (root / "bin").mkdir()
-            gh = root / "bin/gh"
-            gh.write_text("#!/bin/sh\nprintf '[]\\n'\n")
-            gh.chmod(0o755)
-            report = root / "report/coverage-html"
-            (report / "lcov").mkdir(parents=True)
-            (report / "coverage-summary.json").write_text(json.dumps(_summary(95)))
-            (root / "report/coverage-target.txt").write_text("main\n")
-            env = {**os.environ, "PATH": str(root / "bin") + os.pathsep + os.environ["PATH"],
-                   "EXPECTED_TARGET": "main", "GITHUB_REPOSITORY": "mboworks/proto",
-                   "SOURCE_CREATED_AT": "2026-09-01T00:00:00Z",
-                   "SOURCE_STARTED_AT": "2026-09-01T00:00:00Z",
-                   "SOURCE_COMPLETED_AT": "2026-09-01T00:01:00Z", "SOURCE_RUN_ATTEMPT": "1"}
-            (root / "site/coverage").mkdir(parents=True)
-            for run in (100, 200, 150):
-                # Model separate publications: rsync compares size and second-resolution
-                # mtimes, whereas this fixture can publish several equal-size files per second.
-                for retained in (root / "site/coverage/main").rglob("*"):
-                    if retained.is_file():
-                        os.utime(retained, (1, 1))
-                (report / "index.html").write_text(coverage_index.render_report(_summary(95), "main"))
-                (report / "lcov/index.html").write_text(f"original details-{run}")
-                subprocess.run(["bash", "-c", script], cwd=root,
-                               env={**env, "SOURCE_RUN_ID": str(run), "SOURCE_HEAD_SHA": f"head-{run}"},
-                               check=True, capture_output=True, text=True)
-            site = root / "site/coverage"
-            for run in (100, 200, 150):
-                archive = site / f"runs/{run}/1"
-                self.assertEqual((archive / "lcov/index.html").read_text(), f"original details-{run}")
-                self.assertEqual(json.loads((archive / "coverage-meta.json").read_text())["source"]["head_sha"],
-                                 f"head-{run}")
-            self.assertEqual((site / "main/lcov/index.html").read_text(), "original details-200")
-            self.assertIn('href="runs/"', (site / "index.html").read_text())
 
     def test_actual_reference_times_override_history_and_ci_recency(self):
         reports = []

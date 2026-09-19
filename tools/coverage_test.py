@@ -4,6 +4,7 @@
 import sys
 import tempfile
 import unittest
+from typing import Optional
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -496,7 +497,7 @@ class CoverageTest(unittest.TestCase):
                 "branches": {"covered": 0, "total": 0, "percent": None},
             },
         }
-        def metric_policy(minimum: float, target: float | None = None):
+        def metric_policy(minimum: float, target: Optional[float] = None):
             return coverage_tool.coverage_policy.MetricPolicy(
                 minimum, minimum if target is None else target, "medium"
             )

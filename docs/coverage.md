@@ -45,3 +45,7 @@ This publisher behavior is adapted from [xff #876](https://github.com/mboworks/x
 [xff #877](https://github.com/mboworks/xff/pull/877). See
 [Infrastructure and publishing](infrastructure.md) for deployment details. These changes take effect
 when the publisher reaches main; this PR does not backfill or deploy the public site.
+Coverage publication also refreshes PR lifecycle metadata on close and reopen, selects one
+pre-merge or exact-merge-commit post-merge result per PR, and accepts a valid coverage job when
+other CI jobs fail. A manual source-run input can replay a retained artifact through the same
+serialized publisher without rerunning tests.
