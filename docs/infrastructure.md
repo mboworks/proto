@@ -91,12 +91,15 @@ stage. This guide is linked from the README and mapped in `release-site.json` fo
 
 ## Coverage publishing and artwork
 
-The trusted publisher fetches main's full first-parent history and tags and refreshes all retained
-report metadata against paginated merged-PR data. Main stays first; PRs and releases interleave by
-merge/tag commit position, newest first. Numeric release tags are peeled to commits, including
-annotated tags. Releases precede PRs at the same commit. Unpositioned reports follow by workflow
-creation time. Run identity and replacement ordering remain independent of history ordering, so a
-slow older run cannot overwrite newer coverage.
+The trusted publisher retains complete reports per CI run and attempt, alongside the latest report
+for each target. It archives existing and incoming reports before replacement, including late runs,
+and exposes a separate immutable run-history index. Main stays first in the latest overview; merged
+PRs and numeric releases follow by actual merge/tag timestamp. Closed-unmerged PRs are hidden only
+from that overview. All PR states are refreshed with paginated GitHub data. Main-integration ancestry
+is retained as provenance, including verified squash aggregation, and never determines row order.
+Run identity and replacement ordering remain independent of display ordering. See
+[Coverage policy and published report history](coverage.md#published-report-history) for timestamp
+fallbacks, migration limits, and archive navigation.
 
 The README uses the existing MBO Works artwork at 64 by 64 pixels, right-aligned in its heading.
 The unchanged logo, PNG favicons, Apple Touch icon, and multi-resolution ICO come from xff PR #836.
