@@ -1,0 +1,614 @@
+[
+  {
+    "number": 102,
+    "state": "closed",
+    "merged_at": "2026-09-19T21:21:03Z",
+    "merge_commit_sha": "673c2f976609f7c96d1063160d3167019e69d956"
+  },
+  {
+    "number": 101,
+    "state": "closed",
+    "merged_at": "2026-09-19T15:08:27Z",
+    "merge_commit_sha": "b5e0eb8048fc750d1806653faf30be70492a7541"
+  },
+  {
+    "number": 100,
+    "state": "closed",
+    "merged_at": "2026-09-16T22:42:57Z",
+    "merge_commit_sha": "829e1c98b6058b9a009d275cb6576aa075c17a23"
+  },
+  {
+    "number": 99,
+    "state": "closed",
+    "merged_at": "2026-09-16T14:58:51Z",
+    "merge_commit_sha": "402a5046e4fc56deadac0b398cfb0da99f73f4af"
+  },
+  {
+    "number": 98,
+    "state": "closed",
+    "merged_at": "2026-09-08T12:31:39Z",
+    "merge_commit_sha": "a4c95e0ec69a722a6e99ccf9af2c1b0cf0d29cfb"
+  },
+  {
+    "number": 97,
+    "state": "closed",
+    "merged_at": "2026-09-08T00:06:25Z",
+    "merge_commit_sha": "884f47267bb14c1c1c54cfcd0967d5d30a05403e"
+  },
+  {
+    "number": 96,
+    "state": "closed",
+    "merged_at": "2026-09-07T21:25:20Z",
+    "merge_commit_sha": "ca3c1e012b3ec387ee1f3e9182434ce2d9494f75"
+  },
+  {
+    "number": 95,
+    "state": "closed",
+    "merged_at": "2026-09-07T20:15:48Z",
+    "merge_commit_sha": "31b81bbffadd12a0b5a9d7f934c58d09d833b42e"
+  },
+  {
+    "number": 94,
+    "state": "closed",
+    "merged_at": "2026-09-07T19:46:39Z",
+    "merge_commit_sha": "d38a5b35b031b12255ff06acb26fbb79cde708bf"
+  },
+  {
+    "number": 93,
+    "state": "closed",
+    "merged_at": "2026-09-07T18:16:44Z",
+    "merge_commit_sha": "1ef8f7745562aedb7958f53f84ac9098515b3d94"
+  },
+  {
+    "number": 92,
+    "state": "closed",
+    "merged_at": "2026-09-07T12:08:40Z",
+    "merge_commit_sha": "c46c08aa4bd3a78750924016065b0a4361a542e4"
+  },
+  {
+    "number": 91,
+    "state": "closed",
+    "merged_at": "2026-09-06T21:15:37Z",
+    "merge_commit_sha": "d3cba9f6fa03918e3767c5be3567065e2c1a04d7"
+  },
+  {
+    "number": 90,
+    "state": "closed",
+    "merged_at": "2026-09-06T20:41:56Z",
+    "merge_commit_sha": "188f30d51f26c6b403da5a6f9da300217bc45a7c"
+  },
+  {
+    "number": 89,
+    "state": "closed",
+    "merged_at": "2026-09-06T19:40:41Z",
+    "merge_commit_sha": "fb4128f53e20bc6f11a7eb86be060cbe3f5902fd"
+  },
+  {
+    "number": 88,
+    "state": "closed",
+    "merged_at": "2026-09-06T19:00:44Z",
+    "merge_commit_sha": "48f1d6db8af8e705718f0a6f88c4524bc335dc94"
+  },
+  {
+    "number": 87,
+    "state": "closed",
+    "merged_at": "2026-09-06T17:49:21Z",
+    "merge_commit_sha": "5d8bfecd4ae46b9e5fecbbaf383643f87ebaec7e"
+  },
+  {
+    "number": 86,
+    "state": "closed",
+    "merged_at": "2026-09-06T17:19:33Z",
+    "merge_commit_sha": "b80171781024a3b1d56b75f064d13fe390898422"
+  },
+  {
+    "number": 85,
+    "state": "closed",
+    "merged_at": "2026-09-06T16:26:42Z",
+    "merge_commit_sha": "2473a9666c41125759d1e7e3fc81b2139eebfc01"
+  },
+  {
+    "number": 84,
+    "state": "closed",
+    "merged_at": "2026-09-06T15:26:41Z",
+    "merge_commit_sha": "80938e497a74ce1d5690cae9dd81e59e9b0937f3"
+  },
+  {
+    "number": 83,
+    "state": "closed",
+    "merged_at": "2026-09-06T12:53:42Z",
+    "merge_commit_sha": "eee0b7361cbf4d7d5241dc25d9e579af18551aeb"
+  },
+  {
+    "number": 82,
+    "state": "closed",
+    "merged_at": "2026-09-06T12:26:51Z",
+    "merge_commit_sha": "23a69bde2df5b70bdd88e0fe5d99681e73315cfe"
+  },
+  {
+    "number": 81,
+    "state": "closed",
+    "merged_at": "2026-09-06T09:31:13Z",
+    "merge_commit_sha": "c02c867abda87c3249cbdaf610df9fff61441f89"
+  },
+  {
+    "number": 80,
+    "state": "closed",
+    "merged_at": "2026-09-06T10:27:27Z",
+    "merge_commit_sha": "05d49f8f0f56c3239e46f1567884eebcfc0a4f7d"
+  },
+  {
+    "number": 79,
+    "state": "closed",
+    "merged_at": "2026-09-06T10:10:32Z",
+    "merge_commit_sha": "bf79683eeffcac4e28c78d84d4edeb93d947c1e2"
+  },
+  {
+    "number": 78,
+    "state": "closed",
+    "merged_at": "2026-09-06T09:52:35Z",
+    "merge_commit_sha": "5428671c546b4b44b400e694c03e7cad39d8a5b6"
+  },
+  {
+    "number": 77,
+    "state": "closed",
+    "merged_at": "2026-09-01T07:31:47Z",
+    "merge_commit_sha": "0c56618e5068edba40c39d6f6ef68662e24d7419"
+  },
+  {
+    "number": 76,
+    "state": "closed",
+    "merged_at": "2026-08-31T21:30:42Z",
+    "merge_commit_sha": "ed3e6651d166433b968a5e63a75c9c71e6a11ac3"
+  },
+  {
+    "number": 75,
+    "state": "closed",
+    "merged_at": "2026-09-01T07:55:18Z",
+    "merge_commit_sha": "8b7be9e9dee504a0d2ab68b0b6d2703e0547e587"
+  },
+  {
+    "number": 74,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": "a34284a06e58018aecaa9211ad9ecfa352513c47"
+  },
+  {
+    "number": 73,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": "685e6819affd33a70c0d133fce19407d91057179"
+  },
+  {
+    "number": 72,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": "748c45b054c46105c26824bf37f090b6dd43df54"
+  },
+  {
+    "number": 71,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": "7d4e5b547df738699765228cc7a9ac9843b388df"
+  },
+  {
+    "number": 70,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": null
+  },
+  {
+    "number": 69,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": "452e247ef3fa38fce649f4084f29d1c783e6c6c5"
+  },
+  {
+    "number": 68,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": null
+  },
+  {
+    "number": 67,
+    "state": "closed",
+    "merged_at": "2026-08-31T16:39:09Z",
+    "merge_commit_sha": "bbdcdf318429b41375875222b3ed4637dfb8fea0"
+  },
+  {
+    "number": 66,
+    "state": "closed",
+    "merged_at": "2026-08-31T15:35:33Z",
+    "merge_commit_sha": "a4ae6b948ffee1ad2c481a0ac558d31812b29796"
+  },
+  {
+    "number": 65,
+    "state": "closed",
+    "merged_at": "2026-08-31T14:01:20Z",
+    "merge_commit_sha": "1954dd9e1aeaf81360a5a11b5a24493df9770c29"
+  },
+  {
+    "number": 64,
+    "state": "closed",
+    "merged_at": "2026-08-30T15:46:39Z",
+    "merge_commit_sha": "85c219fa46691de125c5ced02b6cd41cbe6518a0"
+  },
+  {
+    "number": 63,
+    "state": "closed",
+    "merged_at": "2026-08-30T14:12:07Z",
+    "merge_commit_sha": "660aae53591a9a9927314a69a1fe2937137d9e1c"
+  },
+  {
+    "number": 62,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": "a9dfb6ea2670bb65a24a7d0d37b7ee05d96a26b1"
+  },
+  {
+    "number": 61,
+    "state": "closed",
+    "merged_at": "2026-08-30T19:49:02Z",
+    "merge_commit_sha": "d675fef1af4a38a011e55cb918efbbfe92f62709"
+  },
+  {
+    "number": 60,
+    "state": "closed",
+    "merged_at": "2026-08-30T18:13:00Z",
+    "merge_commit_sha": "0738adf14f804c7d742770f0d007818db4af23ae"
+  },
+  {
+    "number": 59,
+    "state": "closed",
+    "merged_at": "2026-08-30T16:58:55Z",
+    "merge_commit_sha": "e22a432f1cdc44c29cc2b02d8a57508c43e3773c"
+  },
+  {
+    "number": 58,
+    "state": "closed",
+    "merged_at": "2026-08-30T10:33:16Z",
+    "merge_commit_sha": "6ec1987bf907587106beb1e6a863354d9748d80c"
+  },
+  {
+    "number": 57,
+    "state": "closed",
+    "merged_at": "2026-08-30T09:13:36Z",
+    "merge_commit_sha": "a953be3b2e279e719df4fab990a7c8aa05f34c32"
+  },
+  {
+    "number": 56,
+    "state": "closed",
+    "merged_at": "2026-06-21T10:40:52Z",
+    "merge_commit_sha": "7c1f30d4d668119672b31f82a041dede9e9c0712"
+  },
+  {
+    "number": 55,
+    "state": "closed",
+    "merged_at": "2026-06-20T17:58:44Z",
+    "merge_commit_sha": "9d7020691306d4259e4070ed13d28046224e0676"
+  },
+  {
+    "number": 54,
+    "state": "closed",
+    "merged_at": "2026-06-15T07:12:35Z",
+    "merge_commit_sha": "dfd774b7e1913659496b24661004e42a78efc0d7"
+  },
+  {
+    "number": 53,
+    "state": "closed",
+    "merged_at": "2026-06-15T08:58:15Z",
+    "merge_commit_sha": "15bb23af10ba53fa9684e04d8b4f52be4a448da8"
+  },
+  {
+    "number": 52,
+    "state": "closed",
+    "merged_at": "2026-06-14T20:41:33Z",
+    "merge_commit_sha": "858d156ffd79c1ffff11ac7a02af0555e1601de4"
+  },
+  {
+    "number": 51,
+    "state": "closed",
+    "merged_at": "2026-06-13T15:05:49Z",
+    "merge_commit_sha": "4a24c717c61e472bcd19322bab6c04ef0317436a"
+  },
+  {
+    "number": 50,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": null
+  },
+  {
+    "number": 49,
+    "state": "closed",
+    "merged_at": "2025-03-29T12:46:08Z",
+    "merge_commit_sha": "48cdc8e4428e9c15b6e4dc9cd8d025540a0a7067"
+  },
+  {
+    "number": 48,
+    "state": "closed",
+    "merged_at": "2025-03-24T21:35:58Z",
+    "merge_commit_sha": "4997f59b28450f23c34ed80b36b65d9f3d86decf"
+  },
+  {
+    "number": 47,
+    "state": "closed",
+    "merged_at": "2025-03-24T18:57:48Z",
+    "merge_commit_sha": "e02dc6bff92131817e542175afb2df1aadd5ef34"
+  },
+  {
+    "number": 46,
+    "state": "closed",
+    "merged_at": "2025-03-24T17:46:44Z",
+    "merge_commit_sha": "6897c3d02f7a4f917ff460edffcac7bed8d06b0c"
+  },
+  {
+    "number": 45,
+    "state": "closed",
+    "merged_at": "2025-03-23T20:48:12Z",
+    "merge_commit_sha": "1da98cb139a13b4afca8cead488a3cc4d33c0af3"
+  },
+  {
+    "number": 44,
+    "state": "closed",
+    "merged_at": "2025-03-23T20:19:30Z",
+    "merge_commit_sha": "3c0521c9abbe2fbd4b9f49470d475cb37379ddba"
+  },
+  {
+    "number": 43,
+    "state": "closed",
+    "merged_at": "2025-03-22T10:02:25Z",
+    "merge_commit_sha": "86bbe3801f87cfb244d68e1db9055429d716331a"
+  },
+  {
+    "number": 42,
+    "state": "closed",
+    "merged_at": "2025-03-23T13:21:06Z",
+    "merge_commit_sha": "e8bd6880c071e565e6b3aaeb48f39fa2172a0a75"
+  },
+  {
+    "number": 41,
+    "state": "closed",
+    "merged_at": "2025-03-20T06:37:47Z",
+    "merge_commit_sha": "66492fc16ecee0441fb23aa0197081d357542b80"
+  },
+  {
+    "number": 40,
+    "state": "closed",
+    "merged_at": "2025-03-18T21:25:00Z",
+    "merge_commit_sha": "e9f0a2657584d0baa0502729021ecbfcb0d1bcad"
+  },
+  {
+    "number": 39,
+    "state": "closed",
+    "merged_at": "2025-03-16T21:40:07Z",
+    "merge_commit_sha": "4ea2c2157d08e03dd3abdbf754e45b8442cf7de1"
+  },
+  {
+    "number": 38,
+    "state": "closed",
+    "merged_at": "2025-03-16T20:45:45Z",
+    "merge_commit_sha": "fe80b42f7f73180f5d9b967211d9ef5dca97372e"
+  },
+  {
+    "number": 37,
+    "state": "closed",
+    "merged_at": "2025-03-16T19:53:05Z",
+    "merge_commit_sha": "10be2d96ce4f01d8eedd6fb1f424ff84ff679b5f"
+  },
+  {
+    "number": 36,
+    "state": "closed",
+    "merged_at": null,
+    "merge_commit_sha": null
+  },
+  {
+    "number": 35,
+    "state": "closed",
+    "merged_at": "2025-03-16T18:57:00Z",
+    "merge_commit_sha": "ba853f9631e2302cd2e3c22d75dd50b1c752791e"
+  },
+  {
+    "number": 34,
+    "state": "closed",
+    "merged_at": "2025-03-16T18:40:06Z",
+    "merge_commit_sha": "b3f801d8dfbb5407243d12a4871e03e8d5a5244a"
+  },
+  {
+    "number": 33,
+    "state": "closed",
+    "merged_at": "2025-03-17T18:29:52Z",
+    "merge_commit_sha": "970d7848c30b31cd66a05a2726342231b9975386"
+  },
+  {
+    "number": 32,
+    "state": "closed",
+    "merged_at": "2025-03-16T17:51:16Z",
+    "merge_commit_sha": "0a0ca940f8a2d3f299692ed020c054dcf834c7d6"
+  },
+  {
+    "number": 31,
+    "state": "closed",
+    "merged_at": "2025-03-16T15:17:57Z",
+    "merge_commit_sha": "cddca946a495c6efc67fd0cf90e81bfb51f961d1"
+  },
+  {
+    "number": 30,
+    "state": "closed",
+    "merged_at": "2025-03-16T14:38:59Z",
+    "merge_commit_sha": "821ed6b6bb3d9df05effd4cec8a69b64401a5550"
+  },
+  {
+    "number": 29,
+    "state": "closed",
+    "merged_at": "2025-03-15T09:37:09Z",
+    "merge_commit_sha": "8fdaf167fd55bef15b0c6d46f653a5a9cfa2dc7c"
+  },
+  {
+    "number": 28,
+    "state": "closed",
+    "merged_at": "2025-03-11T19:42:23Z",
+    "merge_commit_sha": "749450027e8e03e0a8352037ca7aa70dd1f563a9"
+  },
+  {
+    "number": 27,
+    "state": "closed",
+    "merged_at": "2025-03-11T18:24:09Z",
+    "merge_commit_sha": "16e1e0d7ce5146dcc8aeb59df24108a075576a58"
+  },
+  {
+    "number": 26,
+    "state": "closed",
+    "merged_at": "2025-03-10T19:47:54Z",
+    "merge_commit_sha": "ada0dba9a28e0870b8cb7cea6405e9c60abe821d"
+  },
+  {
+    "number": 25,
+    "state": "closed",
+    "merged_at": "2025-03-10T17:53:45Z",
+    "merge_commit_sha": "eeed8b8485f5589039afbc49f102008cb3af6606"
+  },
+  {
+    "number": 24,
+    "state": "closed",
+    "merged_at": "2025-03-10T16:12:20Z",
+    "merge_commit_sha": "cff9ef667a0c247797ff1a3fef7dfa68f219caa0"
+  },
+  {
+    "number": 23,
+    "state": "closed",
+    "merged_at": "2025-03-09T18:45:57Z",
+    "merge_commit_sha": "041230111d2c43f2f28530dd1b643a343b46bceb"
+  },
+  {
+    "number": 22,
+    "state": "closed",
+    "merged_at": "2025-03-09T18:14:33Z",
+    "merge_commit_sha": "6464165adcc662229539652d6b458356267ad0df"
+  },
+  {
+    "number": 21,
+    "state": "closed",
+    "merged_at": "2025-03-09T17:38:19Z",
+    "merge_commit_sha": "a749e3fa19218f25e66c1e156ba14a1542faa579"
+  },
+  {
+    "number": 20,
+    "state": "closed",
+    "merged_at": "2025-03-09T17:23:44Z",
+    "merge_commit_sha": "ff02a38d17ae8f1cb8fc03f5f706866a380bc069"
+  },
+  {
+    "number": 19,
+    "state": "closed",
+    "merged_at": "2025-03-09T16:39:32Z",
+    "merge_commit_sha": "9fdb2ab4a43452625996be4e3f384601cf068ccf"
+  },
+  {
+    "number": 18,
+    "state": "closed",
+    "merged_at": "2025-03-09T10:54:30Z",
+    "merge_commit_sha": "1bbfcca2d8f9e8a6363f00984ec091a5d485ee7d"
+  },
+  {
+    "number": 17,
+    "state": "closed",
+    "merged_at": "2025-03-09T10:18:46Z",
+    "merge_commit_sha": "14b0a28d31555ae8707177578b635437ee8a2e86"
+  },
+  {
+    "number": 16,
+    "state": "closed",
+    "merged_at": "2025-03-08T20:10:31Z",
+    "merge_commit_sha": "78bb4f93a0953e568b6670f7ba384b01004e73f7"
+  },
+  {
+    "number": 15,
+    "state": "closed",
+    "merged_at": "2025-03-08T20:00:15Z",
+    "merge_commit_sha": "694ee2589aeb6ad004cbce53abf4a66325389de3"
+  },
+  {
+    "number": 14,
+    "state": "closed",
+    "merged_at": "2025-03-08T19:12:14Z",
+    "merge_commit_sha": "593536bbd7d6922b1ac49c7fb5c5987ac19ce577"
+  },
+  {
+    "number": 13,
+    "state": "closed",
+    "merged_at": "2025-03-08T12:38:37Z",
+    "merge_commit_sha": "5009e620743da4a1e91cc1b008c5606ffa8532f6"
+  },
+  {
+    "number": 12,
+    "state": "closed",
+    "merged_at": "2025-03-07T21:46:44Z",
+    "merge_commit_sha": "62f12b469cc93b4e2bbc19f33e26adfc4e3aed26"
+  },
+  {
+    "number": 11,
+    "state": "closed",
+    "merged_at": "2025-03-07T21:14:29Z",
+    "merge_commit_sha": "d07511091edb7d480a5da48edcb68eb09f73097c"
+  },
+  {
+    "number": 10,
+    "state": "closed",
+    "merged_at": "2025-03-03T19:49:52Z",
+    "merge_commit_sha": "10e773f9964409147c8eba1558deddd0f3a140f8"
+  },
+  {
+    "number": 9,
+    "state": "closed",
+    "merged_at": "2025-03-02T22:53:39Z",
+    "merge_commit_sha": "4350938672bac5dc49bdeb57234c331f636e87d1"
+  },
+  {
+    "number": 8,
+    "state": "closed",
+    "merged_at": "2025-03-02T14:57:56Z",
+    "merge_commit_sha": "851d7ebdda3b6534a18fdb8f0cb680fa51d4bdfc"
+  },
+  {
+    "number": 7,
+    "state": "closed",
+    "merged_at": "2025-03-02T07:10:16Z",
+    "merge_commit_sha": "e3e6d2c871820fbcf1944a761a0776aead212623"
+  },
+  {
+    "number": 6,
+    "state": "closed",
+    "merged_at": "2024-09-01T12:56:25Z",
+    "merge_commit_sha": "c4b0a932ce928bbce47ba61e6048849f7b28a171"
+  },
+  {
+    "number": 5,
+    "state": "closed",
+    "merged_at": "2024-07-16T12:27:24Z",
+    "merge_commit_sha": "c8b332eac8ffc102bb10bf6f049e4a35fd54de07"
+  },
+  {
+    "number": 4,
+    "state": "closed",
+    "merged_at": "2024-07-16T11:12:59Z",
+    "merge_commit_sha": "e5c80159050cbe43e5e3a37b0a78cd860fddf18e"
+  },
+  {
+    "number": 3,
+    "state": "closed",
+    "merged_at": "2024-01-20T11:44:24Z",
+    "merge_commit_sha": "d4b6dd4a72390bc7b130cdd112be684f41c08115"
+  },
+  {
+    "number": 2,
+    "state": "closed",
+    "merged_at": "2024-01-20T09:58:39Z",
+    "merge_commit_sha": "407af8c79d178eb3ebd9813147a881f3edc2be2f"
+  },
+  {
+    "number": 1,
+    "state": "closed",
+    "merged_at": "2024-01-20T10:40:24Z",
+    "merge_commit_sha": "05ccd606ee801a506b2f068e21d520bacfe04815"
+  }
+]
