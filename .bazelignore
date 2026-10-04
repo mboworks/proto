@@ -1,1 +1,2 @@
 bazel-proto
+tools/coverage_web/node_modules

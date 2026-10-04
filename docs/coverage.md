@@ -17,16 +17,18 @@ Threshold changes should be based on a generated report and should never conceal
 The trusted publisher retains the latest report at `coverage/main/`, `coverage/pr/NUMBER/`, and
 `coverage/tag/VERSION/`. It also archives each identified published run and attempt under
 `coverage/runs/RUN_ID/ATTEMPT/`, with a separate [run-history index](https://mboworks.github.io/proto/coverage/runs/).
-Snapshots include the original summary JSON, measured commit and workflow metadata, and detailed
-LCOV source pages. Only overview navigation is relocated for the archive's deeper URL; measurements,
-source content, and report-local links are preserved. Once published, a snapshot is not rewritten.
+Aggregate summaries and measured commit/workflow metadata remain indefinitely. Summaries use
+lossless gzip; detailed LCOV source pages use shared compressed storage and expire seven days
+after original completion. Existing source links route to the viewer, and expired details link
+the permanent aggregate report. See [published-site storage](site-storage.md) for the format,
+browser requirements, and 250 MB advisory budget.
 
 Existing reports and incoming artifacts are archived before latest-report replacement. A late older
 run therefore gains its own snapshot without replacing a newer report. Copies are staged and renamed
 atomically, so an interrupted copy does not leave a partial snapshot at its public URL. Migration
 archives currently retained reports with authentic run IDs; it cannot reconstruct previously
 replaced reports or invent identities for legacy reports. Failed runs without a published report
-are not archived. Run history grows with publication; no automatic pruning is introduced.
+are not archived. Aggregate run history grows with publication; source-detail expiration never evicts its measurements.
 
 The overview keeps main first, then interleaves merged PRs and releases by actual reference time,
 newest first. PRs use GitHub's `merged_at`, including merges into aggregation branches. Annotated
