@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "total_bytes": 595318,
+  "sections": {
+    "root": {
+      "files": 5,
+      "bytes": 1839
+    },
+    "coverage": {
+      "files": 684,
+      "bytes": 512517
+    },
+    "site": {
+      "files": 13,
+      "bytes": 80962
+    }
+  },
+  "coverage_detail_days": 7,
+  "review_bytes": 250000000
+}
