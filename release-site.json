@@ -12,7 +12,8 @@
     "TODO.md": "TODO.html",
     "docs/coverage.md": "docs/coverage.html",
     "docs/infrastructure.md": "docs/infrastructure.html",
-    "docs/release-website.md": "docs/release-website.html"
+    "docs/release-website.md": "docs/release-website.html",
+    "docs/site-storage.md": "docs/site-storage.html"
   },
   "links": [
     {

@@ -91,7 +91,7 @@ stage. This guide is linked from the README and mapped in `release-site.json` fo
 
 ## Coverage publishing and artwork
 
-The trusted publisher retains complete reports per CI run and attempt, alongside the latest report
+The trusted publisher retains aggregate reports per CI run and attempt, alongside the latest report
 for each target. It archives existing and incoming reports before replacement, including late runs,
 and exposes a separate immutable run-history index. Main stays first in the latest overview; merged
 PRs and numeric releases follow by actual merge/tag timestamp. Closed-unmerged PRs are hidden only
@@ -140,3 +140,10 @@ combined serial hook invocation with a two-worker default and explicit overrides
 [Commit 76a87fd](https://github.com/mboworks/xff/commit/76a87fdf7378ccccdc1d1ad69eb5660cd164ae5d)
 later changed the default to CPUs minus one. Proto takes the conservative two-worker bound and
 preserves its broader header coverage instead of adopting xff's quoted-include-only dependency scan.
+
+## Published-site storage
+
+[Storage and retention](site-storage.md) documents compressed summaries, seven-day source details,
+shallow publication snapshots, the 250 MB advisory budget, and the final payload guard. Both
+publishers compact before committing and after deployment-only artwork. Original aggregate
+measurements and run identities are preserved; publication Git history is not rewritten.
