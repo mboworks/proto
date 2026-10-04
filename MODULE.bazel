@@ -71,7 +71,7 @@ bazel_dep(name = "protobuf", version = "36.2", repo_name = "com_google_protobuf"
 # C++ toolchain resolution for every target. Force a current rules_go via MVS;
 # its own deps all sit below our pins, so it adds nothing else. Drop once
 # protobuf's transitive rules_go is new enough on its own.
-bazel_dep(name = "rules_go", version = "0.63.0")
+bazel_dep(name = "rules_go", version = "0.64.0")
 
 # Same class of fix for the other Bazel-9-incompatible toolchain protobuf pulls:
 # rules_android. Its `@androidsdk//:all` toolchain registration makes Bazel load
@@ -81,4 +81,4 @@ bazel_dep(name = "rules_go", version = "0.63.0")
 # Bazel 9. Force a current rules_android via MVS. (`.bazelrc` blanks ANDROID_HOME
 # for our own builds; this shim is what fixes downstream consumers, which never
 # see our `.bazelrc` -- e.g. the BCR presubmit.)
-bazel_dep(name = "rules_android", version = "0.7.3")
+bazel_dep(name = "rules_android", version = "0.8.0")
