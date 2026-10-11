@@ -31,7 +31,7 @@ include("//bazelmod:llvm.MODULE.bazel")
 # `@com_google_googletest`, `@com_google_protobuf`).
 bazel_dep(name = "bazel_skylib", version = "1.9.2")
 bazel_dep(name = "platforms", version = "1.1.0")
-bazel_dep(name = "rules_cc", version = "0.2.25")
+bazel_dep(name = "rules_cc", version = "0.2.26")
 bazel_dep(name = "rules_shell", version = "0.8.0")
 
 # RE2's release metadata still selects compatibility-level-1 Abseil. Patch the
@@ -71,7 +71,7 @@ bazel_dep(name = "protobuf", version = "36.2", repo_name = "com_google_protobuf"
 # C++ toolchain resolution for every target. Force a current rules_go via MVS;
 # its own deps all sit below our pins, so it adds nothing else. Drop once
 # protobuf's transitive rules_go is new enough on its own.
-bazel_dep(name = "rules_go", version = "0.64.0")
+bazel_dep(name = "rules_go", version = "0.64.1")
 
 # Same class of fix for the other Bazel-9-incompatible toolchain protobuf pulls:
 # rules_android. Its `@androidsdk//:all` toolchain registration makes Bazel load
