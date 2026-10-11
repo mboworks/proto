@@ -9,11 +9,11 @@ common --apple_platform_type=macos
 common:macos --features=-macos_default_link_flags
 common:macos --features=-supports_dynamic_linker
 common:macos --linkopt=-framework --linkopt=CoreFoundation --host_linkopt=-framework --host_linkopt=CoreFoundation
-common:macos --linkopt=-Wl,-undefined,dynamic_lookup --host_linkopt=-Wl,-undefined,dynamic_lookup
-# Apple Silicon only: 11.0 is the earliest arm64 macOS and clears libc++'s
-# `std::filesystem` availability gate (the APIs are "introduced in macOS 10.15").
-common:macos --cxxopt=-mmacosx-version-min=11.0 --host_cxxopt=-mmacosx-version-min=11.0
-common:macos --linkopt=-mmacosx-version-min=11.0 --host_linkopt=-mmacosx-version-min=11.0
+# Apple Silicon only: 11.0 is the earliest arm64 macOS. This Bazel setting
+# propagates the deployment target to Apple platform metadata and both target
+# and host compile/link actions; raw -mmacosx-version-min flags do not fully
+# update the toolchain's linker inputs and make ld64.lld warn about SDK objects.
+common:macos --macos_minimum_os=11.0 --host_macos_minimum_os=11.0
 
 try-import %workspace%/.bazelrc.user
 
@@ -70,8 +70,6 @@ common --copt=-fdiagnostics-color=always
 common:clang --extra_toolchains=@llvm_toolchain_llvm//:all
 common:clang --cxxopt=-gmlt
 common:clang --host_cxxopt=-gmlt
-common:clang --linkopt=-fuse-ld=lld
-common:clang --host_linkopt=-fuse-ld=lld
 common:clang --define is_clang=true
 # Some newer Clang versions really do not like '-c':
 # https://github.com/llvm/llvm-project/issues/100909
