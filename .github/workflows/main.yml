@@ -26,7 +26,7 @@ jobs:
           python-version: "3.13"
       - run: python3 -m unittest discover -s tools -p release_site_test.py
       - run: python3 -m unittest discover -s tools -p release_notes_test.py
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: "22"
       - name: Test retained coverage in Chromium
