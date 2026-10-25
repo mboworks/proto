@@ -16,7 +16,6 @@
 #include "mbo/proto/parse_text_proto.h"
 
 #include <source_location>
-#include <string>
 #include <string_view>
 
 #include "absl/log/absl_log.h"

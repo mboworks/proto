@@ -109,7 +109,9 @@ std::vector<const ::google::protobuf::FieldDescriptor*> GetFieldDescriptors(
 
   const ::google::protobuf::DescriptorPool* pool = proto_descriptor->file()->pool();
   for (const std::string& name : ignore_fields) {
-    if (const ::google::protobuf::FieldDescriptor* field = pool->FindFieldByName(name)) {
+    // Invalid names terminate via QCHECK below and are covered by the invalid-field death test.
+    // Death-test subprocess coverage is not merged into the parent report.
+    if (const ::google::protobuf::FieldDescriptor* field = pool->FindFieldByName(name)) {  // LCOV_EXCL_BR_LINE
       ignore_descriptors.push_back(field);
     } else {
       remaining_descriptors.push_back(name);
