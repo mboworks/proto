@@ -75,7 +75,7 @@ TEST_F(ParseTextProtoTest, ParseText) {
   EXPECT_THAT(status.status().code(), absl::StatusCode::kInvalidArgument);
   EXPECT_THAT(status.status().message(), ContainsRegex(kExpected));
   EXPECT_DEATH(
-      [[maybe_unused]] auto msg = *ParseText<SimpleMessage>("!!!"),
+      [[maybe_unused]] const auto msg = *ParseText<SimpleMessage>("!!!"),
       absl::StrCat(
           "RAW: Attempting to fetch value instead of handling error ",  // Prefix
           "INVALID_ARGUMENT: ",                                         // StatusCode
