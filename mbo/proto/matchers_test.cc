@@ -50,6 +50,28 @@ using ::testing::HasSubstr;
 using ::testing::Matches;
 using ::testing::Not;
 
+struct StringViewMatchersTest : ::testing::Test {};
+
+TEST_F(StringViewMatchersTest, TextMatchersAcceptBoundedViews) {
+  constexpr std::string_view kWrappedText = "!num: 42!";
+  const std::string_view text = kWrappedText.substr(1, kWrappedText.size() - 2);
+  const TestMessage message = ParseTextOrDie<TestMessage>(text);
+  EXPECT_THAT(message, EqualsProto(text));
+  EXPECT_THAT(message, EquivToProto(text));
+  EXPECT_THAT(message, EqualsProto<TestMessage>(text));
+  EXPECT_THAT(message, EquivToProto<TestMessage>(text));
+}
+
+TEST_F(StringViewMatchersTest, TextMatchersOwnExpectedText) {
+  std::string text = "num: 42";
+  const auto equal = EqualsProto(std::string_view(text));
+  const auto equivalent = EquivToProto(std::string_view(text));
+  text.assign("num: 99");
+  const TestMessage message = ParseTextOrDie<TestMessage>("num: 42");
+  EXPECT_THAT(message, equal);
+  EXPECT_THAT(message, equivalent);
+}
+
 TEST(Matchers, EqualsProto) {
   const TestMessage msg = ParseTextProtoOrDie(R"pb(num: 42 name: "name")pb");
   EXPECT_THAT(msg, EqualsProto(msg));

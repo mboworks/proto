@@ -11,6 +11,10 @@ release and the two preceding major release lines. The exact versions currently 
 [![Test](https://github.com/mboworks/proto/actions/workflows/main.yml/badge.svg)](https://github.com/mboworks/proto/actions/workflows/main.yml)
 [![Compatibility](https://github.com/mboworks/proto/actions/workflows/compatibility.yml/badge.svg)](https://github.com/mboworks/proto/actions/workflows/compatibility.yml)
 
+Text-proto matchers (`EqualsProto` and `EquivToProto`) accept `std::string_view`, including
+bounded substrings, string literals, and `std::string` arguments. Matchers retain their own copy
+of expected text, so the source text may be changed or destroyed after matcher construction.
+
 # Parse Proto
 
 - rule: `@mboworks_proto//mbo/proto:parse_text_proto_cc`

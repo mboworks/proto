@@ -74,7 +74,7 @@ class StringErrorCollector : public ::google::protobuf::io::ErrorCollector {
 
 }  // namespace
 
-bool ParsePartialFromAscii(const std::string& pb_ascii, ::google::protobuf::Message* proto, std::string* error_text) {
+bool ParsePartialFromAscii(std::string_view pb_ascii, ::google::protobuf::Message* proto, std::string* error_text) {
   ::google::protobuf::TextFormat::Parser parser;
   StringErrorCollector collector(error_text);
   parser.RecordErrorsTo(&collector);
@@ -179,7 +179,7 @@ class IgnoreFieldPathCriteria : public ::google::protobuf::util::MessageDifferen
 // Parses a field path and returns individual components.
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 std::vector<::google::protobuf::util::MessageDifferencer::SpecificField> ParseFieldPathOrDie(
-    const std::string& relative_field_path,
+    std::string_view relative_field_path,
     const ::google::protobuf::Descriptor& root_descriptor) {
   std::vector<::google::protobuf::util::MessageDifferencer::SpecificField> field_path;
   // We're parsing a dot-separated list of elements that can be either:
@@ -204,7 +204,7 @@ std::vector<::google::protobuf::util::MessageDifferencer::SpecificField> ParseFi
     }
     // Try to consume a field name. If that fails, consume an extension name.
     ::google::protobuf::util::MessageDifferencer::SpecificField field;
-    std::string name;
+    std::string_view name;
     if (RE2::Consume(&input, field_subscript_regex, &name, &field.index) || RE2::Consume(&input, field_regex, &name)) {
       if (field_path.empty()) {
         field.field = root_descriptor.FindFieldByName(name);
