@@ -64,8 +64,8 @@ TEST_F(StringViewMatchersTest, TextMatchersAcceptBoundedViews) {
 
 TEST_F(StringViewMatchersTest, TextMatchersOwnExpectedText) {
   std::string text = "num: 42";
-  const auto equal = EqualsProto(std::string_view(text));
-  const auto equivalent = EquivToProto(std::string_view(text));
+  const auto equal = EqualsProto(text);
+  const auto equivalent = EquivToProto(text);
   text.assign("num: 99");
   const TestMessage message = ParseTextOrDie<TestMessage>("num: 42");
   EXPECT_THAT(message, equal);
