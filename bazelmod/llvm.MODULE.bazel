@@ -25,21 +25,12 @@ bazel_dep(name = "toolchains_llvm", version = "1.12.0")
 llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)
 llvm.toolchain(
     name = "llvm_toolchain_llvm",
-    # buildifier: disable=unsorted-dict-items
-    extra_llvm_distributions = {
-        "LLVM-22.1.8-Linux-ARM64.tar.xz": "805efad2bb91cb4967fa569e0881d10c0f69c04461cf671cccbae19f547acc34",
-        "LLVM-22.1.8-Linux-X64.tar.xz": "df0e1ecf16caf3489a272a5eea4eec9b0d82878f6477fa309504f918a0006384",
-        "LLVM-22.1.8-macOS-ARM64.tar.xz": "f260f4f7c0d430828a81ae8a3826a1d63fc0963ec2459489308cc23b1f7eab4f",
-        "clang+llvm-22.1.8-aarch64-pc-windows-msvc.tar.xz": "de718c58ebbc5f61d58c17b90457fcf42983bc2c4a4aba3e010d108713bfd7f1",
-    },
-    # Use Apple's native ld on Darwin. The hermetic lld linker stamps SDK
-    # objects with its SDK version and then warns when the deployment target is
-    # macOS 11; xff's `auto` selection avoids those ld64.lld diagnostics.
+    # Preserve the native Apple linker selection used by macOS builds.
     linker = {
         "darwin-aarch64": "auto",
         "darwin-x86_64": "auto",
     },
-    llvm_version = "22.1.8",
+    llvm_version = "23.1.4",
 )
 use_repo(llvm, "llvm_toolchain_llvm")
 
