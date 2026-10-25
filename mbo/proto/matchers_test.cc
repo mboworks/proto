@@ -54,12 +54,12 @@ struct StringViewMatchersTest : ::testing::Test {};
 
 TEST_F(StringViewMatchersTest, TextMatchersAcceptBoundedViews) {
   constexpr std::string_view kWrappedText = "!num: 42!";
-  const std::string_view text = kWrappedText.substr(1, kWrappedText.size() - 2);
-  const TestMessage message = ParseTextOrDie<TestMessage>(text);
-  EXPECT_THAT(message, EqualsProto(text));
-  EXPECT_THAT(message, EquivToProto(text));
-  EXPECT_THAT(message, EqualsProto<TestMessage>(text));
-  EXPECT_THAT(message, EquivToProto<TestMessage>(text));
+  constexpr std::string_view kText = kWrappedText.substr(1, kWrappedText.size() - 2);
+  const TestMessage message = ParseTextOrDie<TestMessage>(kText);
+  EXPECT_THAT(message, EqualsProto(kText));
+  EXPECT_THAT(message, EquivToProto(kText));
+  EXPECT_THAT(message, EqualsProto<TestMessage>(kText));
+  EXPECT_THAT(message, EquivToProto<TestMessage>(kText));
 }
 
 TEST_F(StringViewMatchersTest, TextMatchersOwnExpectedText) {
