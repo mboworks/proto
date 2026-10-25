@@ -22,6 +22,7 @@
 #include <ostream>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -81,13 +82,13 @@ const bool kMayBeUninitialized = false;
 
 // Parses the TextFormat representation of a protobuf, allowing required fields
 // to be missing.  Returns true iff successful.
-bool ParsePartialFromAscii(const std::string& pb_ascii, ::google::protobuf::Message* proto, std::string* error_text);
+bool ParsePartialFromAscii(std::string_view pb_ascii, ::google::protobuf::Message* proto, std::string* error_text);
 
 // Returns a protobuf of type Proto by parsing the given TextFormat
 // representation of it.  Required fields can be missing, in which case the
 // returned protobuf will not be fully initialized.
 template<class Proto>
-Proto MakePartialProtoFromAscii(const std::string& str) {
+Proto MakePartialProtoFromAscii(std::string_view str) {
   Proto proto;
   std::string error_text;
   ABSL_CHECK(ParsePartialFromAscii(str, &proto, &error_text))
@@ -111,7 +112,7 @@ bool ProtoCompare(
 // actual message, a CHECK failure will cause the test to fail and no subsequent
 // tests will be run.
 template<typename Proto>
-inline bool ProtoCompare(const ProtoComparison& comp, const Proto& actual, const std::string& expected) {
+inline bool ProtoCompare(const ProtoComparison& comp, const Proto& actual, std::string_view expected) {
   return ProtoCompare(comp, actual, MakePartialProtoFromAscii<Proto>(expected));
 }
 
@@ -448,21 +449,9 @@ class WhenDeserializedMatcherBase {
     return match;
   }
 
-  bool MatchAndExplain(const std::string& str, ::testing::MatchResultListener* listener) const {
-    // NOLINTNEXTLINE(*-narrowing-conversions)
-    ::google::protobuf::io::ArrayInputStream input(str.data(), str.size());
-    return MatchAndExplain(&input, listener);
-  }
-
   bool MatchAndExplain(std::string_view str, ::testing::MatchResultListener* listener) const {
     // NOLINTNEXTLINE(*-narrowing-conversions)
     ::google::protobuf::io::ArrayInputStream input(str.data(), str.size());
-    return MatchAndExplain(&input, listener);
-  }
-
-  bool MatchAndExplain(const char* str, ::testing::MatchResultListener* listener) const {
-    // NOLINTNEXTLINE(*-narrowing-conversions)
-    ::google::protobuf::io::ArrayInputStream input(str, strlen(str));
     return MatchAndExplain(&input, listener);
   }
 
@@ -632,14 +621,14 @@ inline internal::PolymorphicProtoMatcher EqualsProto(const ::google::protobuf::M
   return ::testing::MakePolymorphicMatcher(internal::ProtoMatcher(rhs, internal::kMayBeUninitialized, comp));
 }
 
-inline ::testing::PolymorphicMatcher<internal::ProtoStringMatcher> EqualsProto(const std::string& rhs) {
+inline ::testing::PolymorphicMatcher<internal::ProtoStringMatcher> EqualsProto(std::string_view rhs) {
   internal::ProtoComparison comp;
   comp.field_comp = internal::kProtoEqual;
   return ::testing::MakePolymorphicMatcher(internal::ProtoStringMatcher(rhs, internal::kMayBeUninitialized, comp));
 }
 
 template<class Proto>
-inline internal::PolymorphicProtoMatcher EqualsProto(const std::string& str) {
+inline internal::PolymorphicProtoMatcher EqualsProto(std::string_view str) {
   return EqualsProto(internal::MakePartialProtoFromAscii<Proto>(str));
 }
 
@@ -659,14 +648,14 @@ inline internal::PolymorphicProtoMatcher EquivToProto(const ::google::protobuf::
   return ::testing::MakePolymorphicMatcher(internal::ProtoMatcher(rhs, internal::kMayBeUninitialized, comp));
 }
 
-inline ::testing::PolymorphicMatcher<internal::ProtoStringMatcher> EquivToProto(const std::string& rhs) {
+inline ::testing::PolymorphicMatcher<internal::ProtoStringMatcher> EquivToProto(std::string_view rhs) {
   internal::ProtoComparison comp;
   comp.field_comp = internal::kProtoEquiv;
   return ::testing::MakePolymorphicMatcher(internal::ProtoStringMatcher(rhs, internal::kMayBeUninitialized, comp));
 }
 
 template<class Proto>
-inline internal::PolymorphicProtoMatcher EquivToProto(const std::string& str) {
+inline internal::PolymorphicProtoMatcher EquivToProto(std::string_view str) {
   return EquivToProto(internal::MakePartialProtoFromAscii<Proto>(str));
 }
 

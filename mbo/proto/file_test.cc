@@ -44,11 +44,14 @@ using ::testing::Not;
 using ::testing::Optional;
 
 constexpr std::array<std::string_view, 5> kBinaryExtensions = {
-    ".binpb", ".pb", "file.binpb", "dir.foo/file.pb", "..pb"};
+    ".binpb", ".pb", "file.binpb", "dir.foo/file.pb", "..pb",
+};
 constexpr std::array<std::string_view, 5> kTextExtensions = {
-    ".txtpb", ".textproto", "file.txtpb", "dir.foo/file.txtpb", "..txtpb"};
-constexpr std::array<std::string_view, 6> kOtherExtensions = {".txtproto", ".proto", "binpb",
-                                                              "pb",        "txtpb",  "textproto"};
+    ".txtpb", ".textproto", "file.txtpb", "dir.foo/file.txtpb", "..txtpb",
+};
+constexpr std::array<std::string_view, 6> kOtherExtensions = {
+    ".txtproto", ".proto", "binpb", "pb", "txtpb", "textproto",
+};
 
 struct FileProtoTest : ::testing::Test {
   [[nodiscard]] static bool WriteFile(const std::filesystem::path& filename, std::string_view data) {
@@ -146,13 +149,15 @@ MATCHER(IsTextProtoExtension, "") {
 }
 
 TEST_F(FileProtoTest, HasBinaryProtoExtension) {
+  constexpr std::string_view kBinaryExtension = ".binpb";
+  constexpr std::string_view kTextExtension = ".txtpb";
   // True: binary proto
   for (const std::string_view filename : kBinaryExtensions) {
     EXPECT_THAT(filename, IsBinaryProtoExtension());
   }
   // Type handling
   EXPECT_TRUE(HasBinaryProtoExtension(".binpb"));
-  EXPECT_TRUE(HasBinaryProtoExtension(std::string{".binpb"}));
+  EXPECT_TRUE(HasBinaryProtoExtension(kBinaryExtension));
   EXPECT_TRUE(HasBinaryProtoExtension(std::string_view{".binpb"}));
   EXPECT_TRUE(HasBinaryProtoExtension(std::filesystem::path(".binpb")));
   // False: text prto
@@ -161,7 +166,7 @@ TEST_F(FileProtoTest, HasBinaryProtoExtension) {
   }
   // Type handling
   EXPECT_FALSE(HasBinaryProtoExtension(".txtpb"));
-  EXPECT_FALSE(HasBinaryProtoExtension(std::string{".txtpb"}));
+  EXPECT_FALSE(HasBinaryProtoExtension(kTextExtension));
   EXPECT_FALSE(HasBinaryProtoExtension(std::string_view{".txtpb"}));
   EXPECT_FALSE(HasBinaryProtoExtension(std::filesystem::path(".txtpb")));
   // False: others
@@ -171,13 +176,15 @@ TEST_F(FileProtoTest, HasBinaryProtoExtension) {
 }
 
 TEST_F(FileProtoTest, HasTextProtoExtension) {
+  constexpr std::string_view kBinaryExtension = ".binpb";
+  constexpr std::string_view kTextExtension = ".txtpb";
   // True: text proto
   for (const std::string_view filename : kTextExtensions) {
     EXPECT_THAT(filename, IsTextProtoExtension());
   }
   // Type handling
   EXPECT_TRUE(HasTextProtoExtension(".txtpb"));
-  EXPECT_TRUE(HasTextProtoExtension(std::string{".txtpb"}));
+  EXPECT_TRUE(HasTextProtoExtension(kTextExtension));
   EXPECT_TRUE(HasTextProtoExtension(std::string_view{".txtpb"}));
   EXPECT_TRUE(HasTextProtoExtension(std::filesystem::path(".txtpb")));
   // False: binary proto
@@ -189,7 +196,7 @@ TEST_F(FileProtoTest, HasTextProtoExtension) {
   }
   // Type handling
   EXPECT_FALSE(HasTextProtoExtension(".binpb"));
-  EXPECT_FALSE(HasTextProtoExtension(std::string{".binpb"}));
+  EXPECT_FALSE(HasTextProtoExtension(kBinaryExtension));
   EXPECT_FALSE(HasTextProtoExtension(std::string_view{".binpb"}));
   EXPECT_FALSE(HasTextProtoExtension(std::filesystem::path(".binpb")));
   // False: others

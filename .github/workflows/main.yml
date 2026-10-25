@@ -250,12 +250,12 @@ jobs:
             bazel_config: opt
           - os: ubuntu-latest
             compiler: clang
-            llvm_version: 22.1.8
+            llvm_version: 23.1.4
             bazel_version: 9.2.0
             bazel_config: opt
           - os: macos-latest
             compiler: clang
-            llvm_version: 22.1.8
+            llvm_version: 23.1.4
             bazel_version: 9.2.0
             bazel_config: opt
 
@@ -283,7 +283,7 @@ jobs:
           # these modes with every compiler and OS.
           - os: ubuntu-latest
             compiler: clang
-            llvm_version: 22.1.8
+            llvm_version: 23.1.4
             bazel_version: 9.2.0
             bazel_config: asan
           - os: ubuntu-latest
@@ -295,19 +295,19 @@ jobs:
           # for the current protobuf major and the two preceding major lines.
           - os: ubuntu-latest
             compiler: clang
-            llvm_version: 22.1.8
+            llvm_version: 23.1.4
             bazel_version: 9.2.0
             bazel_config: opt
             proto_version: "34.1"
           - os: ubuntu-latest
             compiler: clang
-            llvm_version: 22.1.8
+            llvm_version: 23.1.4
             bazel_version: 9.2.0
             bazel_config: opt
             proto_version: "35.0"
           - os: ubuntu-latest
             compiler: clang
-            llvm_version: 22.1.8
+            llvm_version: 23.1.4
             bazel_version: 9.2.0
             bazel_config: opt
             proto_version: "36.1.bcr.1"

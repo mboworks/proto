@@ -16,7 +16,6 @@
 #include "mbo/proto/parse_text_proto.h"
 
 #include <source_location>
-#include <string>
 #include <string_view>
 
 #include "absl/log/absl_log.h"
@@ -36,7 +35,7 @@ absl::Status ParseTextInternal(
   google::protobuf::TextFormat::Parser parser;
   SilentErrorCollector error_collector;
   parser.RecordErrorsTo(error_collector);
-  if (parser.ParseFromString(std::string(text_proto), message)) {
+  if (parser.ParseFromString(text_proto, message)) {
     return absl::OkStatus();
   }
   return absl::InvalidArgumentError(

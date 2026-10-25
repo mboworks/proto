@@ -2,6 +2,8 @@
 # Anonymous namespaces are the repository convention for internal linkage.
 # llvm-prefer-static-over-anonymous-namespace conflicts with that convention
 # and with misc-use-anonymous-namespace, which remains enabled.
+# Exclude both Fuchsia checks and their deprecated Zircon aliases; the broad
+# wildcard otherwise enables the old names and triggers clang-tidy-config errors.
 Checks: >
   *,
   abseil-*,
@@ -16,6 +18,7 @@ Checks: >
   cppcoreguidelines-*,
   -cppcoreguidelines-avoid-const-or-ref-data-members,
   -fuchsia*,
+  -zircon*,
   google-*,
   -google-build-using-namespace,
   -hicpp-no-assembler,

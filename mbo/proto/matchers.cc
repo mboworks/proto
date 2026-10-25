@@ -74,12 +74,12 @@ class StringErrorCollector : public ::google::protobuf::io::ErrorCollector {
 
 }  // namespace
 
-bool ParsePartialFromAscii(const std::string& pb_ascii, ::google::protobuf::Message* proto, std::string* error_text) {
+bool ParsePartialFromAscii(std::string_view pb_ascii, ::google::protobuf::Message* proto, std::string* error_text) {
   ::google::protobuf::TextFormat::Parser parser;
   StringErrorCollector collector(error_text);
   parser.RecordErrorsTo(&collector);
   parser.AllowPartialMessage(true);
-  return parser.ParseFromString(std::string(pb_ascii), proto);
+  return parser.ParseFromString(pb_ascii, proto);
 }
 
 // Returns true iff `lhs` and `rhs` can be compared (i.e. have the same descriptor).
@@ -109,7 +109,9 @@ std::vector<const ::google::protobuf::FieldDescriptor*> GetFieldDescriptors(
 
   const ::google::protobuf::DescriptorPool* pool = proto_descriptor->file()->pool();
   for (const std::string& name : ignore_fields) {
-    if (const ::google::protobuf::FieldDescriptor* field = pool->FindFieldByName(std::string(name))) {
+    // Invalid names terminate via QCHECK below and are covered by the invalid-field death test.
+    // Death-test subprocess coverage is not merged into the parent report.
+    if (const ::google::protobuf::FieldDescriptor* field = pool->FindFieldByName(name)) {  // LCOV_EXCL_BR_LINE
       ignore_descriptors.push_back(field);
     } else {
       remaining_descriptors.push_back(name);
@@ -179,7 +181,7 @@ class IgnoreFieldPathCriteria : public ::google::protobuf::util::MessageDifferen
 // Parses a field path and returns individual components.
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 std::vector<::google::protobuf::util::MessageDifferencer::SpecificField> ParseFieldPathOrDie(
-    const std::string& relative_field_path,
+    std::string_view relative_field_path,
     const ::google::protobuf::Descriptor& root_descriptor) {
   std::vector<::google::protobuf::util::MessageDifferencer::SpecificField> field_path;
   // We're parsing a dot-separated list of elements that can be either:
@@ -204,14 +206,14 @@ std::vector<::google::protobuf::util::MessageDifferencer::SpecificField> ParseFi
     }
     // Try to consume a field name. If that fails, consume an extension name.
     ::google::protobuf::util::MessageDifferencer::SpecificField field;
-    std::string name;
+    std::string_view name;
     if (RE2::Consume(&input, field_subscript_regex, &name, &field.index) || RE2::Consume(&input, field_regex, &name)) {
       if (field_path.empty()) {
-        field.field = root_descriptor.FindFieldByName(std::string(name));
+        field.field = root_descriptor.FindFieldByName(name);
         ABSL_CHECK(field.field) << "No such field '" << name << "' in message '" << root_descriptor.full_name() << "'";
       } else {
         const ::google::protobuf::util::MessageDifferencer::SpecificField& parent = field_path.back();
-        field.field = parent.field->message_type()->FindFieldByName(std::string(name));
+        field.field = parent.field->message_type()->FindFieldByName(name);
         ABSL_CHECK(field.field) << "No such field '" << name << "' in '" << parent.field->full_name() << "'";
       }
     } else if (RE2::Consume(&input, extension_regex, &name)) {

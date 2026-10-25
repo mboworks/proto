@@ -11,6 +11,10 @@ release and the two preceding major release lines. The exact versions currently 
 [![Test](https://github.com/mboworks/proto/actions/workflows/main.yml/badge.svg)](https://github.com/mboworks/proto/actions/workflows/main.yml)
 [![Compatibility](https://github.com/mboworks/proto/actions/workflows/compatibility.yml/badge.svg)](https://github.com/mboworks/proto/actions/workflows/compatibility.yml)
 
+Text-proto matchers (`EqualsProto` and `EquivToProto`) accept `std::string_view`, including
+bounded substrings, string literals, and `std::string` arguments. Matchers retain their own copy
+of expected text, so the source text may be changed or destroyed after matcher construction.
+
 # Parse Proto
 
 - rule: `@mboworks_proto//mbo/proto:parse_text_proto_cc`
@@ -296,13 +300,13 @@ int main() {
 
 # Installation and requirements
 
-This repository requires a C++20 compiler (in case of MacOS XCode 15 is needed) and Bazel 8 or newer. Required CI uses GCC 14 and LLVM/Clang 22.1.8 on Linux/Ubuntu and macOS, with Bazel 8 and 9 compatibility rungs. The [scheduled compatibility workflow](.github/workflows/compatibility.yml) verifies Protocol Buffers versions 34.1, 35.0, and 36.1.bcr.1.
+This repository requires a C++20 compiler (in case of MacOS XCode 15 is needed) and Bazel 8 or newer. Required CI uses GCC 14 and LLVM/Clang 23.1.4 on Linux/Ubuntu and macOS, with Bazel 8 and 9 compatibility rungs. The [scheduled compatibility workflow](.github/workflows/compatibility.yml) verifies Protocol Buffers versions 34.1, 35.0, and 36.1.bcr.1.
 
 The reliance on a C++20 compiler is because it uses `std::source_location` since Google's Abseil `absl::SourceLocation` has not been open sourced.
 
 The project only comes with a Bazel BUILD.bazel file and can be added to other Bazel projects.
 
-The project runs clang-format 22.1.8 from the hermetic Bazel LLVM toolchain through pre-commit.
+The project runs clang-format 23.1.4 from the hermetic Bazel LLVM toolchain through pre-commit.
 Development builds use the same toolchain with `bazel [build|test] --config=clang ...`; no system
 LLVM installation is required.
 
