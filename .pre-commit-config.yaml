@@ -225,6 +225,12 @@ repos:
 
   - repo: local
     hooks:
+      - id: clang-format-launcher-test
+        name: Test the hermetic formatter launcher
+        language: system
+        entry: python3 -m unittest tools/clang_format_test.py
+        files: ^(tools/clang_format(_test)?[.](sh|py)|\.pre-commit-config\.yaml)$
+        pass_filenames: false
       - id: clang-format
         name: clang-format
         language: system
