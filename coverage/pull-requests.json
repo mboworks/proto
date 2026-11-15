@@ -7,19 +7,19 @@
   },
   {
     "number": 133,
-    "state": "open",
+    "state": "closed",
     "merged_at": null,
     "merge_commit_sha": "e1583f57354a25b918f75be0de0e8526c4aaaeb0"
   },
   {
     "number": 132,
-    "state": "open",
+    "state": "closed",
     "merged_at": null,
     "merge_commit_sha": "d9d8888dd8aa520a9905e91c8417bf95577f1728"
   },
   {
     "number": 131,
-    "state": "open",
+    "state": "closed",
     "merged_at": null,
     "merge_commit_sha": "29811133e585f6a75bdaf6ab5757c00f5170f5e2"
   },
