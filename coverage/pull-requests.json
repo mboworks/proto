@@ -1,9 +1,9 @@
 [
   {
     "number": 134,
-    "state": "open",
-    "merged_at": null,
-    "merge_commit_sha": "5a30fe60dd8dd24c24b88b823e9ba567ccc8a938"
+    "state": "closed",
+    "merged_at": "2026-11-15T14:04:36Z",
+    "merge_commit_sha": "30595e21475c1f8740727a12db9553483ead3687"
   },
   {
     "number": 133,
